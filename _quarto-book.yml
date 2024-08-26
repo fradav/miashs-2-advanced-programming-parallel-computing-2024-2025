@@ -1,0 +1,24 @@
+project:
+  type: book
+  output-dir: docs
+  resources:
+    - "docs-resources/Slides/**/*"
+    - "docs-resources/Notebooks/**/Applications/*"
+    - "docs-resources/Notebooks/**/Solutions/*-sol.*"
+    - "docs-resources/Notebooks/**/Solutions/*-sol_files/**/*"
+
+book: 
+  title: "Swiss Army knife for quarto and teaching classes"
+  chapters: 
+    - index.qmd
+    - intro.qmd
+    - Lectures/Lecture1.qmd
+    - Lectures/Lecture2.qmd
+    - summary.qmd
+    - references.qmd
+  appendices: 
+    - applications.qmd
+    - slides.qmd
+
+filters: 
+  - ./filters/unclutter-slides.lua

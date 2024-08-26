@@ -1,0 +1,10 @@
+:::list-table
+   * - Original (In Percent Format)
+     - Online Html (Corrected)
+     - Notebook (Corrected)
+<% for (const item of items) { %>
+   * - [<%= item.title %>](<%= item.py %>)
+     <% if (item.html) { %>- [Solution](<%= item.html %>)<% } %>
+     <% if (item.ipynb) { %>- [Notebook](<%= item.ipynb %>)<% } %>
+<% } %>
+:::

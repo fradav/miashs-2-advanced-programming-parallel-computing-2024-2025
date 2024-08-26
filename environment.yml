@@ -1,0 +1,18 @@
+name: miashs-hpc
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - jupyter
+  - jupyter-cache
+  - plotly
+  - ipywidgets
+  - pandas
+  - numpy
+  - numba
+  - scipy
+  - scikit-learn
+  - dask
+  - jupytext 
+  - black
+

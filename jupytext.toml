@@ -1,0 +1,5 @@
+notebook_metadata_filter="-all"
+cell_metadata_filter="-all"
+hide_notebook_metadata=true
+comment_magics=false
+cell_markers = '"""'

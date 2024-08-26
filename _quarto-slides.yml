@@ -1,0 +1,14 @@
+project:
+  render: 
+    - Lectures/*.qmd
+    - "!Lectures/*_app.qmd"
+    - "!Lectures/*_app-sol.qmd"
+  pre-render: project-scripts/prepare-slides.py
+  output-dir: docs-resources/Slides
+
+format:
+  revealjs:
+    output-ext: "slides.html"
+
+filters: 
+  - ./filters/slides-meta.lua

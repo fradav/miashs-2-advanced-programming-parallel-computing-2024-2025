@@ -1,0 +1,6 @@
+- title: "Python code and solution"
+  html: "docs-resources/Notebooks/Lectures/Solutions/Lecture1-sol.html"
+  ipynb: "docs-resources/Notebooks/Lectures/Solutions/Lecture1-sol.ipynb"
+  py: "docs-resources/Notebooks/Lectures/Applications/Lecture1.py"
+- title: "Python code and solution, application 2"
+  py: "docs-resources/Notebooks/Lectures/Applications/Lecture2.py"

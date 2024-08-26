@@ -1,0 +1,46 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "notebooks",
+            "type": "shell",
+            "command": "quarto render --profile notebooks",
+            "problemMatcher": []
+        },
+        {
+            "label": "slides",
+            "type": "shell",
+            "command": "quarto render --profile slides",
+            "problemMatcher": []
+        },
+        {
+            "label": "book",
+            "type": "shell",
+            "command": "quarto render --profile book",
+            "problemMatcher": []
+        },
+        {
+            "label": "all",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "notebooks",
+                "slides",
+                "book"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "tikz figures",
+            "type": "shell",
+            "command": "dotnet fsi regenerate-tikz.fsx Courses/tikz-figures",
+            "problemMatcher": []
+        },
+
+    ]
+}

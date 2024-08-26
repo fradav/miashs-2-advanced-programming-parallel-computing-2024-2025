@@ -1,0 +1,13 @@
+profile:
+  default: slides
+
+author: "Norah Jones"
+date: "25/07/2024"
+
+bibliography: references.bib
+
+filters:
+  - list-table
+
+execute: 
+  freeze: auto

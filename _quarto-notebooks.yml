@@ -1,0 +1,19 @@
+project:
+  render:
+    - ./Lectures/Applications/*.qmd
+    - ./Lectures/Solutions/*.qmd
+  output-dir: docs-resources/Notebooks
+  pre-render: project-scripts/prepare-notebooks.py
+  post-render: project-scripts/convert.py
+
+format: 
+  ipynb: default
+  html: default
+
+execute: 
+  eval: false
+
+filters:
+  - ./filters/unclutter-slides.lua
+  - ./filters/unclutter-tp.lua
+  - ./filters/notebooks-meta.lua

@@ -3,5 +3,6 @@ title: "Applications"
 listing:
   contents: applications.yml
   template: applications.ejs
+  sort: "name"
 ---
 

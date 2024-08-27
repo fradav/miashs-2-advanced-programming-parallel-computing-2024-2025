@@ -1,0 +1,1103 @@
+---
+title: Asynchronous Programming with Python
+subtitle: One programming model to rule them all
+nocite: |
+    @fowler2022python
+---
+
+# Asynchronous, Basics
+
+## What is Asynchronous Programming?
+
+- Asynchronous programming is a programming paradigm that allows the program to continue executing other tasks before the current task is finished.
+- It is a way to achieve concurrency in a program.
+
+$\Rightarrow$  it is an **abstraction over concurrency**, it does not necessarily mean that the program is executed in parallel.
+
+## I/O Bound vs. CPU Bound
+
+```python
+import requests
+ 
+response = requests.get('https://www.example.com')      #<1>
+ 
+items = response.headers.items()
+ 
+headers = [f'{key}: {header}' for key, header in items] #<2>
+ 
+formatted_headers = '\n'.join(headers)                  #<3>
+ 
+with open('headers.txt', 'w') as file:
+    file.write(formatted_headers)                       #<4>
+```
+1. I/O-bound web request
+2. CPU-bound response processing
+3. CPU-bound string concatenation
+4. I/O-bound write to disk
+
+# Concurrency, parallelism and multitasking
+
+We will use extensively the bakery metaphor.
+
+
+## Concurrency vs. Parallelism
+
+::: {.columns}
+:::: {.column width=50%}
+One baker and two cakes to prepare.
+
+- Can preheat the oven while preparing the first cake.
+- Can start the second cake while the first one is in the oven.
+
+$\Rightarrow$ **Switching between tasks** is **concurrency** (or concurrent behavior).
+::::
+
+:::: {.column width=50%}
+Two bakers and two cakes to prepare.
+
+- Can prepare both cakes at the same time.
+
+$\Rightarrow$ **Doing multiple tasks in parallel** is **parallelism** (or parallel behavior).
+::::
+:::
+
+## Concurrency vs. Parallelism (2)
+
+![With concurrency, we have multiple tasks happening at the same time, but only one we’re actively doing at a given point in time. With parallelism, we have multiple tasks happening and are actively doing more than one simultaneously.](figs/bakers.png)
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+## Concurrency vs. Parallelism (3)
+
+![With concurrency, we switch between running two applications. With parallelism, we actively run two applications simultaneously.](figs/concurrency.png)
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+## Concurrency vs. Parallelism (4)
+
+- Concurrency is about multiple **independent** tasks that can happen.
+- Parallelism is concurrency AND **simultaneous** execution.
+
+While parallelism implies concurrency, concurrency does not always imply parallelism.
+
+$\Rightarrow$ Concurrency is a **broader** concept than parallelism.
+
+## Multitasking
+
+::: {.columns}
+:::: {.column width=50%}
+### Preemptive multitasking
+
+- The operating system decides when to switch between tasks.
+- The tasks are not aware of each other.
+
+::::
+
+:::: {.column width=50%}
+### Cooperative multitasking
+
+- In this model we have to explicitly to decide when to switch between tasks.
+- The tasks are aware of each other.
+
+::::
+:::
+
+## Benefits of cooperative multitasking
+
+- Less overhead than preemptive multitasking.
+- Granular/optimal control over when to switch between tasks.
+
+# Processes, threads, multithreading, and multiprocessing
+
+## Multi-processing vs Multi-threading 
+
+:::::::::::::: {.columns}
+::: {.column width="50%"}
+```{ style="font-size: 0.6em;" }
+                   Main Process
+                 ┌─────────────┐
+                 │             │
+                 │   CPU       │
+                 ├─────────────┤
+                 │             │
+                 │   Memory    │
+                 └─┬────┬────┬─┘
+                   │    │    │
+                   │    │    │
+       ┌───────────┘    │    └───────────┐
+       │                │                │
+┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐
+│             │  │             │  │             │
+│   CPU       │  │   CPU       │  │   CPU       │
+├─────────────┤  ├─────────────┤  ├─────────────┤
+│             │  │             │  │             │
+│   Memory    │  │   Memory    │  │   Memory    │
+└─────────────┘  └─────────────┘  └─────────────┘
+
+   Process 1        Process 1        Process 1
+```
+:::
+::: {.column width="50%"}
+```{ style="font-size: 0.6em;" }
+┌──────────────────────────────────────┐
+│            MAIN PROCESS              │
+│                                      │
+│                                      │
+│     ┌──────────┐                     │
+│     │          │                     │
+│     │   CPU    │   ┌───────────┐     │
+│     │          │   │           │     │
+│     └──────────┘   │   Memory  │     │
+│                    │           │     │
+│                    └───────────┘     │
+│                                      │
+│                                      │
+│                                      │
+│      ┌─┐         ┌─┐         ┌─┐     │
+│      │┼│         │┼│         │┼│     │
+│      │┴│         │┴│         │┴│     │
+│      ▼▼▼         ▼▼▼         ▼▼▼     │
+│   Thread 1    Thread 2    Thread 3   │
+│      ┌─┐         ┌─┐         ┌─┐     │
+│      │┼│         │┼│         │┼│     │
+│      │┴│         │┴│         │┴│     │
+│      ▼▼▼         ▼▼▼         ▼▼▼     │
+│                                      │
+└──────────────────────────────────────┘
+```
+:::
+::::::::::::::
+
+## Processes and threads
+
+```{python}
+#| echo: true
+#| output-location: fragment
+#| lst-cap: Processes and threads in a simple Python application
+import os
+import threading
+ 
+print(f'Python process running with process id: {os.getpid()}')
+total_threads = threading.active_count()
+thread_name = threading.current_thread().name
+ 
+print(f'Python is currently running {total_threads} thread(s)')
+print(f'The current thread is {thread_name}')
+```
+
+## Creating processes
+
+```{python}
+#| echo: true
+#| output-location: fragment
+#| lst-cap: Creating processes in Python
+import multiprocessing
+import os
+ 
+ 
+def hello_from_process():
+    print(f'Hello from child process {os.getpid()}!')
+if __name__ == '__main__':
+    hello_process = multiprocessing.Process(target=hello_from_process)
+    hello_process.start()
+ 
+    print(f'Hello from parent process {os.getpid()}')
+ 
+    hello_process.join()
+```
+
+## Creating threads
+
+```{python}
+#| echo: true
+#| output-location: fragment
+#| lst-cap: Creating threads in Python
+import threading
+ 
+ 
+def hello_from_thread():
+    print(f'Hello from thread {threading.current_thread()}!')
+ 
+ 
+hello_thread = threading.Thread(target=hello_from_thread)
+hello_thread.start()
+ 
+total_threads = threading.active_count()
+thread_name = threading.current_thread().name
+ 
+print(f'Python is currently running {total_threads} thread(s)')
+print(f'The current thread is {thread_name}')
+ 
+hello_thread.join()
+```
+
+# And all hell broke loose: the GIL
+
+## What about Python?
+
+::::::: incremental
+
+- Designed for *sequential and single-core architecture* from the beginning
+- Everything is *interpreted* 
+- All dynamic (no static types)
+
+:::::::
+
+## The GIL
+
+Aka *Global Interpreter Lock*
+
+. . .
+
+- The GIL *allows* thread usage, you can create threads and launch them: YES! 
+
+. . .
+
+- but...
+
+. . .
+
+- Only ONE thread can actually execute code at python level..
+
+![](./figs/nooo.jpg){ .notransparent .noinvert fig-align="center" height=40%}
+
+## Multi-threaded != Parallel execution
+
+Multi-threading doesn't guarantee parallel executien...
+
+::: {.content-visible when-format="pdf"}
+\centering
+\animategraphics[loop,width=8cm]{10}{./figs/gilbreakdance/gilbreakdance-}{0}{252}
+:::
+
+::: {.content-visible when-format="html"}
+![](./figs/gilbreakdance.gif){ .notransparent .noinvert fig-align="center" width=60% }
+:::
+
+$\Longrightarrow$ Python seems to have started off with the wrong foot by a long way...
+
+## High performance Python 😬
+
+:::::::::::::: {.columns}
+::: {.column width="40%"}
+
+::: {}
+![](figs/slow.png){ .notransparent .noinvert }
+:::
+
+:::
+::: {.column width="60%"}
+But wait!
+
+::::::: incremental
+
+1. Actually we can run (real) parallel programs with the `multiprocessing` package. 
+
+    $\Rightarrow$ But this is an "OS level" multiprocessing, with associated huge overhead (relatively)
+
+2. Python actually releases the GIL when executing everything that is not Python code (e.g. C/C++ extensions and libraries)
+
+    $\Rightarrow$ It means we can parallelize our code by using I/O bound and CPU bound libraries that release the GIL (***this is the case for most of them***)
+
+:::::::
+:::
+::::::::::::::
+
+# Single-threaded asynchronous programming with `asyncio`
+
+## Socket
+
+![Writing bytes to a socket and reading bytes from a socket](figs/socket.png)
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+- This a mailbox metaphor
+- By default, the socket is blocking, i.e. the program will wait until the socket is ready to be read or written.
+- We can make the socket non-blocking, i.e. the program will not wait for the socket to be ready to be read or written.
+    $\Rightarrow$ Later on, the OS will tell us we received byte and we deal with it.
+
+## Socket (2)
+
+::: {.columns}
+:::: {.column width=50%}
+![](figs/socket-wait.png){ .margin-a}
+::::
+
+:::: {.column width=50%}
+::::: incremental
+- Making a non-blocking I/O request returns immediately 
+- tells the O/S to watch sockets for data
+    $\Rightarrow$ This allows execute_other_code() to run right away instead of waiting for the I/O requests to finish
+- Later, we can be alerted when I/O is complete and process the response.
+:::::
+::::
+:::
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+
+## Event Loop
+
+::: {.columns}
+:::: {.column width=50%}
+```python
+from collections import deque
+ 
+messages = deque()
+ 
+while True:
+    if messages:
+        message = messages.pop()
+        process_message(message)
+```
+::::
+
+:::: {.column width=50%}
+::::: incremental
+- The event loop is a loop that runs forever.
+- It checks if there are any messages to process.
+- If there are, it processes them.
+- If there are not, it waits for messages to arrive.
+:::::
+::::
+:::
+
+$\Rightarrow$ **In `asyncio`, the event loop is queue of tasks instead of messages, Tasks are wrapped coroutines.**
+
+## Event Loop (2)
+
+![](figs/event-loop.png)
+
+## Event Loop (3)
+
+```python
+def make_request():
+    cpu_bound_setup()
+    io_bound_web_request()
+    cpu_bound_postprocess()
+ 
+task_one = make_request()
+task_two = make_request()
+task_three = make_request()
+```
+
+## Event Loop (4)
+
+![](figs/event-loop-applied.png)
+
+# `asyncio` Coroutines
+
+To define a coroutine, we use the `async def` syntax.
+
+```python
+async def my_coroutine() -> None
+    print('Hello world!')
+```
+
+## What is it?
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+async def coroutine_add_one(number: int) -> int:
+    return number + 1
+ 
+def add_one(number: int) -> int:
+    return number + 1
+ 
+function_result = add_one(1)  #<1>
+coroutine_result = coroutine_add_one(1) #<2>
+ 
+print(f'Function result is {function_result}\n\
+    and the type is {type(function_result)}')
+print(f'Coroutine result is {coroutine_result}\n\
+    and the type is {type(coroutine_result)}')
+```
+1. function call, is executed immediately.
+2. coroutine call, is not executed at all, but returns a coroutine object.
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+## How to execute a coroutine?
+
+You need an event loop. 
+
+```python
+import asyncio
+ 
+async def coroutine_add_one(number: int) -> int:
+    return number + 1
+ 
+result = asyncio.run(coroutine_add_one(1)) #<1>
+
+print(result)
+```
+1. This launches the event loop, executes the coroutine, and returns the result.
+
+## How to execute a coroutine? (2)
+
+:::{.callout-warning}
+This code will not work in a Jupyter notebook, because the event loop is already running (by Jupyter itself). So you just have to replace the line 4 by:
+
+```python
+result = await coroutine_add_one(1)
+```
+:::
+
+## `await` keyword
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+import asyncio
+ 
+async def add_one(number: int) -> int:
+    return number + 1
+ 
+ 
+async def main() -> None:
+    one_plus_one = await add_one(1) #<1>
+    two_plus_one = await add_one(2) #<2>
+    print(one_plus_one)
+    print(two_plus_one)
+ 
+await main() #<3>
+```
+1. Pause, and wait for the result of `add_one(1)`.
+2. Pause, and wait for the result of `add_one(2)`.
+3. Pause, and wait for the result of `main()`. (outside of a Jupyter notebook, you have to launch the event loop somewhere, like `asyncio.run(main())` instead of `await main()`)
+
+## `await` keyword (2)
+
+![](figs/await.png)
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+## Simulating the real thing with `asyncio.sleep`
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import asyncio
+ 
+async def hello_world_message() -> str:
+    await asyncio.sleep(1) #<1>
+    return 'Hello World!'
+ 
+async def main() -> None:
+    message = await hello_world_message() #<2>
+    print(message)
+ 
+await main()
+```
+1. Pause `hello_world_message` for 1 second.
+2. Pause `main` until `hello_world_message` is finished.
+
+## Utility function `delay(seconds)`
+
+```{python}
+#| echo: true
+import asyncio
+ 
+ 
+async def delay(delay_seconds: int) -> int: #<1>
+    print(f'sleeping for {delay_seconds} second(s)') #<2>
+    await asyncio.sleep(delay_seconds) #<1>
+    print(f'finished sleeping for {delay_seconds} second(s)') #<2>
+    return delay_seconds #<3>
+```
+1. Takes an integer of the duration in seconds that we’d like the function to sleep.
+2. Prints when sleep begins and ends.
+3. Returns that integer to the caller once it has finished sleeping.
+
+## Running two coroutines
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import asyncio
+ 
+async def add_one(number: int) -> int:
+    return number + 1
+ 
+async def hello_world_message() -> str:
+    await delay(1)
+    return 'Hello World!'
+ 
+async def main() -> None:
+    message = await hello_world_message() #<1>
+    one_plus_one = await add_one(1) #<2>
+    print(one_plus_one)
+    print(message)
+ 
+await main()
+```
+1. Pause `main` until `hello_world_message` is finished.
+2. Pause `main` until `add_one` is finished.
+
+## Running two coroutines (2)
+
+![](figs/await-2.png)
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+## What to do next?
+
+Moving away from sequential execution and run `add_one` and `hello_world_message` *concurrently*.
+
+For that we need…
+
+# Tasks
+
+So far we just learned how to create coroutines and put then in the event loop.
+
+**Tasks** are a way to schedule coroutines concurrently.
+
+$\Rightarrow$ Tasks are wrapped coroutines which are scheduled to run in the event loop as soon as possible.
+
+## Creating tasks
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import asyncio
+
+async def main():
+    sleep_for_three = asyncio.create_task(delay(3))
+    print(type(sleep_for_three))
+    result = await sleep_for_three
+    print(result)
+ 
+await main()
+```
+
+- the coroutine is scheduled to run in the event loop as soon as possible.
+- before, it was just run at the await statement (pausing the caller).
+
+## Running tasks concurrently
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import asyncio
+ 
+async def main():
+    sleep_for_three = \
+        asyncio.create_task(delay(3))
+    sleep_again = \
+        asyncio.create_task(delay(3))
+    sleep_once_more = \
+        asyncio.create_task(delay(3))
+ 
+    await sleep_for_three
+    await sleep_again
+    await sleep_once_more
+
+await main()
+```
+
+## Running tasks concurrently (2)
+
+![](figs/tasks.png)
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+## Running tasks concurrently (3)
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import asyncio
+ 
+async def hello_every_second():
+    for i in range(2):
+        await asyncio.sleep(1)
+        print("I'm running other code while I'm waiting!")
+ 
+async def main():
+    first_delay = asyncio.create_task(delay(3))
+    second_delay = asyncio.create_task(delay(3))
+    await hello_every_second()
+    await first_delay
+    await second_delay
+
+await main()
+```
+
+## Running tasks concurrently (4)
+
+![](figs/tasks-2.png)
+
+:::{.attribution}
+From @fowler2022python
+:::
+
+## Canceling tasks
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import asyncio
+from asyncio import CancelledError
+
+async def main():
+    long_task = asyncio.create_task(delay(10))
+ 
+    seconds_elapsed = 0
+ 
+    while not long_task.done():
+        print('Task not finished, checking again in a second.')
+        await asyncio.sleep(1)
+        seconds_elapsed = seconds_elapsed + 1
+        if seconds_elapsed == 5:
+            long_task.cancel()
+ 
+    try:
+        await long_task
+    except CancelledError:
+        print('Our task was cancelled')
+ 
+await main()
+```
+
+## Setting a timeout
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import asyncio
+
+async def main():
+    delay_task = asyncio.create_task(delay(2))
+    try:
+        result = await asyncio.wait_for(delay_task, timeout=1)
+        print(result)
+    except asyncio.exceptions.TimeoutError:
+        print('Got a timeout!')
+        print(f'Was the task cancelled? {delay_task.cancelled()}')
+ 
+await main()
+```
+
+# Tasks, coroutines, futures, and awaitables
+
+## Introducing futures
+
+```{python}
+#| echo: true
+#| output-location: fragment
+from asyncio import Future
+ 
+my_future = Future()
+ 
+print(f'Is my_future done? {my_future.done()}')
+ 
+my_future.set_result(42)
+ 
+print(f'Is my_future done? {my_future.done()}')
+print(f'What is the result of my_future? {my_future.result()}')
+```
+
+## Awaiting futures
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+from asyncio import Future
+import asyncio
+ 
+ 
+def make_request() -> Future:
+    future = Future()
+    asyncio.create_task(set_future_value(future)) #<1>
+    return future
+ 
+ 
+async def set_future_value(future) -> None:
+    await asyncio.sleep(1) #<2>
+    future.set_result(42)
+ 
+ 
+async def main():
+    future = make_request()
+    print(f'Is the future done? {future.done()}')
+    value = await future #<3>
+    print(f'Is the future done? {future.done()}')
+    print(value)
+ 
+await main()
+```
+1. Create a task to asynchronously set the value of the future.
+2. Wait 1 second before setting the value of the future.
+3. Pause main until the future’s value is set.
+
+## Comparing tasks, coroutines, futures, and awaitables
+
+:::{.columns} 
+:::: {.column width=40%}
+<!---
+ ```{.d2 sketch=true pad=0 width=400}
+Awaitable -> Coroutine
+Awaitable -> Future -> Task
+style: {
+    fill: "transparent"
+}
+```  
+--->
+![](figs/tasks-coroutines-futures-awaitables.png)
+::::
+
+:::: {.column width=60%}
+::::: incremental
+Awaitables
+: Objects that can be awaited in an async function, including coroutines, tasks, and futures.
+
+Coroutines
+: Special functions that can be paused and resumed later, defined using `async def`, and can be awaited to allow other coroutines to run.
+
+Futures
+: Represent the result of an asynchronous operation, manage its state, and can be awaited to get the result.
+
+Tasks
+: Schedule and run coroutines concurrently, and can be used to cancel or check their status.
+:::::
+::::
+:::
+
+# Benchmarking
+
+## With a decorator
+
+:::{.columns}
+:::: {.column width=60%}
+
+```{python}
+#| echo: true
+import functools
+import time
+from typing import Callable, Any
+ 
+def async_timed():
+    def wrapper(func: Callable) -> Callable:
+        @functools.wraps(func)
+        async def wrapped(*args, **kwargs) -> Any:
+            print(f'starting {func} with args {args} {kwargs}')
+            start = time.time()
+            try:
+                return await func(*args, **kwargs)
+            finally:
+                end = time.time()
+                total = end - start
+                print(f'finished {func} in {total:.4f} second(s)')
+ 
+        return wrapped
+ 
+    return wrapper
+```
+
+::::
+
+:::: {.column width=40%}
+[Official Python documentation for decorators](https://peps.python.org/pep-0318/)
+
+- add functionality to an existing function
+- without modifying the function itself
+- it intercepts the function call and runs “decorated” code before and after it
+::::
+:::
+
+## Using it
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+import asyncio
+ 
+@async_timed()
+async def delay(delay_seconds: int) -> int:
+    print(f'sleeping for {delay_seconds} second(s)')
+    await asyncio.sleep(delay_seconds)
+    print(f'finished sleeping for {delay_seconds} second(s)')
+    return delay_seconds
+ 
+ 
+@async_timed()
+async def main():
+    task_one = asyncio.create_task(delay(2))
+    task_two = asyncio.create_task(delay(3))
+ 
+    await task_one
+    await task_two
+
+await main()
+```
+
+## `asyncio.gather`
+
+asyncio.gather() runs multiple asynchronous operations, wraps a coroutine as a task, and returns a list of results in the same order of awaitables.
+
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+import asyncio
+
+
+async def call_api(message, result, delay=3):
+    print(message)
+    await asyncio.sleep(delay)
+    return result
+
+
+async def main():
+    return await asyncio.gather(
+        call_api('Calling API 1 ...', 1),
+        call_api('Calling API 2 ...', 2)
+    )
+
+await main()
+```
+
+## `asyncio.gather` (2)
+
+:::{ .callout-caution}
+`asyncio.gather` takes a tuple of awaitables, not a list of awaitables, but returns a list of results in the same order of awaitables.
+
+If you want to pass a list, use the `*` operator to unpack it as a tuple.
+:::
+
+
+# Pitfalls of asynchronous programming
+
+## Running CPU-bound code
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+import asyncio
+
+@async_timed()
+async def cpu_bound_work() -> int:
+    counter = 0
+    for i in range(100000000):
+        counter = counter + 1
+    return counter
+ 
+ 
+@async_timed()
+async def main():
+    task_one = asyncio.create_task(cpu_bound_work())
+    task_two = asyncio.create_task(cpu_bound_work())
+    await task_one
+    await task_two
+ 
+await main()
+```
+
+## Running blocking APIs
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+import asyncio
+import requests
+ 
+@async_timed()
+async def get_example_status() -> int:
+    return requests.get('http://www.example.com').status_code
+ 
+ 
+@async_timed()
+async def main():
+    task_1 = asyncio.create_task(get_example_status())
+    task_2 = asyncio.create_task(get_example_status())
+    task_3 = asyncio.create_task(get_example_status())
+    await task_1
+    await task_2
+    await task_3
+ 
+await main()
+```
+
+# Asynchronous threading
+
+
+## Example of blocking code
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+import requests
+ 
+ 
+def get_status_code(url: str) -> int:
+    response = requests.get(url)
+    return response.status_code
+ 
+ 
+url = 'https://www.example.com'
+print(get_status_code(url))
+print(get_status_code(url))
+```
+
+## Thread Pool
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import time
+import requests
+from concurrent.futures import ThreadPoolExecutor
+ 
+ 
+def get_status_code(url: str) -> int:
+    response = requests.get(url)
+    return response.status_code
+ 
+ 
+start = time.time()
+ 
+with ThreadPoolExecutor() as pool:
+    urls = ['https://www.example.com' for _ in range(10)]
+    results = pool.map(get_status_code, urls)
+    for result in results:
+        # print(result)
+        pass
+
+ 
+end = time.time()
+ 
+print(f'finished requests in {end - start:.4f} second(s)')
+```
+
+## Compare with sequential code
+
+```{python}
+#| echo: true
+#| output-location: fragment
+start = time.time()
+ 
+urls = ['https://www.example.com' for _ in range(10)]
+ 
+for url in urls:
+    result = get_status_code(url)
+    # print(result)
+ 
+end = time.time()
+ 
+print(f'finished requests in {end - start:.4f} second(s)')
+```
+
+## Thread pool with `asyncio`
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import functools
+import requests
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+ 
+def get_status_code(url: str) -> int:
+    response = requests.get(url)
+    return response.status_code
+ 
+ 
+@async_timed()
+async def main():
+    loop = asyncio.get_running_loop()
+    with ThreadPoolExecutor() as pool:
+        urls = ['https://www.example.com' for _ in range(10)]
+        tasks = [loop.run_in_executor(pool, functools.partial(get_status_code, url)) for url in urls]
+        results = await asyncio.gather(*tasks)
+        print(results)
+ 
+await main()
+```
+
+## Multithreading with numpy
+
+Let’s define a big matrix on which we will compute the mean of each row.
+
+```{python}
+import numpy as np
+
+data_points = 400000000
+rows = 50
+columns = int(data_points / rows)
+ 
+matrix = np.arange(data_points).reshape(rows, columns)
+```
+
+## Multithreading with numpy (2)
+
+Now process the matrix sequentially.
+
+```{python}
+#| echo: true
+#| output-location: fragment
+s = time.time()
+ 
+res_seq = np.mean(matrix, axis=1)
+ 
+e = time.time()
+print(e - s)
+```
+
+## Multithreading with numpy (3)
+
+And then the same with multithreading (we check that the results are *exactly* the same).
+
+```{python}
+#| echo: true
+#| output-location: fragment
+import functools
+from concurrent.futures.thread import ThreadPoolExecutor
+import asyncio
+ 
+def mean_for_row(arr, row):
+    return np.mean(arr[row])
+ 
+@async_timed()
+async def main():
+    loop = asyncio.get_running_loop()
+    with ThreadPoolExecutor() as pool:
+        tasks = []
+        for i in range(rows):
+            mean = functools.partial(mean_for_row, matrix, i)
+            tasks.append(loop.run_in_executor(pool, mean))
+ 
+        return await asyncio.gather(*tasks)
+
+res_threads = np.array(await main())
+np.testing.assert_array_equal(res_seq, res_threads)
+```
+
+# Conclusion
+
+::::: incremental
+- Everything is `awaitable` (coroutines, futures, tasks), i.e. can be simply run with `await`.
+- a task is a coroutine wrapped in a future, and scheduled to run in the event loop.
+- `asyncio` is a single-threaded asynchronous programming library, providing a simple way to write concurrent code for I/O bound tasks.
+
+    $\Rightarrow$ We’ll see later that this programming model can be used for parallelism as well, and very easily.
+:::::
+
+# References {.allowframebreaks}
+

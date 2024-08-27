@@ -1,0 +1,50 @@
+\documentclass[dvisvgm]{standalone}
+
+\usepackage{tikz}
+\usepackage{pgfgantt}
+
+\newganttchartelement{critical}{critical/.append style={fill=red!50}}\newganttchartelement{wait}{wait/.append style={dashed, fill=blue!30},wait inline label node/.style={anchor=west},wait inline label anchor=west}
+
+\begin{document}
+
+\resizebox{40cm}{!}{%
+\begin{ganttchart}[
+        inline,
+        bar/.append style={fill=green, rounded corners=3pt},
+        group/.append style={draw=black, fill=red!20},
+        group left shift=0,
+        group right shift=0,
+        group peaks tip position=0,
+        group peaks height=.2
+    ]{1}{18}
+    \ganttgroup[group/.style={},inline=false]{Waiting processes}{1}{1}
+    \special{dvisvgm:raw <g id="zone1">} \ganttgroup{1}{6}{6} \special{dvisvgm:raw </g>}
+    \special{dvisvgm:raw <g id="zone2">} \ganttgroup{2}{7}{7} \special{dvisvgm:raw </g>}
+    \special{dvisvgm:raw <g id="zone3">} \ganttgroup{1}{8}{11} \special{dvisvgm:raw </g>} \\
+    \ganttbar[inline=false]{Process 1}{1}{3}\ganttcritical{critical}{4}{7}\ganttbar{}{8}{13} \\
+    \ganttbar[inline=false]{Process 2}{1}{5}\ganttwait{wait}{6}{7}\ganttcritical{critical}{8}{11}\ganttbar{}{12}{14} \\
+    \ganttbar[inline=false]{Process 3}{1}{6}\ganttwait{wait}{7}{11}\ganttcritical{critical}{12}{15}\ganttbar{}{16}{18}
+
+    \special{dvisvgm:raw <g id="t1">}
+    \ganttvrule{}{5}
+    \special{dvisvgm:raw </g>}
+    \special{dvisvgm:raw <g id="t2">}
+    \ganttvrule{}{6}
+    \special{dvisvgm:raw </g>}
+    \special{dvisvgm:raw <g id="t3">}
+    \ganttvrule{}{7}
+    \special{dvisvgm:raw </g>}
+    \special{dvisvgm:raw <g id="t4">}
+    \ganttlink{elem5}{elem9}
+    \special{dvisvgm:raw </g>}
+    \special{dvisvgm:raw <g id="t5">}
+    \ganttvrule{}{11}
+    \special{dvisvgm:raw </g>}
+    \special{dvisvgm:raw <g id="t6">}
+    \ganttlink{elem9}{elem13}
+    \special{dvisvgm:raw </g>}
+
+\end{ganttchart}%
+}
+
+\end{document}

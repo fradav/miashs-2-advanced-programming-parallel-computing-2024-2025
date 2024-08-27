@@ -2,3 +2,7 @@
 /.luarc.json
 /docs/
 /docs-resources/
+.jupyter_cache
+Courses/Applications/*
+/applications.yml
+/slides.yml

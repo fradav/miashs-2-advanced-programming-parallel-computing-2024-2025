@@ -38,7 +38,7 @@
         {
             "label": "tikz figures",
             "type": "shell",
-            "command": "dotnet fsi regenerate-tikz.fsx Courses/tikz-figures",
+            "command": "dotnet fsi regenerate-tikz.fsx ../Courses/tikz-figures",
             "problemMatcher": []
         },
 

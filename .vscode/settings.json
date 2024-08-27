@@ -1,0 +1,84 @@
+{
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "dvilualatex -> dvisvgm",
+            "tools": [
+                "dvilualatex",
+                "dvisvgm"
+            ]
+        },
+        {
+            "name": "pdflatex (latexmk)",
+            "tools": [
+                "latexmk"
+            ]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "--recorder",
+                "--pdf",
+                "--enable-installer",
+                "--shell-escape",
+                "-output-directory=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "dvilualatex",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "--recorder",
+                "--dvilua",
+                "--enable-installer",
+                "--shell-escape",
+                "-output-directory=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "dvisvgm",
+            "command": "dvisvgm",
+            "args": [
+                "--colornames",
+                "--grad-overlap",
+                "--optimize",
+                "--exact",
+                "--clipjoin",
+                "--font-format=woff",
+                "%DOCFILE%"
+            ],
+            "env": {}
+        }
+    ],
+    "svg.preview.background": "custom",
+    "pasteImage.path": "${projectRoot}/Courses/figs",
+    "pasteImage.showFilePathConfirmInputBox": true,
+    "pasteImage.insertPattern": "![](${imageOriginalFilePath})",
+    "liveshare.alwaysFollowHost": true,
+    "liveshare.anonymousGuestApproval": "accept",
+    "liveshare.increasedGuestLimit": true,
+    "liveshare.autoShareTerminals": false,
+    "liveshare.guestApprovalRequired": false,
+    "liveshare.showVerboseNotifications": false,
+    "liveshare.notebooks.allowGuestExecuteCells": true,
+    "liveshare.languages.allowGuestCommandControl": false,
+    "liveshare.codeLens": true,
+    "liveshare.allowGuestTaskControl": false,
+    "liveshare.showReadOnlyUsersInEditor": "whileFollowing",
+    "cmake.ignoreCMakeListsMissing": true,
+    "livePreview.autoRefreshPreview": "Never",
+    "livePreview.defaultPreviewPath": "docs/index.html",
+    "python.defaultInterpreterPath": ".micromamba/envs/miashs-hpc/bin/python"
+}

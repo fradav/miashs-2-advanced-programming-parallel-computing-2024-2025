@@ -1,0 +1,331 @@
+# Numba first steps
+
+## Rewind on sequence searching
+
+Make a proper function of the sequence searching Application from `0_Numpy workout.ipynb`. Test it.
+
+```python
+def search_sequence_numpy(data,seq):
+    ...
+```
+
+```{python}
+import numpy as np
+
+data = np.array([1,3,2,3,5,9,2,3,5,1,0],dtype=np.uint8)
+sequence = np.array([3,5],dtype=np.uint8)
+```
+
+```{python}
+#| tags: [solution]
+def search_sequence_numpy(data,seq):
+    seq_ind = np.arange(seq.size)
+    cor_size = data.size-seq.size+1
+    data_ind = np.arange(cor_size).reshape((cor_size,1))
+    
+    return np.nonzero(np.all(data[data_ind + seq_ind] == seq,1))[0]
+```
+
+```{python}
+search_sequence_numpy(data,sequence)
+```
+
+## Numba migration
+
+We want to "unroll" numpy code in double nested loop, simply walking `data` and `sequence` and put results in an accumulator, one element at a time. Write the missing line.
+
+```python
+import numba
+
+@numba.jit(nopython=True)
+def search_sequence_numba(data,seq):
+    cor_size = data.size-seq.size+1
+    
+    matches = np.ones(cor_size,dtype=np.uint8)
+    
+    for i in range(cor_size): # walking on data
+        for j in range(seq.size): # walking on sequence
+            ...
+            
+    return np.nonzero(matches)[0]
+
+search_sequence_numba(data,sequence)
+```
+
+```{python}
+#| tags: [solution]
+import numba
+
+@numba.jit(nopython=True)
+def search_sequence_numba(data,seq):
+    cor_size = data.size-seq.size+1
+    
+    matches = np.ones(cor_size,dtype=np.uint8)
+    
+    for i in range(cor_size): # walking on data
+        for j in range(seq.size): # walking on sequence
+            if data[i+j] != seq[j]:
+                matches[i] = 0      
+                break
+            
+    return np.nonzero(matches)[0]
+ 
+search_sequence_numba(data,sequence)
+```
+
+## Blow it up
+
+Generate 10000 of random digits (the data) a sequence of 3 digits, and benchmark both versions (numpy and numba) on it. Compare and comment.
+
+```{python}
+#| tags: [solution]
+data_rand = np.random.randint(10,size=int(1e6))
+sequence_rand = np.random.randint(10,size=3)
+```
+
+```{python}
+search_sequence_numpy(data_rand,sequence_rand)
+```
+
+```{python}
+#| tags: [solution]
+np.testing.assert_array_equal(search_sequence_numpy(data_rand,sequence_rand),
+                              search_sequence_numba(data_rand,sequence_rand))
+```
+
+```{python}
+#| tags: [solution]
+numpy_time = %timeit -o -r 7 -n 10 search_sequence_numpy(data_rand,sequence_rand)
+numba_time = %timeit -o -r 7 -n 10 search_sequence_numba(data_rand,sequence_rand)
+print("Numba speedup over Numpy : {:.1f}".format(numpy_time.average/numba_time.average))
+```
+
+```{python}
+import pandas as pd
+
+benchmarks = pd.DataFrame(
+    {"data size":int(1e6),
+     "version":"numpy",
+     "timing":numpy_time.average},
+    index=[0])
+benchmarks = pd.concat(
+    [benchmarks,
+     pd.Series(
+         {"data size":int(1e6),
+          "version":"numba",
+          "timing":numba_time.average
+         }).to_frame().T],ignore_index=True)
+```
+
+## And now… parallelize
+
+Question : is pattern matching like we just did an “embarrassingly parallel” problem ? Explain.
+
+It shouldn’t be : if we partition the data in chunks, the pattern matching will miss any match occuring between two consecutive chunks.
+
+Numba got a powerful (multi-threaded) parallelization feature, one just needs to :
+1. add `parallel=True` in the decorator call
+2. replace python `range` used for looping with numba’s `prange`.
+
+With a spetial attention to where you could put parallelization directive with prange (remember the “Concepts” course). Test and benchmark, give the speedup and comment.
+
+Why there si no *race condition* there ? (Tip : consider concurrent access in multi-threading, and look closely in the loop to read/store to the data).
+
+```{python}
+#| tags: [solution]
+import numba
+
+@numba.jit(nopython=True,parallel=True)
+def search_sequence_numba_parallel(data,seq):
+    cor_size = data.size-seq.size+1
+    
+    matches = np.ones(cor_size,dtype=np.uint8)
+
+    for i in numba.prange(cor_size): # walking on data
+        for j in range(seq.size): # walking on sequence
+            if data[i+j] != seq[j]:
+                matches[i] = 0      
+                break
+                
+    return np.nonzero(matches)[0]
+
+search_sequence_numba_parallel(data,sequence)
+```
+
+```{python}
+#| tags: [solution]
+np.testing.assert_array_equal(search_sequence_numpy(data_rand,sequence_rand),
+                              search_sequence_numba_parallel(data_rand,sequence_rand))
+```
+
+```{python}
+#| tags: [solution]
+numba_parallel_time = %timeit -r 7 -n 10  -o search_sequence_numba_parallel(data_rand,sequence_rand)
+print("Numba parallel speedup over numba : {:.1f}".format(numba_time.average/numba_parallel_time.average))
+
+benchmarks = pd.concat(
+    [benchmarks,
+     pd.Series(
+         {"data size":int(1e6),
+          "version":"numba parallel",
+          "timing":numba_parallel_time.average
+         }).to_frame().T],ignore_index=True)
+```
+
+Over 2~3 speedup over the non-parallel version is a sensible one on a the current 4-core CPU.
+
+There is no race condition because all data/sequence access are only read and the only assignment is on `matches[i]` which depends only on itself and data/sequence read. As a `prange` on `matches` index gives exclusive partitions per thread, it is guaranted that a thread will never access `matches` from other thread partitions.
+
+# Multi-processing vs Multi-threading
+
+Is this type of parallelization “trick” also possible as is with multi-processing ?
+
+Has multi-threading any advantage over multiprocessing in this context ?
+
+Let’s look into it.
+
+Make a modified `search_sequence_numba2` which takes a index subrange of the `matches` array and return the matches only on this range. Test it on the original `data` and `sequence` with two chunks.
+
+```python
+@numba.jit(nopython=True)
+def search_sequence_numba2(data,seq,chunk):
+    matches = ...
+    
+    for i,ic in enumerate(chunk): # walking on data
+        for j in range(seq.size): # walking on sequence
+            ...
+            
+    return np.nonzero(matches)[0]+chunk[0]
+```
+
+```{python}
+#| tags: [solution]
+@numba.jit(nopython=True)
+def search_sequence_numba2(data,seq,chunk):
+    matches = np.ones(chunk.size,dtype=np.uint8)
+    
+    for i,ic in enumerate(chunk): # walking on data
+        for j in range(seq.size): # walking on sequence
+            if data[ic+j] != seq[j]:
+                matches[i] = 0      
+                break
+            
+    return np.nonzero(matches)[0]+chunk[0]
+```
+
+```{python}
+#| tags: [solution]
+[search_sequence_numba2(data,sequence,np.arange(0,5)),
+             search_sequence_numba2(data,sequence,np.arange(5,12))]
+```
+
+```{python}
+#| tags: [solution]
+rand_cor_size = data_rand.size-sequence_rand.size+1
+np.testing.assert_array_equal(search_sequence_numpy(data_rand,sequence_rand),
+                              search_sequence_numba2(data_rand,sequence_rand,
+                                                     np.arange(rand_cor_size)))
+```
+
+Recall the chunks function generator
+
+```{python}
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+```
+
+Now make the multiprocessing version, test it. Benchmark it and give the speedup over the numba parallel version.
+
+Do it again but this time for a random data with 10 millions of digits. 
+
+```python
+import multiprocessing
+from itertools import chain
+
+def search_sequence_multiprocessing(data,seq,ncores):
+    cor_size = data.size-seq.size+1
+    
+    ...
+```
+
+```{python}
+#| tags: [solution]
+import multiprocessing
+from itertools import chain
+
+def search_sequence_multiprocessing(data,seq,ncores):
+    cor_size = data.size-seq.size+1
+    
+    mapargs = [(data,seq,chunk) for chunk in chunks(np.arange(cor_size),int(cor_size/ncores))]
+    with multiprocessing.Pool(ncores) as p:
+        res = p.starmap(search_sequence_numba2,mapargs)
+    matches_index = list(chain(*res))
+    return matches_index
+
+np.testing.assert_array_equal(search_sequence_numpy(data_rand,sequence_rand),
+                              search_sequence_multiprocessing(data_rand,sequence_rand,8))
+```
+
+```{python}
+#| tags: [solution]
+multiprocessing_numba_time = %timeit -r 7 -n 10 -o search_sequence_multiprocessing(data_rand,sequence_rand,8)
+print("Numba parallel speedup over multiprocessing : {:.1f}".format(multiprocessing_numba_time.average/numba_parallel_time.average))
+
+benchmarks = pd.concat(
+    [benchmarks,
+     pd.Series(
+         {"data size":int(1e6),
+          "version":"multiprocessing numba",
+          "timing":multiprocessing_numba_time.average
+         }).to_frame().T],ignore_index=True)
+```
+
+```{python}
+#| tags: [solution]
+data_rand = np.random.randint(10,size=int(1e7))
+sequence_rand = np.random.randint(10,size=3)
+
+numpy10M_time = %timeit -o -r 7 -n 10 search_sequence_numpy(data_rand,sequence_rand)
+numba10M_time = %timeit -o -r 7 -n 10 search_sequence_numba(data_rand,sequence_rand)
+print("Numba speedup over Numpy : {:.1f}".format(numpy10M_time.average/numba10M_time.average))
+numba_parallel10M_time = %timeit -r 7 -n 10 -o search_sequence_numba_parallel(data_rand,sequence_rand)
+print("Numba parallel speedup over numba : {:.1f}".format(numba10M_time.average/numba_parallel10M_time.average))
+multiprocessing_numba10M_time = %timeit -r 7 -n 10 -o search_sequence_multiprocessing(data_rand,sequence_rand,8)
+print("Numba parallel speedup over multiprocessing : {:.1f}".format(multiprocessing_numba10M_time.average/numba_parallel10M_time.average))
+```
+
+```{python}
+benchmarks = pd.concat(
+    [benchmarks,
+     pd.DataFrame([
+         {"data size":int(1e7),"version":"numpy","timing":numpy10M_time.average},
+         {"data size":int(1e7),"version":"numba","timing":numba10M_time.average},
+         {"data size":int(1e7),"version":"numba parallel","timing":numba_parallel10M_time.average},
+         {"data size":int(1e7),"version":"multiprocessing numba","timing":multiprocessing_numba10M_time.average}
+     ])],
+     ignore_index=True)
+```
+
+# Market it with a chart
+
+Make a bar chart with all versions timings, taking the numpy version as reference, and both (1e6, 1e7) runs of the data.
+
+```{python}
+#| tags: [solution]
+import plotly.express as px
+
+# pandas kata 😀
+speedups = benchmarks\
+            .groupby("data size")\
+            .apply(lambda x: x[x["version"] == "numpy"]["timing"].values[0]/x["timing"])\
+            .to_frame()\
+            .droplevel("data size")\
+            .rename(columns={"timing":"speedup over numpy"})
+to_plot = pd.concat([benchmarks,speedups],axis=1)
+to_plot = to_plot[to_plot["version"] != "numpy"]
+
+px.bar(to_plot,barmode='group',x="version",y="speedup over numpy",color="data size")
+```
+

@@ -1,0 +1,78 @@
+/*-- scss:defaults --*/
+$code-font-size: 0.8em;
+
+/*-- scss:rules --*/
+ol > li > ol {
+    counter-reset: list;
+}
+
+ol > li > ol > li{
+    list-style: none;
+    position: relative;
+}
+
+ol > li > ol > li:before {
+    counter-increment: list;
+    content: counter(list, lower-alpha) ") ";
+    position: absolute;
+    left: -1.4em;
+}
+
+.quarto-dark {
+    img:not(.noinvert) {
+        filter: invert(80%);
+    }
+    
+    svg:not(.noinvert) {
+        filter: invert(80%);
+    }
+}
+
+
+
+svg:not(.nostretch) {
+    width: 60%;
+    height: auto;
+}
+
+body:not(.reveal-viewport) code {
+        font-size: 0.8em;
+}
+
+body:not(.reveal-viewport) div.cell-output > pre > code {
+    &::before {
+        content: "Output: \A";
+        font-weight: bold;
+    }
+
+}
+
+.reveal pre code {
+    max-height: 1200px;
+}
+
+// .sourceCode {
+//     font-size: smaller;
+// }
+
+.aside-footnotes {
+    position: absolute;
+    bottom: -200px;
+    width: 900px;
+}
+
+.asciiflow {
+    font-size: 0.6em;
+}
+
+body > div:not(.reveal) div.attribution {
+    font-size: 0.6em;
+    text-align: right;
+
+    // :before {
+    //     content: "(";
+    // }
+    // :after {
+    //     content: ")";
+    // }   
+}

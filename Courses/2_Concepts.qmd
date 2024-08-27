@@ -1,0 +1,340 @@
+---
+title: Advanced concepts in parallel programming
+subtitle: More foray inside the parallel programming
+nocite: |
+    @robey2021parallel
+---
+
+
+# Why parallel computing
+
+## Trend over ~50years
+
+:::: incremental
+- Moore's Law (doubling the transistor counts every two years) is live
+- Single thread performance hit a wall in 2000s 
+- Along with typical power usage and frequency
+- Number of logical cores is doubling every ~3 years since mid-2000
+::::
+
+## Trend over ~50years (2)
+
+![Original data up to the year 2010 collected and plotted by M. Horowitz, F. Labonte, O. Shacham, K. Olukotun, L. Hammond, and C. Batten\n
+New plot and data collected for 2010-2021 by K. Rupp](50yearstrend/50-years-processor-trend.svg){ fig-align="center" }
+
+:::{ .attribution }
+[Github repo for data](https://github.com/karlrupp/microprocessor-trend-data/tree/master/50yrs)
+:::
+
+## Computing units
+
+::: incremental
+
+- CPU :
+    - 4/8/16+ execution cores (depending on context, laptop, desktop, server)
+    - Hyperthreading (Intel) or SMT (AMD), x2 
+    - Vector units (multiple instructions processed on a vector of data)
+- GPU computing : 100/1000 "simple" cores per card
+
+:::
+
+## The reality
+
+![A serial application only accesses 0.8% of the processing power of a 16-core CPU.](figs/serial_waste.png){ .notransparent }
+
+\small
+$$0.08\% = \frac{1}{16 * 2 (cores + hyperthreading) * \frac{256 (bitwide vector unit}{64(bit double)} = 128}$$
+
+# Benefits of parallel computing
+
+## Faster for less development
+
+$$\frac{S_{up}}{T_{par}} \gg \frac{S_{up}}{T_{seq}}$$
+
+Ratio of speedup improvment $S_{up}$ over time of development ($T_{seq|par})$ comparison.
+
+From a development time perspective, return on investment (speedup) is often *several magnitudes of order* better than pure "serial/sequential" improvment.
+
+## Scaling
+
+Simple "divide and conquer" strategies in parallel programming allow to handle data with previously almost untractable sizes and scale before.
+
+## Energy efficiency
+
+:::{.callout-note}
+This is a huge one, in the present context 😬
+:::
+
+Difficult to estimate but the *Thermal Design Power (TDP)*, given by hardware manufacturers, is a good rule of thumb. Just factor the number of units, and usual proportionality rules.
+
+## Energy efficiency, a bunch of CPUs
+
+Example of "standard" use : 20 [16-core Intel Xeon E5-4660](https://ark.intel.com/content/www/us/en/ark/products/93796/intel-xeon-processor-e54660-v4-40m-cache-2-20-ghz.html) which is $120~W$ of TDP
+
+\small
+$$P = (20~Processors) * (120~W/~Processors) * (24~hours) = 57.60~kWhrs$$
+
+## Energy efficiency, just a few (big) GPUs
+
+A Tesla V100 GPU is of $300~W$ of TDP. Let's use 4 of them.
+
+\small
+$$P = (4~GPUs) * (300~W/~GPUs) * (24~hours) = 28.80~kWhrs$$
+
+$\Longrightarrow$ half of the power use
+
+# Laws
+
+## Asymtptote of parallel computing : [Amdahl's Law](https://en.wikipedia.org/wiki/Amdahl%27s_law){ .notransparent }
+
+If $P$ and $S$ is the parallel (resp. serial) fraction of the code and $N$ the number of computing units:
+
+$$S_{up}(N) \le \frac{1}{S+\frac{P}{N}}$$
+
+## Asymtptote of parallel computing : Amdahl's Law, Graphic
+
+![Ideal speedup : 100% of the code parallelized; 90%, 75%, and 50% : limited by the fractions of code that remain serial. [@robey2021parallel]](./figs/amdhals.png){ .notransparent }
+
+## More with (almost) less : the *pump it up* approach 
+
+
+[Gustafson's law](https://en.wikipedia.org/wiki/Gustafson%27s_law){ .notransparent }
+
+:::::::::::::: {.columns}
+::: {.column width="60%"}
+![](figs/gimmemore-meme.png){ .notransparent .noinvert }
+:::
+::: {.column width="40%"}
+When the size of the problem grows up proportionnaly to the number of computing units.
+
+$$S_{up}(N) \le N - S*(N-1)$$
+
+where $N$ is the number of computing units and *S* the serial fraction as before.
+:::
+::::::::::::::
+
+## More with (almost) less : graphic
+
+![Linear growth with the number of processor (and data size too)](./figs/gustafsons.png){ .notransparent }
+
+
+## Strong vs Weak Scaling, definitions
+
+::::::: incremental
+
+Strong Scaling
+
+: Strong scaling represents the time to solution with respect to the number of processors for a fixed total size.
+
+Weak Scaling
+
+: Weak scaling represents the time to solution with respect to the number of processors for a fixed-sized problem per processor.
+
+::::::: 
+
+
+## Strong vs Weak Scaling, schemas {.smaller }
+
+:::::::::::::: {.columns }
+::: {.column width="50%"}
+```{ style="font-size: 0.6em;" }
+┌────────────────────────────────────┐
+│                 1000               │
+│         ┌───────────────────┐      │
+│         │                   │      │           1 processor
+│         │                   │      │
+│         │                   │      │
+│ 1000    │                   │      │           
+│         │                   │      │
+│         │                   │      │
+│         └───────────────────┘      │
+│        ┌─────────┐  ┌─────────┐    │
+│        │         │  │         │    │
+│ 500    │         │  │         │    │
+│        │         │  │         │    │
+│        └─────────┘  └─────────┘    │
+│           500                      │           4 processors
+│        ┌─────────┐  ┌─────────┐    │
+│        │         │  │         │    │
+│        │         │  │         │    │
+│        │         │  │         │    │
+│        └─────────┘  └─────────┘    │
+│      250                           │
+│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │
+│ 250 │    │  │    │  │    │  │    │ │
+│     └────┘  └────┘  └────┘  └────┘ │
+│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │
+│     │    │  │    │  │    │  │    │ │
+│     └────┘  └────┘  └────┘  └────┘ │           16 processors
+│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │
+│     │    │  │    │  │    │  │    │ │
+│     └────┘  └────┘  └────┘  └────┘ │
+│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │
+│     │    │  │    │  │    │  │    │ │
+│     └────┘  └────┘  └────┘  └────┘ │
+└────────────────────────────────────┘
+```
+:::
+::: {.column width="50%"}
+```{ style="font-size: 0.6em;" }
+┌───────────────────────────────────────────────────────────┐
+│                         1000                              │
+│                      ┌─────────┐                          │
+│                      │         │                          │
+│              1000    │      ───┼──┐                       │
+│                      │         │  │                       │
+│                      └─────────┘  │                       │
+│                   1000            │                       │
+│                 ┌─────────┐  ┌────┼────┐                  │
+│                 │         │  │    │    │                  │
+│           1000  │         │  │    │    │                  │
+│                 │         │  │    │    │                  │
+│                 └─────────┘  └────┼────┘                  │
+│                 ┌─────────┐  ┌────┼────┐                  │
+│                 │         │  │    │    │                  │
+│                 │         │  │    │    │                  │
+│                 │         │  │    │    │                  │
+│                 └─────────┘  └────┼────┘                  │
+│                                   │         1000          │
+│    ┌─────────┐  ┌─────────┐  ┌────┼────┐  ┌─────────┐     │
+│    │         │  │         │  │    │    │  │         │     │
+│    │         │  │         │  │    ▼    │  │         │1000 │
+│    │         │  │         │  │         │  │         │     │
+│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │
+│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │
+│    │         │  │         │  │         │  │         │     │
+│    │         │  │         │  │         │  │         │     │
+│    │         │  │         │  │         │  │         │     │
+│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │
+│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │
+│    │         │  │         │  │         │  │         │     │
+│    │         │  │         │  │         │  │         │     │
+│    │         │  │         │  │         │  │         │     │
+│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │
+│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │
+│    │         │  │         │  │         │  │         │     │
+│    │         │  │         │  │         │  │         │     │
+│    │         │  │         │  │         │  │         │     │
+│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │
+└───────────────────────────────────────────────────────────┘
+```
+:::
+::::::::::::::
+
+# Types of parallelism
+
+## Flynn's taxonomy
+
+:::list-table 
+* -
+  - Simple Instruction
+  - Multiple Instructions
+
+* - Simple Data
+  - ![](figs/SISD.svg){ style="max-height: 300px;" }
+  - ![](figs/MISD.svg){ style="max-height: 300px;" }
+
+* - Multiple Data
+  - ![](figs/SIMD.svg){ style="max-height: 300px;" }
+  - ![](figs/MIMD.svg){ style="max-height: 300px;" }
+:::
+
+## A different approach 
+
+:::list-table
+* - Parallelism  level
+  - Hardware
+  - Software
+  - Parallelism extraction
+
+* - Instruction
+  - SIMD (or VLIW)
+  - Intrinsics
+  - Compiler
+
+* - Thread
+  - Multi-core RTOS
+  - Library or language extension
+  - Partitioning/Scheduling (dependency control)
+
+* - Task
+  - Multi-core (w/o RTOS)
+  - Processes (OS level)
+  - Partitioning/Scheduling
+:::
+
+## Multi-processing vs Multi-threading 
+
+:::::::::::::: {.columns}
+::: {.column width="50%"}
+```{ style="font-size: 0.6em;" }
+                   Main Process
+                 ┌─────────────┐
+                 │             │
+                 │   CPU       │
+                 ├─────────────┤
+                 │             │
+                 │   Memory    │
+                 └─┬────┬────┬─┘
+                   │    │    │
+                   │    │    │
+       ┌───────────┘    │    └───────────┐
+       │                │                │
+┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐
+│             │  │             │  │             │
+│   CPU       │  │   CPU       │  │   CPU       │
+├─────────────┤  ├─────────────┤  ├─────────────┤
+│             │  │             │  │             │
+│   Memory    │  │   Memory    │  │   Memory    │
+└─────────────┘  └─────────────┘  └─────────────┘
+
+   Process 1        Process 1        Process 1
+```
+:::
+::: {.column width="50%"}
+```{ style="font-size: 0.6em;" }
+┌──────────────────────────────────────┐
+│            MAIN PROCESS              │
+│                                      │
+│                                      │
+│     ┌──────────┐                     │
+│     │          │                     │
+│     │   CPU    │   ┌───────────┐     │
+│     │          │   │           │     │
+│     └──────────┘   │   Memory  │     │
+│                    │           │     │
+│                    └───────────┘     │
+│                                      │
+│                                      │
+│                                      │
+│      ┌─┐         ┌─┐         ┌─┐     │
+│      │┼│         │┼│         │┼│     │
+│      │┴│         │┴│         │┴│     │
+│      ▼▼▼         ▼▼▼         ▼▼▼     │
+│   Thread 1    Thread 2    Thread 3   │
+│      ┌─┐         ┌─┐         ┌─┐     │
+│      │┼│         │┼│         │┼│     │
+│      │┴│         │┴│         │┴│     │
+│      ▼▼▼         ▼▼▼         ▼▼▼     │
+│                                      │
+└──────────────────────────────────────┘
+```
+:::
+::::::::::::::
+
+## Multi-processing vs Multi-threading, cont.
+
+|                   | Multi-processing | Multi-threading  |
+|-------------------|------------------|------------------|
+| Memory            | Exclusive        | Shared           |
+| Communication     | Inter-process    | At caller site   |
+| Creation overhead | Heavy            | Minimal          |
+| Concurrency       | At OS level      | Library/language |
+
+# Conclusion
+
+- Parallelism is everywhere, but not always easy to exploit
+- Two types of *scaling* with parallelism : strong and weak 
+- Several types of parallelism : Flynn's taxonomy, multhreading vs multiprocessing etc.
+
+# References {.allowframebreaks}

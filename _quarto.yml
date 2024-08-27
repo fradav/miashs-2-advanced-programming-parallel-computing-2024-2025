@@ -1,8 +1,21 @@
 profile:
   default: slides
 
-author: "Norah Jones"
-date: "25/07/2024"
+author:
+  - name: François-David Collin
+    email: francois-david.collin@umontpellier.fr
+    affiliations: 
+      - CNRS
+      - IMAG
+  - name: Ghislain Durif
+    email: ghislain.durif@ens-lyon.fr
+    affiliations: 
+      - CNRS
+      - LBMC
+
+institute: Paul-Valéry Montpellier 3 University
+
+license: CC BY-SA
 
 bibliography: references.bib
 
@@ -11,3 +24,4 @@ filters:
 
 execute: 
   freeze: auto
+  cache: true

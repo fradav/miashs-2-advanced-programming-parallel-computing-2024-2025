@@ -1,5 +1,91 @@
-# Introduction
+# Prerequisites
 
-This is a book created from markdown and executable code.
+## Infrastructure
 
-See @knuth84 for additional discussion of literate programming.
+In this course, we will be using the following infrastructure:
+
+- a [Jupyterhub](https://jupyter.org/hub) instance, hosted direcly at [IMAG](https://imag.umontpellier.fr/) the lab where I work. Don’t use it directly, I’ll provide a speficic link for each of you to connect. This serve as a “hub” to launch your own JupyterLab instance.
+- a [JupyterLab](https://jupyter.org/) instance, hosted on a cluster [MESO@LR](https://meso-lr.umontpellier.fr/). You will have exatly one instance each. This instance will be, depending on the context of the course, configured to run on essentially two different ways: 
+    - either it will be configured to run on a single node, with a single CPU. This is the case for the first part of the course, where we will focus on the basics of **parallel** programming. 
+    - or it will be configured to run on multiple nodes, . This is the case for the second part of the course, where we will focus on **distributed** programming.
+
+
+## Software required
+
+You will need to install the following software on your computer:
+[Visual Studio Code](https://code.visualstudio.com/) (VSCode), a free and open-source code editor. You’ll have to install the following extensions:
+
+- ![](images/python-ext.png){ width=60 } [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) to have everything you need to work with Python.
+- ![](images/jupyter-ext.png){ width=60 } [Jupyter](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) to have everything you need to work with Jupyter notebooks.
+- ![](images/jupyter-ext.png){ width=60} [JupyterHub](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter-hub) to connect to the JupyterHub instance.
+- ![](images/liveshare-ext.png){ width=60 } [Live Share](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare) to enable collaborative editing.
+
+
+## How to use the JupyterLab instance in VSCode
+
+### Prerequisite: get your own JupyterLab instance url
+
+In the table I provided you, you should have a line with:
+
+- your name
+- your username (which begin with `e_miashs-XX` where `XX` is the number of your account)^[In the case of any problem, contact me ASAP, and specify your username.]
+- a [onesecret link](https://github.com/jhaals/yopass) type of link : ![](images/onesecret1.png)
+- As the decryption key, simply provide your username: ![](images/onesecret2.png)
+- And then you get the token for your jupyterhub instance: ![](images/onesecret3.png), save it somewhere.
+
+:::{.callout-warning}
+This works only **once**. If you close the tab or didn’t properly save the link you’ll have to ask me for a new onesecret link.
+:::
+
+### Connect to the JupyterLab instance with VSCode
+
+- First, bring down the command palette with `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS). Then, choose “Jupyter: Launch Interactive Window”. ![](images/launch-interactive.png)
+- It will open a new tab in vscode, click on “Select kernel” like this: ![](images/interactive-window.png)
+- Choose “Existing Jupyter Server” : ![](images/existing-server.png)
+- Then it will ask you for the URL of the JupyterLab instance, which is `https://jupyterhub.imag.umontpellier.fr` : ![](images/enter-jupyter-url.png)
+- Enter the login name, which is `e_miashs-XX` : ![](images/enter-username.png)
+- Paste the token you got from the onesecret link, and then press enter: ![](images/enter-token.png)
+- Then it will ask you for a display name for the instance, you can put whatever you want, and press enter: ![](images/enter-jupyterhub-name.png)
+- And finally, you have to choose for the kernel, choose “Python 3” and voilà ![](images/choose-kernel.png)
+
+![](images/kernel-connected.png)
+
+:::{.callout-note title="First cell is slow"}
+It could take a few seconds when you enter your first cell of code for the kernel to start.
+:::
+
+![](images/first-cells.png)
+
+:::{.callout-important title="All is remote!"}
+As you can see, from now on, every python interactive execution you do in VSCode will be done on your **remote** JupyterLab instance (the shell `hostname` returned the name of the cluster node on which the instance is running). Therefore, the code you execute can’t use any local file on your computer, even if your code is in a local file. Generally everything you’ll need as resources and files will be provided by me. 
+:::
+
+:::{.callout-tip title="In case you *really* need to use a local file"}
+In the case you need to use a local file, you’ll have to upload it to your JupyterLab instance, by using direct shell commands in the interactive window for example.
+:::
+
+:::{.callout-caution title="Browser vs VSCode"}
+Of course, you can use the JupyterLab instance directly in your browser, but I strongly recommend you to use VSCode, because:
+
+- It will be much more convenient to work with.
+- We will be able to use collaborative editing in practice sessions.
+:::
+
+:::{.callout-note title="Losing connection"}
+When you’ll lose your connection to the JupyterLab instance in VSCode (for example if you close the tab, exit from VSCode, or simply your laptop goes to sleep), you also lose the current state of your session in the stance (you have to reexecute all the cells you executed to restore the state of the session).
+
+It also could ask for your username again, just press enter.
+:::
+
+## Collaborative editing
+
+
+- In the discord channel, I’ll provide you a link to join a collaborative editing session. Don’t click on it, just copy it: ![](images/liveshare-link.png)
+- Then open a new “blank” window in VSCode, which will be exclusively for collaborative session. ![](images/blank-vsode.png)
+- Then, click on the “Live Share” button in the bottom left corner of the window ![](images/liveshare-button.png)
+- Click on the “Join” button ![](images/liveshare-join.png)
+- Either choose anonymous or sign in with your github/microsoft account ![](images/anon-or-signin.png)
+
+:::{.callout-note title="Anonymous Guest Name"}
+If you choose to sign in, you’ll have to authorize VSCode to access your github/microsoft account. If you choose anonymous, you’ll have to choose a username. Please choose a username that is easily identifiable as yours.
+:::

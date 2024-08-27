@@ -1,0 +1,583 @@
+This is LuaTeX, Version 1.17.0 (MiKTeX 23.5) (format=dvilualatex 2023.7.6)  26 SEP 2023 01:13
+ system commands enabled.
+ file:line:error style messages enabled.
+**c:/Users/fradav/Documents/Dev/Python/miashs-2-advanced-programming-parallel-c
+omputing-2023-2024/Courses/tikz-figures/mapreduce.tex
+
+(c:/Users/fradav/Documents/Dev/Python/miashs-2-advanced-programming-parallel-co
+mputing-2023-2024/Courses/tikz-figures/mapreduce.tex
+LaTeX2e <2023-06-01> patch level 1
+L3 programming layer <2023-06-30>
+Lua module: luaotfload 2022-10-03 3.23 Lua based OpenType font support
+Lua module: lualibs 2022-10-04 2.75 ConTeXt Lua standard libraries.
+Lua module: lualibs-extended 2022-10-04 2.75 ConTeXt Lua libraries -- extended c
+ollection.
+luaotfload | conf : Root cache directory is "C:/Users/fradav/AppData/Local/MiKTe
+X/luatex-cache/generic/names".
+luaotfload | init : Loading fontloader "fontloader-2022-10-03.lua" from kpse-res
+olved path "C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/luatex/luaotfload/
+fontloader-2022-10-03.lua".
+Lua-only attribute luaotfload@noligature = 1
+luaotfload | init : Context OpenType loader version 3.120
+Inserting `luaotfload.node_processor' in `pre_linebreak_filter'.
+Inserting `luaotfload.node_processor' in `hpack_filter'.
+Inserting `luaotfload.glyph_stream' in `glyph_stream_provider'.
+Inserting `luaotfload.define_font' in `define_font'.
+Lua-only attribute luaotfload_color_attribute = 2
+luaotfload | conf : Root cache directory is "C:/Users/fradav/AppData/Local/MiKTe
+X/luatex-cache/generic/names".
+Lua-only attribute luaotfload.letterspace_done = 3
+Inserting `luaotfload.aux.set_sscale_dimens' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.set_font_index' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.patch_cambria_domh' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.fixup_fontdata' in `luaotfload.patch_font_unsafe'.
+Inserting `luaotfload.aux.set_capheight' in `luaotfload.patch_font'.
+Inserting `luaotfload.aux.set_xheight' in `luaotfload.patch_font'.
+Inserting `luaotfload.rewrite_fontname' in `luaotfload.patch_font'.
+Inserting `tracingstacklevels' in `input_level_string'.
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/standalone/standalone.
+cls
+Document Class: standalone 2022/10/10 v1.3b Class to compile TeX sub-files stan
+dalone
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/tools/shellesc.sty
+Package: shellesc 2023/04/15 v1.0d unified shell escape interface for LaTeX
+Package shellesc Info: Unrestricted shell escape enabled on input line 75.
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/iftex/ifluatex.sty
+Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/iftex/iftex.sty
+Package: iftex 2022/02/03 v1.0f TeX engine tests
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/xkeyval/xkeyval.tex
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks17
+\XKV@tempa@toks=\toks18
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/xkeyval/keyval.tex))
+\XKV@depth=\count183
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\sa@internal=\count184
+\c@sapage=\count185
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/standalone/standalone.
+cfg
+File: standalone.cfg 2022/10/10 v1.3b Default configuration file for 'standalon
+e' class
+) (C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/base/article.cls
+Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/base/size10.clo
+File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
+luaotfload | db : Font names database loaded from C:/Users/fradav/AppData/Local/
+MiKTeX/luatex-cache/generic/names/luaotfload-names.luc.gz
+Inserting `luaotfload.dvi' in `pre_shipout_filter'.)
+\c@part=\count186
+\c@section=\count187
+\c@subsection=\count188
+\c@subsubsection=\count189
+\c@paragraph=\count190
+\c@subparagraph=\count191
+\c@figure=\count192
+\c@table=\count193
+\abovecaptionskip=\skip48
+\belowcaptionskip=\skip49
+\bibindent=\dimen139
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/luatex85/luatex85.sty
+Package: luatex85 2016/06/15 v1.4 pdftex aliases for luatex
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pdftexcmds/pdftexcmd
+s.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/infwarerr/infwarerr.
+sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode is ignored in DVI mode.
+\pdftexcmds@toks=\toks19
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/frontendlayer/tikz
+.sty
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/basiclayer/pgf.sty
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/utilities/pgfrcs.s
+ty
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/utilities/pgfuti
+l-common.tex
+\pgfutil@everybye=\toks20
+\pgfutil@tempdima=\dimen140
+\pgfutil@tempdimb=\dimen141
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/utilities/pgfuti
+l-latex.def
+\pgfutil@abb=\box51
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/utilities/pgfrcs
+.code.tex
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/pgf.revision.tex
+)
+Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
+))
+Package: pgf 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/basiclayer/pgfcore
+.sty
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/graphics/graphics.sty
+Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/graphics-cfg/graphics.
+cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: dvips.def on input line 107.
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/graphics-def/dvips.def
+File: dvips.def 2022/09/22 v3.1e Graphics/color driver for dvips
+))
+\Gin@req@height=\dimen142
+\Gin@req@width=\dimen143
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/systemlayer/pgfsys
+.sty
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgfs
+ys.code.tex
+Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/utilities/pgfkey
+s.code.tex
+\pgfkeys@pathtoks=\toks21
+\pgfkeys@temptoks=\toks22
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/utilities/pgfkey
+slibraryfiltered.code.tex
+\pgfkeys@tmptoks=\toks23
+))
+\pgf@x=\dimen144
+\pgf@y=\dimen145
+\pgf@xa=\dimen146
+\pgf@ya=\dimen147
+\pgf@xb=\dimen148
+\pgf@yb=\dimen149
+\pgf@xc=\dimen150
+\pgf@yc=\dimen151
+\pgf@xd=\dimen152
+\pgf@yd=\dimen153
+\w@pgf@writea=\write3
+\r@pgf@reada=\read2
+\c@pgf@counta=\count194
+\c@pgf@countb=\count195
+\c@pgf@countc=\count196
+\c@pgf@countd=\count197
+\t@pgf@toka=\toks24
+\t@pgf@tokb=\toks25
+\t@pgf@tokc=\toks26
+\pgf@sys@id@count=\count198
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgf.
+cfg
+File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
+)
+Driver file for pgf: pgfsys-dvips.def
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgfs
+ys-dvips.def
+File: pgfsys-dvips.def 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgfs
+ys-common-postscript.def
+File: pgfsys-common-postscript.def 2023-01-15 v3.1.10 (3.1.10)
+\pgf@objectcount=\count199
+)))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgfs
+yssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfsyssoftpath@smallbuffer@items=\count266
+\pgfsyssoftpath@bigbuffer@items=\count267
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/systemlayer/pgfs
+ysprotocol.code.tex
+File: pgfsysprotocol.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2022/06/12 v2.14 LaTeX color extensions (UK)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: dvips.def on input line 227.
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/graphics/mathcolor.ltx
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1353.
+Package xcolor Info: Model `RGB' extended on input line 1369.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1371.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1372.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1373.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1374.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1375.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1376.
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+re.code.tex
+Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmath.cod
+e.tex
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathutil
+.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathpars
+er.code.tex
+\pgfmath@dimen=\dimen154
+\pgfmath@count=\count268
+\pgfmath@box=\box52
+\pgfmath@toks=\toks27
+\pgfmath@stack@operand=\toks28
+\pgfmath@stack@operation=\toks29
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.basic.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.trigonometric.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.random.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.comparison.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.base.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.round.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.misc.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfunc
+tions.integerarithmetics.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathcalc
+.code.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmathfloa
+t.code.tex
+\c@pgfmathroundto@lastzeros=\count269
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfint.code
+.tex)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+repoints.code.tex
+File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@picminx=\dimen155
+\pgf@picmaxx=\dimen156
+\pgf@picminy=\dimen157
+\pgf@picmaxy=\dimen158
+\pgf@pathminx=\dimen159
+\pgf@pathmaxx=\dimen160
+\pgf@pathminy=\dimen161
+\pgf@pathmaxy=\dimen162
+\pgf@xx=\dimen163
+\pgf@xy=\dimen164
+\pgf@yx=\dimen165
+\pgf@yy=\dimen166
+\pgf@zx=\dimen167
+\pgf@zy=\dimen168
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+repathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@path@lastx=\dimen169
+\pgf@path@lasty=\dimen170
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+repathusage.code.tex
+File: pgfcorepathusage.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@shorten@end@additional=\dimen171
+\pgf@shorten@start@additional=\dimen172
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+rescopes.code.tex
+File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfpic=\box53
+\pgf@hbox=\box54
+\pgf@layerbox@main=\box55
+\pgf@picture@serial@count=\count270
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+regraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgflinewidth=\dimen173
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+retransformations.code.tex
+File: pgfcoretransformations.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@pt@x=\dimen174
+\pgf@pt@y=\dimen175
+\pgf@pt@temp=\dimen176
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+requick.code.tex
+File: pgfcorequick.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+reobjects.code.tex
+File: pgfcoreobjects.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+repathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+rearrows.code.tex
+File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfarrowsep=\dimen177
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+reshade.code.tex
+File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@max=\dimen178
+\pgf@sys@shading@range@num=\count271
+\pgf@shadingcount=\count272
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+reimage.code.tex
+File: pgfcoreimage.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+reexternal.code.tex
+File: pgfcoreexternal.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfexternal@startupbox=\box56
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+relayers.code.tex
+File: pgfcorelayers.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+retransparency.code.tex
+File: pgfcoretransparency.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+repatterns.code.tex
+File: pgfcorepatterns.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/basiclayer/pgfco
+rerdf.code.tex
+File: pgfcorerdf.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/modules/pgfmodul
+eshapes.code.tex
+File: pgfmoduleshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfnodeparttextbox=\box57
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/modules/pgfmodul
+eplot.code.tex
+File: pgfmoduleplot.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/compatibility/pgfc
+omp-version-0-65.sty
+Package: pgfcomp-version-0-65 2023-01-15 v3.1.10 (3.1.10)
+\pgf@nodesepstart=\dimen179
+\pgf@nodesepend=\dimen180
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/compatibility/pgfc
+omp-version-1-18.sty
+Package: pgfcomp-version-1-18 2023-01-15 v3.1.10 (3.1.10)
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/utilities/pgffor.s
+ty
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/utilities/pgfkeys.
+sty
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/utilities/pgfkey
+s.code.tex))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/pgf/math/pgfmath.sty
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/math/pgfmath.cod
+e.tex))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/utilities/pgffor
+.code.tex
+Package: pgffor 2023-01-15 v3.1.10 (3.1.10)
+\pgffor@iter=\dimen181
+\pgffor@skip=\dimen182
+\pgffor@stack=\toks30
+\pgffor@toks=\toks31
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/tikz.code.tex
+Package: tikz 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/pgflib
+raryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgf@plot@mark@count=\count273
+\pgfplotmarksize=\dimen183
+)
+\tikz@lastx=\dimen184
+\tikz@lasty=\dimen185
+\tikz@lastxsaved=\dimen186
+\tikz@lastysaved=\dimen187
+\tikz@lastmovetox=\dimen188
+\tikz@lastmovetoy=\dimen189
+\tikzleveldistance=\dimen190
+\tikzsiblingdistance=\dimen191
+\tikz@figbox=\box58
+\tikz@figbox@bg=\box59
+\tikz@tempbox=\box60
+\tikz@tempbox@bg=\box61
+\tikztreelevel=\count274
+\tikznumberofchildren=\count275
+\tikznumberofcurrentchild=\count276
+\tikz@fig@count=\count277
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/modules/pgfmodul
+ematrix.code.tex
+File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfmatrixcurrentrow=\count278
+\pgfmatrixcurrentcolumn=\count279
+\pgf@matrix@numberofcolumns=\count280
+)
+\tikz@expandcount=\count281
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
+)))
+\sa@box=\box62
+)
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibraryshapes.code.tex
+File: tikzlibraryshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibraryshapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/shapes
+/pgflibraryshapes.geometric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibraryshapes.misc.code.tex
+File: tikzlibraryshapes.misc.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/shapes
+/pgflibraryshapes.misc.code.tex
+File: pgflibraryshapes.misc.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibraryshapes.symbols.code.tex
+File: tikzlibraryshapes.symbols.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/shapes
+/pgflibraryshapes.symbols.code.tex
+File: pgflibraryshapes.symbols.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibraryshapes.arrows.code.tex
+File: tikzlibraryshapes.arrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/shapes
+/pgflibraryshapes.arrows.code.tex
+File: pgflibraryshapes.arrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibraryshapes.callouts.code.tex
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/shapes
+/pgflibraryshapes.callouts.code.tex))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/frontendlayer/ti
+kz/libraries/tikzlibraryshapes.multipart.code.tex
+File: tikzlibraryshapes.multipart.code.tex 2023-01-15 v3.1.10 (3.1.10)
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/generic/pgf/libraries/shapes
+/pgflibraryshapes.multipart.code.tex
+File: pgflibraryshapes.multipart.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\pgfnodepartlowerbox=\box63
+\pgfnodeparttwobox=\box64
+\pgfnodepartthreebox=\box65
+\pgfnodepartfourbox=\box66
+\pgfnodeparttwentybox=\box67
+\pgfnodepartnineteenbox=\box68
+\pgfnodeparteighteenbox=\box69
+\pgfnodepartseventeenbox=\box70
+\pgfnodepartsixteenbox=\box71
+\pgfnodepartfifteenbox=\box72
+\pgfnodepartfourteenbox=\box73
+\pgfnodepartthirteenbox=\box74
+\pgfnodeparttwelvebox=\box75
+\pgfnodepartelevenbox=\box76
+\pgfnodeparttenbox=\box77
+\pgfnodepartninebox=\box78
+\pgfnodeparteightbox=\box79
+\pgfnodepartsevenbox=\box80
+\pgfnodepartsixbox=\box81
+\pgfnodepartfivebox=\box82
+)))
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/l3backend/l3backend-dv
+ips.def
+File: l3backend-dvips.def 2023-04-19 L3 backend support: dvips
+\l__pdf_internal_box=\box83
+\g__pdf_backend_object_int=\count282
+\l__pdf_backend_content_box=\box84
+\l__pdf_backend_model_box=\box85
+\g__pdf_backend_annotation_int=\count283
+\g__pdf_backend_link_int=\count284
+\g__pdf_backend_link_sf_int=\count285
+) (./mapreduce.aux)
+\openout1 = mapreduce.aux
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 5.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 5
+.
+
+(C:/Users/fradav/AppData/Local/Programs/MiKTeX/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 23.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 23.
+
+[1
+
+] (./mapreduce.aux)
+ ***********
+LaTeX2e <2023-06-01> patch level 1
+L3 programming layer <2023-06-30>
+ ***********
+)
+
+Here is how much of LuaTeX's memory you used:
+ 14484 strings out of 477540
+ 100000,1977958 words of node,token memory allocated
+ 406 words of node memory still in use:
+   3 hlist, 1 vlist, 1 rule, 2 glue, 3 kern, 1 glyph, 4 attribute, 48 glue_spec,
+ 4 attribute_list, 1 write nodes
+   avail lists: 2:1662,3:2553,4:2,5:84,6:15,7:1624,8:5,9:363,10:1,11:32
+ 35040 multiletter control sequences out of 65536+600000
+ 30 fonts using 2003471 bytes
+ 117i,6n,114p,510b,742s stack positions out of 10000i,1000n,20000p,200000b,200000s
+Output written on mapreduce.dvi (1 page, 31168 bytes).

@@ -1,0 +1,107 @@
+\documentclass[tikz,border=10pt]{standalone}
+\usepackage{luacode}
+\usetikzlibrary{shapes.misc,fit,decorations.pathreplacing}
+\begin{document}
+
+\begin{luacode}
+function isinlist(x,l)
+    for _, v in pairs(l) do
+        if v == x then
+            return 1
+        end
+    end
+    return 0
+end
+\end{luacode}
+
+\begin{tikzpicture}[very thick]
+\newcommand\IsInList[2]{\directlua{tex.sprint(isinlist(#1,#2))}}
+% imsize: only thing to modify to get a different sized image
+\def\imsize{11}  % number of pixel wide (odd numbers only...)
+\def\seqarray{{1,3,2,0,1,9,2,0,1,1,0}}
+\def\patarray{{0,1}}
+% pixel coord further appart from origin (could have been avoided easily...)
+\pgfmathsetmacro{\n}{(\imsize - 1)/2}  % 2*n + 1 = \imsize <==> n = (\imsize - 1)/2
+\pgfmathsetmacro{\nm}{(\imsize - 2)/2}
+
+
+
+\foreach\i in {0,0.5,...,\nm}{
+    \pgfmathsetmacro{\intpixel}{\seqarray[int(\i*2)]}
+    \pgfmathsetmacro{\ig}{int(\i*2+1)}
+
+    \if\IsInList{\ig}{{4,8}}0
+        \special{dvisvgm:raw <g id="pair\ig">}
+        \fill[red,draw=black] (\i,0) rectangle (\i+0.5,0.5);
+        \fill[red,draw=black] (\i+0.5,0) rectangle (\i+1,0.5);
+        \special{dvisvgm:raw </g>}
+    \fi
+
+
+}
+
+\foreach\i in {0,0.5,...,\nm}{
+    \pgfmathsetmacro{\intpixel}{\seqarray[int(\i*2)]}
+    \pgfmathsetmacro{\ig}{int(\i*2+1)}
+
+    \if\IsInList{\ig}{{4,8}}1
+        \special{dvisvgm:raw <g id="pair\ig">}
+        \fill[yellow,semitransparent,draw=black] (\i,0) rectangle (\i+0.5,0.5);
+        \fill[yellow,semitransparent,draw=black] (\i+0.5,0) rectangle (\i+1,0.5);
+        \special{dvisvgm:raw </g>}
+    \fi
+
+}
+
+\foreach\i in {0,0.5,...,\n}{
+    \pgfmathsetmacro{\intpixel}{\seqarray[int(\i*2)]}
+    \pgfmathsetmacro{\ig}{int(\i*2+1)}
+    % image border
+    \fill[fill=white,draw=black,fill opacity=0] (\i,0) rectangle (\i+0.5,0.5);
+    \draw[black, thick] (0,0) rectangle (\n+0.5, 0.5);
+    
+    \node (seq\ig) at (\i+0.25,0.25) {\intpixel};
+}
+
+\foreach\i in {0,0.5,...,0.5}{
+    \pgfmathsetmacro{\intpixel}{\patarray[int(\i*2)]}
+    \pgfmathsetmacro{\ig}{int(\i*2+1)}
+    \fill[green,draw=black] (\i+2.5,-2) rectangle (\i+3,0.5-2);
+    % image border
+    % \draw[black, thick] (0,0) rectangle (0.5, 0.5);
+    
+    \node (pat\ig) at (\i+2.75,-1.75) {\intpixel};
+}
+
+\node (over0) at (pat1.north) [above=2mm] {};
+\node (over1) at (pat2.north) [above=2mm] {};
+
+\node[fit=(seq1)(seq\imsize)] (first) {};
+\node at (first.north) [above=3mm]
+{Data Sequence};
+
+\node[fit=(pat1)(pat2)] (second) {};
+\node at (second.south) [below=1mm]
+{Pattern Sequence};
+
+
+\special{dvisvgm:raw <g id="firstocc">}
+\draw [decorate,decoration={brace,amplitude=10pt,raise=4pt}]
+(pat1.north west) -- (pat2.north east) node (seq) [black,midway,yshift=0.6cm] {};
+\draw [decorate,decoration={brace,amplitude=10pt,mirror,raise=4pt}]
+(seq4.south west) -- (seq5.south east) node (firstocc) [black,midway,yshift=-0.6cm] {};
+\draw [<-] (firstocc) -- (over0);
+\node[text=blue,draw=blue,rounded rectangle] (ind0) at (seq4.north west) [above=1mm] {\tiny Index 3};
+\draw [-,blue] (ind0) -- (seq4.north west);
+\special{dvisvgm:raw </g>}
+
+\special{dvisvgm:raw <g id="secocc">}
+\draw [decorate,decoration={brace,amplitude=10pt,mirror,raise=4pt}]
+(seq8.south west) -- (seq9.south east) node (secocc) [black,midway,yshift=-0.6cm] {};
+\draw [<-] (secocc) -- (over1);
+\node[text=blue,draw=blue,rounded rectangle] (ind1) at (seq8.north west) [above=1mm] {\tiny Index 7};
+\draw [-,blue] (ind1) -- (seq8.north west);
+\special{dvisvgm:raw </g>}
+
+\end{tikzpicture}
+\end{document}

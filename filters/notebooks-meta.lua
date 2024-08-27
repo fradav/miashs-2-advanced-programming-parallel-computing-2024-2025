@@ -1,8 +1,8 @@
 local prefix = "docs-resources/Notebooks"
 
 function Meta(meta)
-  local dir = string.match(quarto.doc.input_file, "(.-)([^\\/]-%.?([^%.\\/]*))$")
-  local dir = dir:gsub("\\", "/")
+  local dir, origfilename = string.match(quarto.doc.input_file, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+  dir = dir:gsub("\\", "/")
   if dir:match("Solutions/$") and quarto.format.is_html_output() then
     local filename = pandoc.path.join({quarto.project.directory or ".", 'applications.yml'})
     local file = io.open(filename, 'a')
@@ -22,7 +22,9 @@ function Meta(meta)
           file:write("  ipynb: \"" .. prefix .. "/" .. ipynb .. "\"\n")
         end
         file:write("  py: \"" .. prefix .. "/" .. py .. "\"\n")
+        file:write("  name: \"" .. origfilename .. "\"\n")
       end
+      file:close()
     end
   end
 end

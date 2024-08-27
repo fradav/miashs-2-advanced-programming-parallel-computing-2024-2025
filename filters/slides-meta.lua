@@ -9,13 +9,15 @@ function Meta(meta)
       local title = pandoc.utils.stringify(meta.title)
       -- get the ouput file name
       local html = quarto.doc.project_output_file()
+      local dir, filename = string.match(quarto.doc.input_file, "(.-)([^\\/]-%.?([^%.\\/]*))$")
       if html ~= nil then
         -- replace all backslashes with forward slashes
         html = html:gsub("\\", "/")
         file:write("- title: \"" .. title .. "\"\n")
         file:write("  html: \"" .. prefix .. "/" .. html .. "\"\n")
-        file:close()
+        file:write("  name: \"" .. filename .. "\"\n")
       end
+      file:close()
     end
   end
 end

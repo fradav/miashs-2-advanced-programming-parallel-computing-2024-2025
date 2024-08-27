@@ -1,0 +1,267 @@
+## ⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️
+ Under _Windows_, with python the multiprocessing module `multiprocessing` works in a normal script but **not in notebooks**.
+ 
+If you absolutely must use Windows, use[WSL](https://docs.microsoft.com/fr-fr/windows/wsl/)
+
+# Strong Scaling
+
+## Prerequisites
+
+For this TP, set the number of **physical** cores available (8 on the cluster nodes), not the number of logical cores.
+
+```{python}
+ncores = 4 # 8 on the cluster nodes
+```
+
+```{python}
+import math
+```
+
+# Introduction
+
+## Basic functions
+
+Make a function `is_prime` that tests whether an integer $n$ strictly greater than 2 is prime or not.
+
+Hint: First check that it is not even, then list all odd numbers from 3 to $\sqrt{n}$ (upper rounding) and test whether they are factors.
+
+```{python}
+#| tags: [solution]
+def is_prime(n):
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(math.sqrt(n)) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+```
+
+Make a function `total_primes` that counts the number of primes in a list.
+
+```{python}
+#| tags: [solution]
+def total_primes(l):
+    n = 0
+    for i in l:
+        if (i > 0) & (i <= 2):
+            n=n+1
+        elif is_prime(i):
+            n=n+1                
+    return n
+```
+
+Calculate the number of primes from 1 to $N=100 000$ with this function
+
+```{python}
+N=100000
+```
+
+```{python}
+total_primes(range(1,N+1))
+```
+
+## Time measurement
+
+Use `%timeit` to measure the average time taken to count the number of primes up to $N=100000$.
+(note: by default, `timeit` repeats the calculation $7times{}10$ to obtain a reliable average. Please refer to the [magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html) and [timeit](https://docs.python.org/3.9/library/timeit.html) docs).
+
+Store measurements using the -o option in timeit
+
+```{python}
+orig_time = %timeit -o total_primes(range(1,N+1))
+```
+
+# First steps
+
+Our first attempt at multiprocessing will involve partitioning the count into 2. We'll run two processes in parallel on $\{1,...,N/2\}$ and $\{N/2+1,...,N\}$.
+
+Complete the following code ([source](https://notebook.community/izapolsk/integration_tests/notebooks/MultiProcessing)).
+
+Check the result and the performance gain with `%timeit`.
+
+```{python}
+#| eval: false
+from multiprocessing.pool import Pool
+
+def split_total(N):
+    with Pool(2) as pool:
+        return sum(pool.map(total_primes, ...))
+```
+
+```{python}
+#| tags: [solution]
+from multiprocessing.pool import Pool
+
+def split_total(N):
+    with Pool(2) as pool:
+        return sum(pool.map(total_primes, [range(1,int(N/2)), range(int(N/2)+1,N+1)]))
+```
+
+```{python}
+split_total(N)
+```
+
+```{python}
+split_time = %timeit -o split_total(N)
+```
+
+```{python}
+print("Gain with split : {:.1f}".format(orig_time.average/split_time.average))
+```
+
+# Generalization
+
+Generalize the function with partitioning into *n* tasks instead of just 2. We'll use a generalized `multi_process_list` function, which takes as arguments :
+- f` the main computation function, which takes an integer list as argument
+- n` the number of partitions (here, one partition = task)
+- par_f` a function which takes as argument a list and a number of partitions to be performed, and returns the list of partitions in this list
+- l` the list to be partitioned
+
+```{python}
+#| eval: false
+def multi_process_list(f,n,par_f,l):
+    with Pool(ncores) as pool:
+        return sum(pool.map(...)
+```
+
+First, we write the `naive_par` partitioning function.
+
+```{python}
+#| eval: false
+def naive_par(lst,n):
+    return ...
+```
+
+We'll use the `chunks` function, which partitions a list into chunks of fixed size (except for the last one).
+
+We'll test the gain obtained with 8 tasks/partitions.
+
+```{python}
+def chunks(lst, m):
+    """Yield successive m-sized chunks from lst."""
+    for i in range(0, len(lst), m):
+        yield lst[i:i + m]
+```
+
+Vérifier le fonctionnement de `naive_par`
+
+```{python}
+#| tags: [solution]
+def naive_par(lst,n):
+    return chunks(lst,int(len(lst)/n))
+```
+
+```{python}
+#| tags: [solution]
+list(naive_par(range(1,100001),4))
+```
+
+```{python}
+#| tags: [solution]
+def multi_process_list(f,n,par_f,l):
+    with Pool(n) as pool:
+        return sum(pool.map(f,par_f(l,n)))
+```
+
+```{python}
+#| tags: [solution]
+multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+```
+
+```{python}
+multi_time = %timeit -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+```
+
+```{python}
+print("Gain avec multi : {:.1f}".format(orig_time.average/multi_time.average))
+```
+
+Repeat all calculations and payoff comparisons with $N=5000000$. To avoid long calculation times, we'll restrict ourselves to a single iteration (option `-r 1 -n 1` in `%timeit`).
+
+```{python}
+N = 5000000
+```
+
+```{python}
+orig_time = %timeit -r 1 -n 1 -o total_primes(range(1,N+1))
+split_time = %timeit -r 1 -n 1 -o split_total(N)
+multi_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+
+print("Gain with split : {:.1f}".format(orig_time.average/split_time.average))
+print("Gain with multi : {:.1f}".format(orig_time.average/multi_time.average))
+```
+
+# Optional refinement
+
+
+How much time is spent on each task? Use the following function to get an idea. What do you observe?
+
+```{python}
+def timed_total_primes(l):
+    %timeit -r 1 -n 1 total_primes(l)
+    return 0
+```
+
+```{python}
+#| tags: [solution]
+multi_process_list(timed_total_primes,ncores,naive_par,range(1,N+1))
+```
+
+How can we solve this problem?
+
+Find a simple solution that requires only one line of code. Check the execution times of individual tasks.
+
+Compare again with $N = 10000000$ (which will take about 1 minute sequentially).
+
+```{python}
+#| tags: [solution]
+import random
+
+N = 10000000
+
+shuffled = random.sample(range(1,N+1),N)
+```
+
+```{python}
+#| tags: [solution]
+multi_process_list(total_primes,ncores,naive_par,shuffled)
+```
+
+```{python}
+#| tags: [solution]
+temps_shuffled = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,shuffled)
+```
+
+```{python}
+#| tags: [solution]
+multi_process_list(timed_total_primes,ncores,naive_par,shuffled)
+```
+
+```{python}
+#| tags: [solution]
+shuffled = random.sample(range(1,N+1),N)
+orig_time = %timeit -r 1 -n 1 -o total_primes(range(1,N+1))
+multi_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+shuffled_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,shuffled)
+
+print("Gain with multi : {:.1f}".format(orig_time.average/multi_time.average))
+print("Gain with shuffled : {:.1f}".format(orig_time.average/shuffled_time.average))
+```
+
+# Recreational interlude
+
+If you have a CPU with SMT (Hyperthreading), redo the measurements with `ncores` equal to the number of logic cores, and explain the results.
+
+```{python}
+#| tags: [solution]
+ncores = 8 # On a machine with 4 physical cores/8 logical cores
+
+shuffled = random.sample(range(1,N+1),N)
+orig_time = %timeit -r 1 -n 1 -o total_primes(range(1,N+1))
+multi_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+shuffled_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,shuffled)
+
+print("Gain with multi : {:.1f}".format(orig_time.average/multi_time.average))
+print("Gain with shuffled : {:.1f}".format(orig_time.average/shuffled_time.average))
+```
+

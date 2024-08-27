@@ -1,0 +1,404 @@
+---
+title: GPU computing, CPU cache, Computing cluster
+subtitle: The World of big clusters and complex message passing
+notebook-view:
+  - notebook: gpu.ipynb
+    title: "GPU notebook example"
+    url: gpu.ipynb
+  - notebook: cache.ipynb
+    title: "Cache notebook example"
+    url: cache.ipynb
+---
+
+# GPU Computing
+
+## GPU ?
+
+GPU = **graphical process unit**
+
+> "(...) a **specialized electronic circuit** designed to rapidly manipulate and alter memory to accelerate the **creation of images** in a frame buffer intended for output to a **display device**. GPUs are used in embedded systems, mobile phones, personal computers, workstations, and game consoles." ([Wikipedia](https://en.wikipedia.org/wiki/Graphics_processing_unit))
+
+**Original purpose:** image creation and manipulation for graphical rendering (video games, video edition, 3D conception, etc.)
+
+## GPU for computing ?
+
+> "Modern GPUs are very efficient at manipulating computer graphics and image processing. Their highly parallel structure makes them **more efficient** than general-purpose central processing units (CPUs) for algorithms that **process large blocks of data in parallel**." ([Wikipedia](https://en.wikipedia.org/wiki/Graphics_processing_unit))
+
+**Nowadays usage:** more general massive computations based on matrix operations
+
+## Von Neumann architecture
+
+Basic principle (present in most modern computing units) with three interconnected parts:
+
+- **control unit**: does most of the work, such as deciding what operation to do next, fetching the next instruction from memory, etc.
+- **arithmetic/logic unit (ALU)**: implements operations such as addition, subtraction, multiplication, etc.
+- **memory unit**: stores the data processed by the chip, such as its inputs, outputs, and any intermediate data
+
+## Von Neumann architecture, schema
+
+![](figs/von_neuman.png)
+
+:::attribution
+[Ygor Serpa (TowardsDataScience)](https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3)
+:::
+
+## GPU architecture
+
+![](figs/gpu_scheme.png)
+
+:::attribution
+[Ygor Serpa (TowardsDataScience)](https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3)
+:::
+
+**Principle:** control units are large and expensive, while arithmetic units are more straightforward and cheaper
+
+**Design:** a sub-processor = one control unity commanding several ALUs (= GPU
+cores) to operate on larger chunks of data
+
+**Limitation:** all ALUs (connected to the  same control unity) must obey the same commands (i.e. do the same thing at the same moment)
+
+## GPU trades "control" for "arithmetic power"
+
+- ALU blocks (= gpu sub-processors) **not as versatile** as CPU cores but can operate over large amounts of data in batches 
+
+- Central control unit syncs all the sub-processors (each one can do a different task) but the same set of ALUs cannot do different things in parallel (e.g. `if` statements costly for GPUs) 
+
+**Example**: each block of 16 ALUs is limited to processing the same instruction over 16 pairs of operands
+
+## Latency vs Throughput
+
+- **Latency:** how long does it take to finish a given task 
+- **Throughput:** how many times can you complete the task within a period 
+    
+**CPU cores** optimized for **latency**: to finish a task as fast as possible.
+
+$\rightarrow$ scales with more complex operations but not with larger data
+
+
+**GPU cores** optimized for **throughput**: individually slower, but they operate on bulks of data at once.
+
+$\rightarrow$ scales with larger data but not with more complex operations
+
+## Latency vs Throughput: an analogy (I)
+
+Travelling by road:
+
+- **latency**: use a sport car (faster but can only take 2-5 persons)
+- **throughput**: use a bus (slower but can take up to 80 persons) 
+
+Total time to transport 5 persons over 100km (latency):
+
+- 1 trip with a 80-seat bus at 50km/h: 2hours
+- 1 trip with a 5-seat car at 200km/h: 0.5hours 
+
+Total time to transport 160 persons over 100km (throughput):
+
+- 2 round trips with a 80-seat bus at 50km/h: 8hours
+- 32 round trips with a 5-seat car at 200km/h: 32hours
+
+## Latency vs Throughput: an analogy (II)
+
+Fastest way to learn?
+
+:::: {.columns}
+:::{.column width="30%"}
+**Latency**: private teacher or small classroom
+
+**Throughput**: big classroom or online course
+::: 
+::: {.column width="60%"}
+![](figs/parallel_teaching.png)
+:::
+::::
+
+:::attribution
+[Ygor Serpa (TowardsDataScience)](https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3)
+:::
+
+$\rightarrow$ **none is arguably better than the others, all work and fill a specific need**
+
+## CPU vs GPU: hardware side
+
+:::list-table
+Units: B = Byte (memory), W = Watts (power), Hz = Hertz (frequency)
+
+* - Type
+  - Nb of cores
+  - Memory (cache^[per core])
+  - Memory (device)
+  - Power per core
+  - Clock rate^[cycles per second (one operation = $1\times$ - $10\times$ cycles]
+
+* - CPU
+  - $10\times$ 
+  - $10\times$ - $100\times$ KB
+  - $10\times$ - $100\times$ GB^[RAM = host memory]
+  - $10\times$ W
+  - $3$ - $5$ GHz
+
+* - GPU
+  - $1000\times$
+  - $100\times$ B
+  - $10\times$ GB^[GPU on-board memory]
+  - $0.01\times$ - $0.1\times$ W
+  - $0.5$ - $1$ GHz
+:::
+
+
+## CPU vs GPU: concept side
+
+:::list-table
+* - CPU
+  - GPU
+
+* - Task parallelism
+  - Data parallelism
+
+* - A few “heavyweight” cores
+  - Many “ligthweight” cores
+
+* - High memory size
+  - High memory throughput
+
+* - Many diverse instruction sets
+  - A few highly optimized instruction sets
+
+* - Software thread management
+  - Hardware thread management
+:::
+
+:::attribution
+[Mantas Levinas (CherryServers)](https://blog.cherryservers.com/gpu-vs-cpu-what-are-the-key-differences)
+:::
+
+## GPU = dedicated chip
+
+:::: {.columns}
+::: {.column width="50%"}
+**CPU** directly mounted on the motherboard
+
+$<5\times 5$ cm dimension^[size fixed for decades]
+
+![](figs/Intel_CPU_Core_i7_6700K_Skylake_perspective.jpg){ height=200px .noinvert }
+![](figs/Intel_CPU_Core_i7_6700K_Skylake_top.jpg){ height=200px .noinvert }
+:::
+::: {.column width="50%"}
+**GPU** is a HUGE chip ($\sim 30\times 10$ cm)
+
+mounted through PCI-express connection
+
+![](figs/NVIDIA-GTX-1070.jpg){ height=250px .noinvert }
+
+
+:::
+::::
+
+:::attribution
+[Wikipedia](https://fr.wikipedia.org/wiki/Pascal_(architecture_de_carte_graphique))
+:::
+
+## CPU vs GPU comparison: an example
+
+![](figs/ryzen_vs_2080.png){ .noinvert  }
+
+:::attribution
+ [Ygor Serpa (TowardsDataScience)](https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3)
+:::
+
+## CPU vs GPU comparison: an example, CPU
+
+**AMD Ryzen Threadripper 2990X processor**: 32cores (each capable of running two independent threads), 3 GHz up to 4.2 GHz (boost) clock rate, 2 instructions per clock cycle, each thread processes 8 floating-point values at the same time
+
+## CPU vs GPU comparison: an example, GPU
+
+**Nvidia RTX 2080 TI GPU**: 4352 ALUs, 1.35 GHz up to 1.545 GHz (boost) clock rate, 2 operations per clock cycle, one floating point operation per ALU
+
+## Performance illustration
+
+**Throughput**:
+
+Maximum theoretical number of floating-point operations they can handle per second (FLOPS)\footnote{peak theoretical performance}
+
+- **CPU** (Ryzen): $(4.2 \times 10^9) \times 2 \times (8 \times 64) = 4309.8 \times 10^9$ FLOPS $\approx 4.3$ TFLOPS
+- **GPU** (2080 TI): $(1.545 \times 10^9) \times 2 \times 4352 = 13447.68 \times 10^9$ FLOPS $\approx 13.4$ TFLOPS 
+
+**Latency**: the CPU clocks at 4.2 GHz, while the GPU clocks at $\sim 1.5$ GHz, nearly three times slower 
+
+$\rightarrow$ **one is not better than the other, they serve different purposes**
+
+## From 3D image processing (for games) to general-purpose computing
+
+
+**image processing = large matrix operations**
+
+$\rightarrow$ why not using GPU for general matrix operations?
+
+**Example**: deep-learning = combination of linear transformation (=matrix product) and simple non-linear operations
+
+**General-Purpose Graphics Processing Units** (GPGPU): computations on GPU not dedicated to image processing
+
+## Hardware
+
+- Nvidia (with CUDA drivers) \bigskip
+
+- AMD (with AMD drivers or openCL)
+
+## Software (Python)
+
+- deep learning oriented: [`tensorflow`](https://www.tensorflow.org/´), [`PyTorch`](https://pytorch.org/), [`keras`](https://keras.io/) \bigskip
+
+- more general purpose computing: see [`numba`](https://numba.pydata.org/), [`cupy`](https://cupy.dev/), [`RAPIDS`](https://docs.rapids.ai/api) (cuDF, cuML, etc.), [`keops`](https://www.kernel-operations.io/keops/index.html), and more
+
+## Software (R)
+
+
+See this [page](https://www.r-pkg.org/ctv/HighPerformanceComputing)^[corresponding to [CRAN task view on high performance computing](https://cran.r-project.org/web/views/HighPerformanceComputing.html)]
+
+Example with `gpuR`:
+
+```R
+ORDER = 1024
+A = matrix(rnorm(ORDER^2), nrow=ORDER)
+B = matrix(rnorm(ORDER^2), nrow=ORDER)
+gpuA = gpuMatrix(A, type="double")
+gpuB = gpuMatrix(B, type="double")
+C = A %*% B
+gpuC = gpuA %*% gpuB
+all(C == gpuC[])
+[1] TRUE
+```
+
+## In practice
+
+See the dedicated [notebook](gpu.ipynb)^[and its [pdf version](gpu.pdf),[html version](gpu.html)]
+
+
+# Memory Cache
+
+## CPU cache ?
+
+Cache = **on-board memory unit** for CPU cores
+
+![](figs/cpu_scheme.png)
+
+:::attribution
+[Ygor Serpa (TowardsDataScience)](https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3)
+:::
+
+## Example of architecture
+
+![Credit: [Wikipedia](https://en.wikipedia.org/wiki/CPU_cache) (AMD Bulldozer server)
+](figs/amd_bulldozer.png)
+
+## Cache memory size
+
+:::: {.columns}
+::: {.column width="50%"}
+**Very small**
+
+- L1 Cache = $10\times$ KB (per core) \medskip
+- L2 Cache = $100\times$ KB (per core) \medskip
+- L3 Cache = $1000\times$ KB (shared per CPU)
+:::
+::: {.column width="50%"}
+Example:
+
+![](figs/cpu_cache_hierarchy.png)
+:::
+::::
+
+:::attribution
+[Wikipedia](https://en.wikipedia.org/wiki/CPU_cache) (K8 core in the AMD Athlon 64 CPU)
+:::
+
+## Cache access time (latency)
+
+![](figs/cpu_cache_access.png)
+
+:::attribution
+[Stackoverflow](https://stackoverflow.com/questions/42435180/what-is-the-difference-between-cpu-cache-and-memory-cache/42435902#42435902)
+:::
+
+## CPU cache miss
+
+- data transferred from memory to cache **by blocks of contiguous data**
+
+- to be efficient: necessary to use contiguous data in computations
+
+![](figs/cpu_cache_miss.png)
+
+:::attribution
+[Data analysis workflows with R and Python course](https://aaltoscicomp.github.io/data-analysis-workflows-course/chapter-4-scaling/)
+:::
+
+## In practice
+
+See the dedicated [notebook](cache.ipynb)^[and its [pdf version](cache.pdf)]
+
+
+# Computing cluster
+
+## Cluster
+
+- a **front-end server**: user interface to submit computations, accessible from the internet (e.g. by `ssh` connection or through a web interface\footnote{like yourself with the jupyter hub})
+
+- many **computing servers**\footnote{mutli-CPU and/or multi-GPU machines} (also called computing **nodes** or **workers**) that run the computations
+
+- one or more **storage servers**: to store the data and results
+
+
+![](figs/cluster.png)
+
+:::attribution
+[Wikipedia](https://en.wikipedia.org/wiki/Computer_cluster)
+:::
+
+## Usage
+
+- single-node multi-core computations (multi-threading or multi-processing) \medskip
+
+- multi-node computations (distributed computations) \medskip
+
+- GPU computing \medskip
+
+- combinations of two or more
+
+## Illustration
+
+MUSE cluster at MESO@LR computing center in Montpellier
+
+![](figs/muse.jpg){ .noinvert }
+
+:::attribution
+[meso@LR](https://meso-lr.umontpellier.fr/)
+:::
+
+
+## Resource management
+
+How to **share** the computing resources (cores, memory, full nodes) between user?
+
+$\rightarrow$ a resource management system (also called a scheduler) to assign resources to users depending on their request
+
+**Functions**:
+
+- **allocating** exclusive and/or non-exclusive **access to resources** (computer nodes) to users for some duration of time so they can perform work \medskip
+- **providing** a framework for **starting, executing, and monitoring work**, typically a parallel job\footnote{a job = a set of computations} \medskip
+- **arbitrating contention** for resources by managing a queue of pending jobs
+
+## An example
+
+[SLURM](https://slurm.schedmd.com/) = a job scheduler for clusters and supercomputers
+
+**Job submission:**
+
+- In-session command submission (e.g. requesting 16 cores with 32GB of RAM memory and a RTX 2080 TI GPU, on a single node, during 3 days):
+```bash
+srun -N 1 -c 16 --mem=32G --gpus=rtx2080:1 -t 3-0 my_command
+```
+
+
+- Script submission to be run off-session (e.g. requesting 3 full nodes during 96hours):
+```bash
+sbatch -N 3 -t 96:0:0 my_script.sh
+```

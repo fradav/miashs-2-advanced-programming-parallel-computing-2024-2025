@@ -1,19 +1,32 @@
 project:
   render:
-    - ./Lectures/Applications/*.qmd
-    - ./Lectures/Solutions/*.qmd
+    - ./Courses/Solutions/0_Numpy_Workout.qmd
+    - ./Courses/Applications/*.qmd
   output-dir: docs-resources/Notebooks
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py
 
-format: 
-  ipynb: default
-  html: default
+theme:
+  dark: darkly
+  light: flatly
+  
+format:
+  ipynb:
+    date: "2024-08-26"
+    date-format: full
+    toc: true
+  html:
+    number-depth: 3
+    toc-depth: 4
+    html-math-method: katex
+    code-fold: show
+    code-tools: true
+    echo: true
 
 execute: 
   eval: false
 
 filters:
-  - ./filters/unclutter-slides.lua
-  - ./filters/unclutter-tp.lua
-  - ./filters/notebooks-meta.lua
+  - filters/unclutter-slides.lua
+  - filters/unclutter-tp.lua
+  - filters/notebooks-meta.lua

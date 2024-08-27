@@ -1,0 +1,2122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="François-David Collin">
+<meta name="author" content="Ghislain Durif">
+
+<title>2&nbsp; Introduction to parallel computing – Advanced programming and parallel computing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../Courses/2_Concepts.html" rel="next">
+<link href="../intro.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Courses/1_Intro.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to parallel computing</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Advanced programming and parallel computing</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Prerequisites</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/1_Intro.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to parallel computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/2_Concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Advanced concepts in parallel programming</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../applications.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Applications</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Slides in reveal.js</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#parallel-computing-the-intuition" id="toc-parallel-computing-the-intuition" class="nav-link active" data-scroll-target="#parallel-computing-the-intuition"><span class="header-section-number">3</span> Parallel computing: the intuition</a>
+  <ul>
+  <li><a href="#computing" id="toc-computing" class="nav-link" data-scroll-target="#computing"><span class="header-section-number">3.1</span> Computing ?</a></li>
+  <li><a href="#why-parallel-computing" id="toc-why-parallel-computing" class="nav-link" data-scroll-target="#why-parallel-computing"><span class="header-section-number">3.2</span> Why parallel computing?</a></li>
+  <li><a href="#context-level-1" id="toc-context-level-1" class="nav-link" data-scroll-target="#context-level-1"><span class="header-section-number">3.3</span> Context (level 1)</a></li>
+  <li><a href="#sequential-computing" id="toc-sequential-computing" class="nav-link" data-scroll-target="#sequential-computing"><span class="header-section-number">3.4</span> Sequential computing</a></li>
+  <li><a href="#parallel-computing-the-most-simple-case" id="toc-parallel-computing-the-most-simple-case" class="nav-link" data-scroll-target="#parallel-computing-the-most-simple-case"><span class="header-section-number">3.5</span> Parallel computing (the most simple case)</a></li>
+  <li><a href="#task-scheduling" id="toc-task-scheduling" class="nav-link" data-scroll-target="#task-scheduling"><span class="header-section-number">3.6</span> Task scheduling</a></li>
+  <li><a href="#illustration-parallel-computing-simple-case" id="toc-illustration-parallel-computing-simple-case" class="nav-link" data-scroll-target="#illustration-parallel-computing-simple-case"><span class="header-section-number">3.7</span> Illustration: parallel computing (simple case)</a></li>
+  <li><a href="#context-level-2" id="toc-context-level-2" class="nav-link" data-scroll-target="#context-level-2"><span class="header-section-number">3.8</span> Context (level 2)</a></li>
+  <li><a href="#resource-management" id="toc-resource-management" class="nav-link" data-scroll-target="#resource-management"><span class="header-section-number">3.9</span> Resource management</a></li>
+  <li><a href="#resource-management-1" id="toc-resource-management-1" class="nav-link" data-scroll-target="#resource-management-1"><span class="header-section-number">3.10</span> Resource management</a></li>
+  <li><a href="#illustration-overhead-for-resource-access" id="toc-illustration-overhead-for-resource-access" class="nav-link" data-scroll-target="#illustration-overhead-for-resource-access"><span class="header-section-number">3.11</span> Illustration: overhead for resource access</a></li>
+  <li><a href="#context-level-3-realistic" id="toc-context-level-3-realistic" class="nav-link" data-scroll-target="#context-level-3-realistic"><span class="header-section-number">3.12</span> Context (level 3: realistic)</a></li>
+  <li><a href="#inputoutput-management" id="toc-inputoutput-management" class="nav-link" data-scroll-target="#inputoutput-management"><span class="header-section-number">3.13</span> Input/Output management</a></li>
+  <li><a href="#parallel-computing-realistic-model" id="toc-parallel-computing-realistic-model" class="nav-link" data-scroll-target="#parallel-computing-realistic-model"><span class="header-section-number">3.14</span> Parallel computing: realistic model</a></li>
+  <li><a href="#computing-time-and-potential-bottleneck" id="toc-computing-time-and-potential-bottleneck" class="nav-link" data-scroll-target="#computing-time-and-potential-bottleneck"><span class="header-section-number">3.15</span> Computing time and potential bottleneck</a></li>
+  <li><a href="#illustration-1-overhead-for-io-access" id="toc-illustration-1-overhead-for-io-access" class="nav-link" data-scroll-target="#illustration-1-overhead-for-io-access"><span class="header-section-number">3.16</span> Illustration 1: overhead for I/O access</a></li>
+  <li><a href="#illustration-2-overhead-for-io-access" id="toc-illustration-2-overhead-for-io-access" class="nav-link" data-scroll-target="#illustration-2-overhead-for-io-access"><span class="header-section-number">3.17</span> Illustration 2: overhead for I/O access</a></li>
+  <li><a href="#the-vocabulary-of-parallel-computing" id="toc-the-vocabulary-of-parallel-computing" class="nav-link" data-scroll-target="#the-vocabulary-of-parallel-computing"><span class="header-section-number">3.18</span> The vocabulary of parallel computing</a></li>
+  <li><a href="#task-synchronization" id="toc-task-synchronization" class="nav-link" data-scroll-target="#task-synchronization"><span class="header-section-number">3.19</span> Task synchronization</a></li>
+  </ul></li>
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware"><span class="header-section-number">4</span> Hardware</a>
+  <ul>
+  <li><a href="#computing-resources" id="toc-computing-resources" class="nav-link" data-scroll-target="#computing-resources"><span class="header-section-number">4.1</span> Computing resources</a></li>
+  <li><a href="#cpu-central-processing-unit" id="toc-cpu-central-processing-unit" class="nav-link" data-scroll-target="#cpu-central-processing-unit"><span class="header-section-number">4.2</span> CPU (central processing unit)</a></li>
+  <li><a href="#gpu-graphical-processing-units" id="toc-gpu-graphical-processing-units" class="nav-link" data-scroll-target="#gpu-graphical-processing-units"><span class="header-section-number">4.3</span> GPU (graphical processing units)</a></li>
+  </ul></li>
+  <li><a href="#designing-parallel-algorithms" id="toc-designing-parallel-algorithms" class="nav-link" data-scroll-target="#designing-parallel-algorithms"><span class="header-section-number">5</span> Designing parallel algorithms</a>
+  <ul>
+  <li><a href="#rowcolumn-wise-matrix-sum" id="toc-rowcolumn-wise-matrix-sum" class="nav-link" data-scroll-target="#rowcolumn-wise-matrix-sum"><span class="header-section-number">5.1</span> Row/Column-wise matrix sum</a></li>
+  <li><a href="#row-wise-sum" id="toc-row-wise-sum" class="nav-link" data-scroll-target="#row-wise-sum"><span class="header-section-number">5.2</span> Row-wise sum</a></li>
+  <li><a href="#column-wise-sum" id="toc-column-wise-sum" class="nav-link" data-scroll-target="#column-wise-sum"><span class="header-section-number">5.3</span> Column-wise sum</a></li>
+  <li><a href="#rowcolumn-wise-matrix-sum-algorithm" id="toc-rowcolumn-wise-matrix-sum-algorithm" class="nav-link" data-scroll-target="#rowcolumn-wise-matrix-sum-algorithm"><span class="header-section-number">5.4</span> Row/Column-wise matrix sum algorithm</a></li>
+  <li><a href="#concurrent-access-to-memory" id="toc-concurrent-access-to-memory" class="nav-link" data-scroll-target="#concurrent-access-to-memory"><span class="header-section-number">5.5</span> Concurrent access to memory</a></li>
+  <li><a href="#cost-of-parallel-task-management" id="toc-cost-of-parallel-task-management" class="nav-link" data-scroll-target="#cost-of-parallel-task-management"><span class="header-section-number">5.6</span> Cost of parallel task management</a></li>
+  <li><a href="#parallel-column-wise-matrix-sum-algorithm" id="toc-parallel-column-wise-matrix-sum-algorithm" class="nav-link" data-scroll-target="#parallel-column-wise-matrix-sum-algorithm"><span class="header-section-number">5.7</span> Parallel column-wise matrix sum algorithm</a></li>
+  <li><a href="#illustration-columnrow-wise-matrix-sum-algorithm" id="toc-illustration-columnrow-wise-matrix-sum-algorithm" class="nav-link" data-scroll-target="#illustration-columnrow-wise-matrix-sum-algorithm"><span class="header-section-number">5.8</span> Illustration: column/row-wise matrix sum algorithm</a></li>
+  <li><a href="#array-storage-order" id="toc-array-storage-order" class="nav-link" data-scroll-target="#array-storage-order"><span class="header-section-number">5.9</span> Array storage order</a></li>
+  <li><a href="#accessing-array-elements-in-memory" id="toc-accessing-array-elements-in-memory" class="nav-link" data-scroll-target="#accessing-array-elements-in-memory"><span class="header-section-number">5.10</span> Accessing array elements in memory</a></li>
+  <li><a href="#row-major-order-and-row-wise-sum" id="toc-row-major-order-and-row-wise-sum" class="nav-link" data-scroll-target="#row-major-order-and-row-wise-sum"><span class="header-section-number">5.11</span> Row-major order and row-wise sum</a></li>
+  <li><a href="#column-major-order-and-row-wise-sum" id="toc-column-major-order-and-row-wise-sum" class="nav-link" data-scroll-target="#column-major-order-and-row-wise-sum"><span class="header-section-number">5.12</span> Column-major order and row-wise sum</a></li>
+  <li><a href="#memory-access-to-large-data" id="toc-memory-access-to-large-data" class="nav-link" data-scroll-target="#memory-access-to-large-data"><span class="header-section-number">5.13</span> Memory access to large data</a></li>
+  <li><a href="#impact-of-data-dimension" id="toc-impact-of-data-dimension" class="nav-link" data-scroll-target="#impact-of-data-dimension"><span class="header-section-number">5.14</span> Impact of data dimension</a></li>
+  <li><a href="#impact-of-data-dimension-ii" id="toc-impact-of-data-dimension-ii" class="nav-link" data-scroll-target="#impact-of-data-dimension-ii"><span class="header-section-number">5.15</span> Impact of data dimension, II</a></li>
+  <li><a href="#matrix-product" id="toc-matrix-product" class="nav-link" data-scroll-target="#matrix-product"><span class="header-section-number">5.16</span> Matrix product</a></li>
+  <li><a href="#matrix-product-algorithm" id="toc-matrix-product-algorithm" class="nav-link" data-scroll-target="#matrix-product-algorithm"><span class="header-section-number">5.17</span> Matrix product algorithm</a></li>
+  <li><a href="#naive-parallel-matrix-product" id="toc-naive-parallel-matrix-product" class="nav-link" data-scroll-target="#naive-parallel-matrix-product"><span class="header-section-number">5.18</span> (naive) Parallel matrix product</a></li>
+  <li><a href="#divide-and-conquer-procedure" id="toc-divide-and-conquer-procedure" class="nav-link" data-scroll-target="#divide-and-conquer-procedure"><span class="header-section-number">5.19</span> Divide-and-conquer procedure</a></li>
+  <li><a href="#fibonacci-sequence" id="toc-fibonacci-sequence" class="nav-link" data-scroll-target="#fibonacci-sequence"><span class="header-section-number">5.20</span> Fibonacci sequence</a></li>
+  <li><a href="#markov-chain" id="toc-markov-chain" class="nav-link" data-scroll-target="#markov-chain"><span class="header-section-number">5.21</span> Markov chain</a></li>
+  <li><a href="#markov-chain-simulation-algorithm" id="toc-markov-chain-simulation-algorithm" class="nav-link" data-scroll-target="#markov-chain-simulation-algorithm"><span class="header-section-number">5.22</span> Markov chain simulation algorithm</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a>
+  <ul>
+  <li><a href="#take-home-message" id="toc-take-home-message" class="nav-link" data-scroll-target="#take-home-message"><span class="header-section-number">6.1</span> Take home message</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">7</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to parallel computing</span></h1>
+<p class="subtitle lead">A very general (and generic) introduction</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">François-David Collin <a href="mailto:francois-david.collin@umontpellier.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            CNRS
+          </p>
+        <p class="affiliation">
+            IMAG
+          </p>
+        <p class="affiliation">
+            Paul-Valéry Montpellier 3 University
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Ghislain Durif <a href="mailto:ghislain.durif@ens-lyon.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            CNRS
+          </p>
+        <p class="affiliation">
+            LBMC
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="parallel-computing-the-intuition" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Parallel computing: the intuition</h1>
+<section id="computing" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="computing"><span class="header-section-number">3.1</span> Computing ?</h2>
+<ul>
+<li>a <strong>computation</strong> = a succession of <strong>tasks</strong> to complete</li>
+<li>a <strong>task</strong> <span class="math inline">\approx</span> a single command/action or a group of commands/actions</li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Example 1:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># task i:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># sum of elements at index i</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># from two vectors</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    res[i] <span class="op">=</span> a[i] <span class="op">+</span> b[i]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Example 2:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># task 1: matrix product</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> A <span class="op">@</span> B</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># task 2: colwise sum over matrix C</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(C,axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="why-parallel-computing" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="why-parallel-computing"><span class="header-section-number">3.2</span> Why parallel computing?</h2>
+<ul>
+<li><p><strong>Objective:</strong> accelerate computations &lt;=&gt; reduce computation time</p></li>
+<li><p><strong>Idea:</strong> run multiple tasks in parallel instead of sequentially</p></li>
+</ul>
+</section>
+<section id="context-level-1" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="context-level-1"><span class="header-section-number">3.3</span> Context (level 1)</h2>
+<ul>
+<li><p>different <strong>tasks</strong> to complete</p></li>
+<li><p>one or more <strong>workers</strong> to complete the tasks</p></li>
+</ul>
+</section>
+<section id="sequential-computing" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sequential-computing"><span class="header-section-number">3.4</span> Sequential computing</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<ul>
+<li><p><span class="math inline">n</span> tasks to complete (<span class="math inline">n&gt;1</span>)</p></li>
+<li><p>1 worker</p></li>
+</ul>
+<p><strong>Total time</strong> <span class="math inline">=</span></p>
+<div class="incremental">
+<ul class="incremental">
+<li>(exercise)</li>
+<li><span class="math inline">\sum_{i=1}^n t_i \sim O(n)</span>\ with <span class="math inline">t_i</span> time to complete task <span class="math inline">i</span>}</li>
+</ul>
+</div>
+</div><div class="column" style="width:30%;">
+<pre style="font-size: 0.6em;"><code>      ┌────────┐
+      │worker 1│
+      └────────┘
+  ┌─
+  │     task 1
+  │       │
+  │       ▼
+  │     task 2
+  │       │
+  │       ▼
+  │     task 3
+  │       .
+  │       .
+  ▼       .
+
+Time</code></pre>
+</div>
+</div>
+</section>
+<section id="parallel-computing-the-most-simple-case" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="parallel-computing-the-most-simple-case"><span class="header-section-number">3.5</span> Parallel computing (the most simple case)</h2>
+<pre style="font-size: 0.6em;"><code>      ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐
+      │worker 1│  │worker 2│  │worker 3│  │worker 4│  ...
+      └────────┘  └────────┘  └────────┘  └────────┘
+  ┌─
+  │     task 1      task 2      task 3      task 4    ...
+  ▼
+
+Time</code></pre>
+<ul>
+<li><p><span class="math inline">n</span> tasks to complete (<span class="math inline">n&gt;1</span>)</p></li>
+<li><p><span class="math inline">p</span> workers (<span class="math inline">p&gt;=n</span>)</p></li>
+</ul>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<p><strong>Total time</strong> (exercise)</p>
+<div class="fragment">
+<p><span class="math inline">\underset{i=1,\dots,n}{\text{max}}\{t_i\}\sim O(1)</span>\ with <span class="math inline">t_i</span> time to complete task <span class="math inline">i</span></p>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong>Potential bottleneck?</strong> (exercise)</p>
+<div class="fragment">
+<p>not enough workers to complete all tasks</p>
+</div>
+</div>
+</div>
+</section>
+<section id="task-scheduling" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="task-scheduling"><span class="header-section-number">3.6</span> Task scheduling</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<ul>
+<li><p><span class="math inline">n</span> tasks to complete (<span class="math inline">n&gt;1</span>)</p></li>
+<li><p><span class="math inline">p</span> workers (<span class="math inline">p&lt;n</span>)</p></li>
+</ul>
+<p><strong>Need:</strong> assign multiple tasks to each worker (and manage this assignment)</p>
+</div><div class="column" style="width:50%;">
+<pre style="font-size: 0.6em;"><code>      ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐
+      │worker 1│  │worker 2│  │worker 3│  │worker 4│  ...
+      └────────┘  └────────┘  └────────┘  └────────┘
+  ┌─
+  │     task 1      task 2      task 3      task 4    ...
+  │       │           │           │           │
+  │       ▼           ▼           ▼           ▼
+  │    task p+1    task p+2    task p+3    task p+4
+  │       │           │           │           │
+  │       ▼           ▼           ▼           ▼
+  │       .           .           .           .
+  │       .           .           .           .
+  ▼       .           .           .           .
+
+Time</code></pre>
+</div>
+</div>
+<p><strong>Total time</strong> (exercise)</p>
+<div class="fragment">
+<p><span class="math inline">\underset{k=1,\dots,p}{\text{max}}\{T_k\}\sim O(n/p)</span>\ with <span class="math inline">T_k = \sum_{i\in I_k} t_i</span>, total time to complete all tasks assigned to worker <span class="math inline">k</span> (where <span class="math inline">I_k</span> is the set of indexes of tasks assigned to worker <span class="math inline">k</span>)</p>
+</div>
+</section>
+<section id="illustration-parallel-computing-simple-case" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="illustration-parallel-computing-simple-case"><span class="header-section-number">3.7</span> Illustration: parallel computing (simple case)</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>a task = “wait 1 <span class="math inline">\mu</span>s”</p></li>
+<li><p>Objective: run 100 tasks</p></li>
+<li><p>Number of workers: 1, 2, 4, 6, 8</p></li>
+</ul>
+<p><strong>Why is the time gain not linear?</strong></p>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center" style="text-align:center;">
+<figure class="figure">
+<p><img src="figs/parallel1.jpg" class="img-fluid figure-img"></p>
+<figcaption>10 repetitions in each configurations</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="context-level-2" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="context-level-2"><span class="header-section-number">3.8</span> Context (level 2)</h2>
+<ul>
+<li><p>different <strong>tasks</strong> to complete</p></li>
+<li><p>multiple <strong>workers</strong> to complete the tasks</p></li>
+<li><p>one or more <strong>working resources</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p></li>
+</ul>
+<p><strong>Potential bottleneck?</strong> (exercise)</p>
+<div class="fragment">
+<p>not enough resources for all workers</p>
+</div>
+</section>
+<section id="resource-management" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="resource-management"><span class="header-section-number">3.9</span> Resource management</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:60%;">
+<ul>
+<li><span class="math inline">n</span> tasks to complete (<span class="math inline">n&gt;1</span>)</li>
+<li><span class="math inline">p</span> workers (<span class="math inline">p&lt;n</span>)</li>
+<li><span class="math inline">q</span> working resources (<span class="math inline">q&lt;p</span>)</li>
+</ul>
+<p><strong>Need:</strong></p>
+<ul>
+<li>assign workers to each resource (and manage this assignment)</li>
+</ul>
+<p><strong>Total time</strong> <span class="math inline">=</span> ? (exercise)</p>
+<p><strong>Potential issues?</strong> (exercise)</p>
+</div><div class="column" style="width:40%;">
+<pre style="font-size: 0.6em;"><code>       ┌──────────┐      ┌──────────┐
+       │resource 1│      │resource 2│      ...
+       └──────────┘      └──────────┘
+  ┌─
+  │       task 1            task 2         ...
+  │     (worker 1)        (worker 2)
+  │         │                 │
+  │         ▼                 ▼
+  │       task 3            task 4
+  │     (worker 3)        (worker 4)
+  │         │                 │
+  │         ▼                 ▼
+  │      task p+1          task p+2
+  │     (worker 1)        (worker 2)
+  │         │                 │
+  │         ▼                 ▼
+  │      task p+3          task p+4
+  │     (worker 3)        (worker 4)
+  │         │                 │
+  │         ▼                 ▼
+  │         .                 .
+  │         .                 .
+  ▼         .                 .
+
+Time</code></pre>
+</div>
+</div>
+</section>
+<section id="resource-management-1" class="level2" data-number="3.10">
+<h2 data-number="3.10" class="anchored" data-anchor-id="resource-management-1"><span class="header-section-number">3.10</span> Resource management</h2>
+<p><strong>Total time</strong> <span class="math inline">= \text{max}_{\ell=1,\dots,q}\{\tau_\ell\}\sim O(n/q)</span></p>
+<p>with <span class="math inline">\tau_\ell = \sum_{i\in J_\ell} t_i</span> <span class="math inline">=</span> total time to complete all tasks done on resource <span class="math inline">\ell</span> (where <span class="math inline">J_\ell</span> is the set of indexes of tasks assigned done on resource <span class="math inline">\ell</span>)</p>
+<p><strong>Potential issues?</strong> multiple workers want to use the same working resources</p>
+<ul>
+<li>they have to wait for their turn (workers are not working all the time)</li>
+<li>risk to jam<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> resource access (organizing resource access takes time)</li>
+</ul>
+</section>
+<section id="illustration-overhead-for-resource-access" class="level2" data-number="3.11">
+<h2 data-number="3.11" class="anchored" data-anchor-id="illustration-overhead-for-resource-access"><span class="header-section-number">3.11</span> Illustration: overhead for resource access</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>a task = “wait 1 <span class="math inline">\mu</span>s”</p></li>
+<li><p>Objective: run 100 tasks</p></li>
+<li><p>8 computing units</p></li>
+<li><p>Number of workers: 1, 2, 4, 8, 16, 32</p></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center" style="text-align:center;">
+<figure class="figure">
+<p><img src="figs/parallel2.jpg" class="img-fluid figure-img"></p>
+<figcaption>10 repetitions in each configurations</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="context-level-3-realistic" class="level2" data-number="3.12">
+<h2 data-number="3.12" class="anchored" data-anchor-id="context-level-3-realistic"><span class="header-section-number">3.12</span> Context (level 3: realistic)</h2>
+<ul>
+<li><p>different <strong>tasks</strong> to complete</p></li>
+<li><p>multiple <strong>workers</strong> to complete the tasks</p></li>
+<li><p>one or more <strong>working resources</strong></p></li>
+</ul>
+<p><strong>Input/Output (I/O)</strong></p>
+<ul>
+<li><p><strong>Input:</strong> each task requires some <strong>materials</strong> (data) to be completed, these materials are stored in a storage area (memory)</p></li>
+<li><p><strong>Output:</strong> each task returns a <strong>result</strong> that need to be put in the storage area (memory)</p></li>
+</ul>
+<p>Examples: vector/matrix/array operations, process the content of multiple files</p>
+</section>
+<section id="inputoutput-management" class="level2" data-number="3.13">
+<h2 data-number="3.13" class="anchored" data-anchor-id="inputoutput-management"><span class="header-section-number">3.13</span> Input/Output management</h2>
+<ul>
+<li><span class="math inline">n</span> tasks to complete (<span class="math inline">n&gt;1</span>)</li>
+<li><span class="math inline">p</span> workers (<span class="math inline">p&lt;n</span>)</li>
+<li><span class="math inline">q</span> working resources (<span class="math inline">q&lt;p</span>)</li>
+<li>tasks need input (data) and produce output (results)</li>
+</ul>
+<p><strong>Need:</strong></p>
+<ul>
+<li>load input (data) from storage when needed by a worker to complete a task</li>
+<li>write output (result) to storage when a task is completed</li>
+</ul>
+<p><strong>Total time</strong> <span class="math inline">=</span> ? (exercise)</p>
+</section>
+<section id="parallel-computing-realistic-model" class="level2" data-number="3.14">
+<h2 data-number="3.14" class="anchored" data-anchor-id="parallel-computing-realistic-model"><span class="header-section-number">3.14</span> Parallel computing: realistic model</h2>
+<pre style="font-size: 0.6em;"><code>┌──────────┐
+│resource 1│     load        task 1         write       load        task 3         write
+└──────────┘    data 1 ──► (worker 1) ──► result 1 ──► data 3 ──► (worker 3) ──► result 3 ──► . . .
+
+
+┌──────────┐
+│resource 2│     load        task 2         write       load        task 4         write
+└──────────┘    data 2 ──► (worker 2) ──► result 2 ──► data 4 ──► (worker 4) ──► result 4 ──► . . .
+
+     .
+     .
+     .
+
+             └─────────────────────────────────────────────────────────────────────────────────────►
+                                                                                                 Time</code></pre>
+</section>
+<section id="computing-time-and-potential-bottleneck" class="level2" data-number="3.15">
+<h2 data-number="3.15" class="anchored" data-anchor-id="computing-time-and-potential-bottleneck"><span class="header-section-number">3.15</span> Computing time and potential bottleneck</h2>
+<p><strong>Total time</strong> <span class="math inline">= \text{max}_{\ell=1,\dots,q}\{\tau_\ell\}</span></p>
+<p>with <span class="math inline">\tau_\ell = \sum_{i\in J_\ell} t_{i,\text{in}} + t_i + t_{i,\text{out}}</span> <span class="math inline">=</span> total time to complete all tasks done on resource <span class="math inline">\ell</span> (where <span class="math inline">J_\ell</span> is the set of indexes of tasks done on resource <span class="math inline">\ell</span>)</p>
+<p><strong>Potential bottlenecks:</strong></p>
+<ul>
+<li>input (data) are not ready/available when a worker need them to complete a task (the worker have to wait)</li>
+<li>output (results) cannot be written when a worker complete a task (the worker have to wait)</li>
+</ul>
+<p><strong>Overhead on memory access</strong></p>
+<ul>
+<li>concurrent access to a memory space when reading input and/or when writing output</li>
+<li>concurrent data transfer from or to memory (the “pipe” are jammed)</li>
+</ul>
+</section>
+<section id="illustration-1-overhead-for-io-access" class="level2" data-number="3.16">
+<h2 data-number="3.16" class="anchored" data-anchor-id="illustration-1-overhead-for-io-access"><span class="header-section-number">3.16</span> Illustration 1: overhead for I/O access</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<ul>
+<li>a task
+<ol type="1">
+<li>simulate a vector of 10 values</li>
+<li>compute the mean</li>
+</ol></li>
+<li>Objective: run 10000 tasks</li>
+<li>Resources: 8 computing units</li>
+<li>Number of workers: 1, 2, 4, 6, 8</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center" style="text-align:center;">
+<figure class="figure">
+<p><img src="figs/parallel3.jpg" class="img-fluid figure-img"></p>
+<figcaption>10 repetitions in each configurations</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="illustration-2-overhead-for-io-access" class="level2" data-number="3.17">
+<h2 data-number="3.17" class="anchored" data-anchor-id="illustration-2-overhead-for-io-access"><span class="header-section-number">3.17</span> Illustration 2: overhead for I/O access</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>a task = “compute the sum of a given row in a matrix”</p></li>
+<li><p>Objective: compute all row-wise sums for a <span class="math inline">10000 \times 1000</span> matrix (i.e.&nbsp;<span class="math inline">10000</span> tasks)</p></li>
+<li><p>Resources: 8 computing units</p></li>
+<li><p>Number of workers: 1, 2, 4, 6, 8</p></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center" style="text-align:center;">
+<figure class="figure">
+<p><img src="figs/parallel4.jpg" class="img-fluid figure-img"></p>
+<figcaption>20 repetitions in each configurations</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-vocabulary-of-parallel-computing" class="level2" data-number="3.18">
+<h2 data-number="3.18" class="anchored" data-anchor-id="the-vocabulary-of-parallel-computing"><span class="header-section-number">3.18</span> The vocabulary of parallel computing</h2>
+<ul>
+<li>tasks = a command or a group of commands</li>
+<li>worker = a program or a sub-program (<em>like a thread or a sub-process</em>) → <em>Software</em></li>
+<li>working resources = processing units → <em>Hardware</em></li>
+<li>input = data</li>
+<li>output = result</li>
+<li>storage = memory</li>
+</ul>
+<p><strong>Attention:</strong> “worker” may sometimes refer to a working resource in the literature</p>
+</section>
+<section id="task-synchronization" class="level2" data-number="3.19">
+<h2 data-number="3.19" class="anchored" data-anchor-id="task-synchronization"><span class="header-section-number">3.19</span> Task synchronization</h2>
+<div>
+<p>Sometimes tasks cannot be done in parallel</p>
+<ul>
+<li>Specific case: output of task <span class="math inline">i_1</span> is input of task <span class="math inline">i_2</span></li>
+<li><strong>Need:</strong> wait for task <span class="math inline">i_1</span> before task <span class="math inline">i_2</span> starts</li>
+</ul>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Example 1:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># task 1: matrix product</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> A <span class="op">@</span> B</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># task 2: colwise sum over matrix C</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(C,axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Example 2:</p>
+<ul>
+<li>task 1: train a predictive model</li>
+<li>task 2: use the trained model to predict new labels</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="hardware" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Hardware</h1>
+<section id="computing-resources" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="computing-resources"><span class="header-section-number">4.1</span> Computing resources</h2>
+<ul>
+<li>a single computer
+<ul>
+<li>a persistent memory (hard drive) with very slow access</li>
+<li>a non-persistent shared memory (RAM) with faster access</li>
+<li>one or more computing units called CPUs<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> (central processing units) linked to the RAM</li>
+<li>maybe one or more GPUs (graphical processing units) linked to the RAM</li>
+</ul></li>
+<li>multiple computers linked through a network (very slow communication)</li>
+</ul>
+</section>
+<section id="cpu-central-processing-unit" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="cpu-central-processing-unit"><span class="header-section-number">4.2</span> CPU (central processing unit)</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li><p>multi-core CPU: multiple computing units (called “cores”) in a single processor</p></li>
+<li><p>different level of local memory called “cache”</p></li>
+<li><p><strong>to run a computation</strong>: transfer data from shared memory to local cache (and vice-versa for results) <span class="math inline">\rightarrow</span> potential bottleneck</p></li>
+</ul>
+</div><div class="column" style="width:60%;">
+<pre style="font-size: 0.6em;"><code>           ┌─────────────────┬───────────────────────┐
+           │                 │                       │
+┌──────────┴──┐     ┌─────── │ ────────┐    ┌─────── │ ────────┐
+│ MEMORY      │     │ CPU1   │         │    │ CPU2   │         │
+│             │     │ ┌──────┴───────┐ │    │ ┌──────┴───────┐ │
+│             │     │ │ Local Memory │ │    │ │ Local Memory │ │
+│             │     │ └──────┬───────┘ │    │ └──────┬───────┘ │
+│             │     │        │         │    │        │         │
+│             │     │ ┌───┐  │  ┌───┐  │    │ ┌───┐  │  ┌───┐  │
+│             │     │ │ C ├──┼──┤ C │  │    │ │ C ├──┼──┤ C │  │
+│             │     │ └───┘  │  └───┘  │    │ └───┘  │  └───┘  │
+└─────────────┘     │        │         │    │        │         │
+                    │ ┌───┐  │  ┌───┐  │    │ ┌───┐  │  ┌───┐  │
+                    │ │ C ├──┴──┤ C │  │    │ │ C ├──┴──┤ C │  │
+                    │ └───┘     └───┘  │    │ └───┘     └───┘  │
+                    │                  │    │                  │
+                    └──────────────────┘    └──────────────────┘</code></pre>
+</div>
+</div>
+</section>
+<section id="gpu-graphical-processing-units" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="gpu-graphical-processing-units"><span class="header-section-number">4.3</span> GPU (graphical processing units)</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li><p>“many-core” computing card</p></li>
+<li><p>local memory</p></li>
+<li><p>slower connection to shared memory than CPUs</p></li>
+<li><p><strong>to run a computation</strong>: transfer data from host shared memory to local memory (and vice-versa for results)</p></li>
+</ul>
+<p><span class="math inline">\rightarrow</span> potential bottleneck</p>
+</div><div class="column" style="width:60%;">
+<pre style="font-size: 0.6em;"><code>         ┌───────────────────────────────────────────┐
+         │                                           │
+         │ ┌─────────────────┐                       │
+         │ │                 │                       │
+┌────────┴─┴──┐     ┌─────── │ ────────┐    ┌─────── │ ─────────┐
+│ MEMORY      │     │ CPU1   │         │    │ GPU    │          │
+│             │     │ ┌──────┴───────┐ │    │ ┌──────┴───────┐  │
+│             │     │ │ Local Memory │ │    │ │ Local Memory │  │
+│             │     │ └──────┬───────┘ │    │ └──────┬───────┘  │
+│             │     │        │         │    │        │          │
+│             │     │ ┌───┐  │  ┌───┐  │    │  ┌─┬─┬─┼─┬─┬─┬─┐  │
+│             │     │ │ C ├──┼──┤ C │  │    │  │C│C│C│C│C│C│C│  │
+│             │     │ └───┘  │  └───┘  │    │  ├─┼─┼─┼─┼─┼─┼─┤  │
+└─────────────┘     │        │         │    │  │C│C│C│C│C│C│C│  │
+                    │ ┌───┐  │  ┌───┐  │    │  ├─┼─┼─┼─┼─┼─┼─┤  │
+                    │ │ C ├──┴──┤ C │  │    │  │C│C│C│C│C│C│C│  │
+                    │ └───┘     └───┘  │    │  └─┴─┴─┴─┴─┴─┴─┘  │
+                    │                  │    │                   │
+                    └──────────────────┘    └───────────────────┘</code></pre>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/cpu_gpu.png" class="notransparent img-fluid figure-img"></p>
+<figcaption>Source: <code>wikimedia.org</code></figcaption>
+</figure>
+</div>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CPU</th>
+<th>GPU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>tens</strong> (10x) of computing units (“cores”)</td>
+<td><strong>thousand</strong> (1000x) of computing units (“cores”)</td>
+</tr>
+<tr class="even">
+<td>computing units capable of <strong>more complex operations</strong></td>
+<td>computing units only capable of <strong>more simple operations</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>larger cache memory</strong> per computing unit</td>
+<td><strong>very small cache memory</strong> per computing unit</td>
+</tr>
+<tr class="even">
+<td><strong>faster</strong> access to RAM</td>
+<td><strong>slower</strong> access to RAM</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\rightarrow</span> efficient for general purpose parallel programming (e.g.&nbsp;check conditions)</td>
+<td><span class="math inline">\rightarrow</span> fast for massively parallel computations based on simple elementary operations (e.g.&nbsp;linear algebra)</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="designing-parallel-algorithms" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Designing parallel algorithms</h1>
+<section id="rowcolumn-wise-matrix-sum" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="rowcolumn-wise-matrix-sum"><span class="header-section-number">5.1</span> Row/Column-wise matrix sum</h2>
+<ul>
+<li>Matrix <span class="math inline">A = [a_{ij}]_{i=1:N}^{j=1:P}</span> of dimension <span class="math inline">N \times P</span></li>
+</ul>
+<p><span class="math display">
+\begin{bmatrix}
+    \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; a_{ij} &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \\\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+  \end{bmatrix}_{N \times P}
+</span></p>
+<ul>
+<li><p><strong>Row-wise sum:</strong> vector <span class="math inline">C = [c_{i}]_{i=1:N}</span> of size <span class="math inline">N</span> where <span class="math inline">c_{i} = \sum_{j=1}^P a_{ij}</span></p></li>
+<li><p><strong>Column-wise sum:</strong> vector <span class="math inline">D = [d_{j}]_{j=1:P}</span> of size <span class="math inline">P</span> where <span class="math inline">d_{j} = \sum_{i=1}^N a_{ij}</span></p></li>
+</ul>
+</section>
+<section id="row-wise-sum" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="row-wise-sum"><span class="header-section-number">5.2</span> Row-wise sum</h2>
+<p><span class="math display">
+\begin{bmatrix}
+    \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; a_{ij} &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \\\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+  \end{bmatrix}_{N \times P}\ \ \rightarrow \ \ \begin{bmatrix}
+    \vdots \\
+    \vdots \\
+    \sum_{j=1}^{P} a_{ij} \\
+    \vdots\\
+    \vdots\\
+  \end{bmatrix}_{N \times 1}
+</span></p>
+</section>
+<section id="column-wise-sum" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="column-wise-sum"><span class="header-section-number">5.3</span> Column-wise sum</h2>
+<p><span class="math display">
+\begin{array}{c}
+\begin{bmatrix}
+    \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \  &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; a_{ij} &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \\\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+    \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ &amp; \ \ \ \cdot \ \ \ \\
+  \end{bmatrix}_{N \times P}\\
+  \downarrow \ \ \ \ \ \ \\
+\begin{bmatrix}
+   \ \dots \  &amp; \dots &amp; \sum_{i=1}^{N} a_{ij} &amp; \dots &amp; \ \dots \ \\
+  \end{bmatrix}_{1\times P}\\
+\end{array}
+</span></p>
+</section>
+<section id="rowcolumn-wise-matrix-sum-algorithm" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="rowcolumn-wise-matrix-sum-algorithm"><span class="header-section-number">5.4</span> Row/Column-wise matrix sum algorithm</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Row-wise sum:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(N)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    vecD[i] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Column-wise sum:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(P)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    vecD[j] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p><strong>Exercise:</strong> parallel algorithm?</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Solution 1?</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(N)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="at">@parallel</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    vecD[i] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Solution 2?</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(P)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="at">@parallel</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    vecD[i] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p><strong>Exercise:</strong> any concurrent access to memory by the parallel tasks ? in input (reading) ? in output (writing) ?</p>
+</section>
+<section id="concurrent-access-to-memory" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="concurrent-access-to-memory"><span class="header-section-number">5.5</span> Concurrent access to memory</h2>
+<p>Solution 1:</p>
+<ul>
+<li>reading (input): no concurrent access</li>
+<li>writing (output): no concurrent access</li>
+</ul>
+<p>Solution 2:</p>
+<ul>
+<li>reading (input): no concurrent access</li>
+<li>writing (output): what happen if tasks <span class="math inline">j_1</span> and <span class="math inline">j_2</span> need to simultaneously update <code>vecD[i]</code>?</li>
+</ul>
+<div class="fragment">
+<p><span class="math inline">\rightarrow</span> need for <em>synchronization</em> (with a time cost)</p>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Solution 3?</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(P)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">@parallel</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    vecD[i] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Solution 4?</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(N)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">@parallel</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    vecD[i] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(<strong>Concurrent access</strong> between tasks to update <code>vecD[i]</code>)</p>
+</div>
+</div>
+<p><strong>Any other issue ?</strong></p>
+</section>
+<section id="cost-of-parallel-task-management" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="cost-of-parallel-task-management"><span class="header-section-number">5.6</span> Cost of parallel task management</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="at">@parallel</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>1 launch of <span class="math inline">N</span> parallel tasks running each <span class="math inline">P</span> operations</p>
+<p><span class="math inline">\rightarrow</span> <span class="math inline">N</span> “long” parallel tasks</p>
+<p>Cost (in time) to launch parallel tasks <span class="math inline">\sim O(N)</span></p>
+</div><div class="column" style="width:50%;">
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">@parallel</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="math inline">P</span> launches of <span class="math inline">N</span> parallel tasks running each 1 operation</p>
+<p><span class="math inline">\rightarrow</span> <span class="math inline">N \times P</span> “short” parallel tasks</p>
+<p>Cost (in time) to launch parallel tasks <span class="math inline">\sim O(NP)</span></p>
+</div>
+</div>
+</section>
+<section id="parallel-column-wise-matrix-sum-algorithm" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="parallel-column-wise-matrix-sum-algorithm"><span class="header-section-number">5.7</span> Parallel column-wise matrix sum algorithm</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Solution 1?</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(P)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="at">@parallel</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    vecD[j] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<p>Solution 2?</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>vecD <span class="op">=</span> np.zeros(P)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="at">@parallel</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    vecD[j] <span class="op">+=</span> matA[i,j]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Concurrent access</strong> between tasks to update <code>vecD[j]</code></p>
+</div>
+</div>
+</section>
+<section id="illustration-columnrow-wise-matrix-sum-algorithm" class="level2" data-number="5.8">
+<h2 data-number="5.8" class="anchored" data-anchor-id="illustration-columnrow-wise-matrix-sum-algorithm"><span class="header-section-number">5.8</span> Illustration: column/row-wise matrix sum algorithm</h2>
+<p>Parallel column-wise vs parallel row-wise matrix sum algorithms</p>
+<div class="columns" data-align="center">
+<div class="column" style="width:55%;">
+<ul>
+<li><p>Matrix <span class="math inline">10000 \times 10000</span></p></li>
+<li><p>Objective: run <span class="math inline">10000</span> tasks</p></li>
+<li><p>Resources: 64 computing units</p></li>
+<li><p>Number of workers: 1, 2, 4, 8, 16, 32</p></li>
+</ul>
+<p><strong>Exercise 1:</strong> why the performance degradation?</p>
+<div class="fragment">
+<p>{<span class="math inline">\rightarrow</span> overhead for memory access}</p>
+</div>
+<p><strong>Exercise 2:</strong> why the performance difference?</p>
+<div class="fragment">
+<p>{<span class="math inline">\rightarrow</span> impact of array storage order}</p>
+</div>
+</div><div class="column" style="width:45%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/row_col_sum.jpg" class="img-fluid figure-img"></p>
+<figcaption>20 repetitions in each configurations</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="array-storage-order" class="level2" data-number="5.9">
+<h2 data-number="5.9" class="anchored" data-anchor-id="array-storage-order"><span class="header-section-number">5.9</span> Array storage order</h2>
+<p>Matrix in memory = a big array of contiguous rows or columns</p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<section id="row-major" class="level3" data-number="5.9.1">
+<h3 data-number="5.9.1" class="anchored" data-anchor-id="row-major"><span class="header-section-number">5.9.1</span> Row-major</h3>
+<p>Memory: <span class="math display">
+\begin{array}{|c|c|c|}
+\hline
+a_{11} &amp; a_{12} &amp; a_{13} \\
+\hline
+\end{array}\
+\begin{array}{|c|c|c|}
+\hline
+a_{21} &amp; a_{22} &amp; a_{23} \\
+\hline
+\end{array}\
+\begin{array}{|c|c|c|}
+\hline
+a_{31} &amp; a_{32} &amp; a_{33} \\
+\hline
+\end{array}
+</span></p>
+</section>
+<section id="column-major" class="level3" data-number="5.9.2">
+<h3 data-number="5.9.2" class="anchored" data-anchor-id="column-major"><span class="header-section-number">5.9.2</span> Column-major</h3>
+<p>Memory: <span class="math display">
+\begin{array}{|c|c|c|}
+\hline
+a_{11} &amp; a_{21} &amp; a_{31} \\
+\hline
+\end{array}\
+\begin{array}{|c|c|c|}
+\hline
+a_{12} &amp; a_{22} &amp; a_{32} \\
+\hline
+\end{array}\
+\begin{array}{|c|c|c|}
+\hline
+a_{13} &amp; a_{23} &amp; a_{33} \\
+\hline
+\end{array}
+</span></p>
+</section>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/row_and_column_major_order.png" class="img-fluid figure-img"></p>
+<figcaption>Source: <code>wikimedia.org</code></figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="accessing-array-elements-in-memory" class="level2" data-number="5.10">
+<h2 data-number="5.10" class="anchored" data-anchor-id="accessing-array-elements-in-memory"><span class="header-section-number">5.10</span> Accessing array elements in memory</h2>
+<p>Memory access: <strong>read data from memory by block</strong></p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p>To access <span class="math inline">a_{11}</span>: load <span class="math inline">\begin{array}{|c|c|c|} \hline a_{11} &amp; a_{12} &amp; a_{13} \\ \hline \end{array}</span> into cache</p>
+<p>To access <span class="math inline">a_{11}</span>: load <span class="math inline">\begin{array}{|c|c|c|} \hline a_{11} &amp; a_{21} &amp; a_{31} \\ \hline \end{array}</span> into cache</p>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/row_and_column_major_order.png" class="img-fluid figure-img"></p>
+<figcaption>Source: <code>wikimedia.org</code></figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="row-major-order-and-row-wise-sum" class="level2" data-number="5.11">
+<h2 data-number="5.11" class="anchored" data-anchor-id="row-major-order-and-row-wise-sum"><span class="header-section-number">5.11</span> Row-major order and row-wise sum</h2>
+<p>To compute <span class="math inline">a_{11} + a_{12} + a_{13}</span> ?</p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<div class="incremental">
+<ol class="incremental" type="1">
+<li>init <code>res</code> <span class="math inline">=0</span></li>
+<li>load <span class="math inline">\begin{array}{|c|c|c|} \hline a_{11} &amp; a_{12} &amp; a_{13} \\ \hline \end{array}</span> into cache</li>
+<li>compute <code>res</code> <span class="math inline">=</span> <code>res</code> <span class="math inline">+ a_{11}</span></li>
+<li>compute <code>res</code> <span class="math inline">=</span> <code>res</code> <span class="math inline">+ a_{12}</span></li>
+<li>compute <code>res</code> <span class="math inline">=</span> <code>res</code> <span class="math inline">+ a_{13}</span></li>
+</ol>
+</div>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/row_and_column_major_order.png" class="img-fluid figure-img"></p>
+<figcaption>Source: <code>wikimedia.org</code></figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="column-major-order-and-row-wise-sum" class="level2" data-number="5.12">
+<h2 data-number="5.12" class="anchored" data-anchor-id="column-major-order-and-row-wise-sum"><span class="header-section-number">5.12</span> Column-major order and row-wise sum</h2>
+<p>To compute <span class="math inline">a_{11} + a_{12} + a_{13}</span> ?</p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<div class="incremental">
+<ol class="incremental" type="1">
+<li>init <code>res</code> <span class="math inline">=0</span></li>
+<li>load <span class="math inline">\begin{array}{|c|c|c|} \hline a_{11} &amp; a_{21} &amp; a_{31} \\ \hline \end{array}</span> into cache</li>
+<li>compute <code>res</code> <span class="math inline">=</span> <code>res</code> <span class="math inline">+ a_{11}</span></li>
+<li>load <span class="math inline">\begin{array}{|c|c|c|} \hline a_{12} &amp; a_{22} &amp; a_{32} \\ \hline \end{array}</span> into cache</li>
+<li>compute <code>res</code> <span class="math inline">=</span> <code>res</code> <span class="math inline">+ a_{12}</span></li>
+<li>load <span class="math inline">\begin{array}{|c|c|c|} \hline a_{13} &amp; a_{23} &amp; a_{33} \\ \hline \end{array}</span> into cache</li>
+<li>compute <code>res</code> <span class="math inline">=</span> <code>res</code> <span class="math inline">+ a_{13}</span> More memory accesses <span class="math inline">\rightarrow</span> time consuming</li>
+</ol>
+</div>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/row_and_column_major_order.png" class="img-fluid figure-img"></p>
+<figcaption>Source: <code>wikimedia.org</code></figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="memory-access-to-large-data" class="level2" data-number="5.13">
+<h2 data-number="5.13" class="anchored" data-anchor-id="memory-access-to-large-data"><span class="header-section-number">5.13</span> Memory access to large data</h2>
+<p>Example: <strong>“big” matrix</strong> (<span class="math inline">4 \times 6</span>) <span class="math display">\tiny \begin{array}{|c|c|c|c|c|c|c|}\hline a_{11} &amp; a_{12} &amp; a_{13} &amp; a_{14} &amp; a_{15} &amp; a_{16} \\ \hline a_{21} &amp; a_{22} &amp; a_{23} &amp; a_{24} &amp; a_{25} &amp; a_{26} \\ \hline a_{31} &amp; a_{32} &amp; a_{33} &amp; a_{34} &amp; a_{35} &amp; a_{36} \\ \hline a_{41} &amp; a_{42} &amp; a_{43} &amp; a_{44} &amp; a_{45} &amp; a_{46} \\ \hline\end{array}</span></p>
+<p>Storage in memory (row major):</p>
+<p><span class="math display">\tiny
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+a_{11} &amp; a_{12} &amp; a_{13} &amp; a_{14} &amp; a_{15} &amp; a_{16} \\
+\hline
+\end{array}
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+a_{21} &amp; a_{22} &amp; a_{23} &amp; a_{24} &amp; a_{25} &amp; a_{26} \\
+\hline
+\end{array}
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+a_{31} &amp; a_{32} &amp; a_{33} &amp; a_{34} &amp; a_{35} &amp; a_{36} \\
+\hline
+\end{array}
+\begin{array}{|c|c|ccc}
+\hline
+a_{41} &amp; a_{42} &amp; \cdot &amp; \cdot &amp; \cdot \\
+\hline
+\end{array}
+</span></p>
+<p>Access by <strong>sub-blocks</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> of data (e.g.&nbsp;sub-block of rows or columns)</p>
+<ul>
+<li>Example: load block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{11} &amp; a_{12} &amp; a_{13} \\ \hline \end{array}</span> into cache to access <span class="math inline">a_{11}</span></li>
+</ul>
+</section>
+<section id="impact-of-data-dimension" class="level2" data-number="5.14">
+<h2 data-number="5.14" class="anchored" data-anchor-id="impact-of-data-dimension"><span class="header-section-number">5.14</span> Impact of data dimension</h2>
+<p>Sum of row 1 (row major):</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{11} &amp; a_{12} &amp; a_{13} \\ \hline \end{array}</span> <span class="math display">res = res + a_{11} + a_{12} + a_{13}</span></li>
+</ol>
+</div><div class="column" style="width:50%;">
+<ol start="2" type="1">
+<li>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{14} &amp; a_{15} &amp; a_{16} \\ \hline \end{array}</span> <span class="math display">res = res + a_{14} + a_{15} + a_{16}</span></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="impact-of-data-dimension-ii" class="level2" data-number="5.15">
+<h2 data-number="5.15" class="anchored" data-anchor-id="impact-of-data-dimension-ii"><span class="header-section-number">5.15</span> Impact of data dimension, II</h2>
+<p>Sum of row 1 (column major):</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li><p>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{11} &amp; a_{21} &amp; a_{31} \\ \hline \end{array}</span> <span class="math display">res = res + a_{11}</span></p></li>
+<li><p>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{12} &amp; a_{22} &amp; a_{32} \\ \hline \end{array}</span> <span class="math display">res = res + a_{12}</span></p></li>
+<li><p>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{13} &amp; a_{23} &amp; a_{33} \\ \hline \end{array}</span> <span class="math display">res = res + a_{13}</span></p></li>
+</ol>
+</div><div class="column" style="width:50%;">
+<ol start="4" type="1">
+<li><p>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{14} &amp; a_{24} &amp; a_{34} \\ \hline \end{array}</span> <span class="math display">res = res + a_{14}</span></p></li>
+<li><p>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{15} &amp; a_{25} &amp; a_{35} \\ \hline \end{array}</span> <span class="math display">res = res + a_{14}</span></p></li>
+<li><p>access block <span class="math inline">\begin{array}{|c|c|c|} \hline a_{16} &amp; a_{26} &amp; a_{36} \\ \hline \end{array}</span> <span class="math display">res = res + a_{16}</span></p></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="matrix-product" class="level2" data-number="5.16">
+<h2 data-number="5.16" class="anchored" data-anchor-id="matrix-product"><span class="header-section-number">5.16</span> Matrix product</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li><p>Matrix <span class="math inline">A = [a_{ij}]_{i=1:N}^{j=1:P}</span> of dimension <span class="math inline">N\times{}P</span></p></li>
+<li><p>Matrix <span class="math inline">B = [b_{jk}]_{j=1:P}^{k=1:Q}</span> of dimension <span class="math inline">N\times{}P</span></p></li>
+<li><p><strong>Matrix product:</strong> <span class="math inline">C = A \times B = [c_{ik}]_{i=1:N}^{k=1:Q}</span> of dimension <span class="math inline">N\times{}Q</span> where</p></li>
+</ul>
+<p><span class="math display">c_{ik} = \sum_{j=1}^P a_{ij} \times b_{jk}</span></p>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figs/matrix_multiplication.png" class="notransparent img-fluid figure-img" style="width:100.0%"></p>
+<figcaption>Source: <code>wikimedia.org</code></figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="matrix-product-algorithm" class="level2" data-number="5.17">
+<h2 data-number="5.17" class="anchored" data-anchor-id="matrix-product-algorithm"><span class="header-section-number">5.17</span> Matrix product algorithm</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(P,Q)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>matC <span class="op">=</span> np.zeros((N,Q))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(Q):</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>      matC[i,k] <span class="op">+=</span> matA[i,j] <span class="op">*</span> matB[j,k]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Exercise:</strong> parallel algorithm?</p>
+</section>
+<section id="naive-parallel-matrix-product" class="level2" data-number="5.18">
+<h2 data-number="5.18" class="anchored" data-anchor-id="naive-parallel-matrix-product"><span class="header-section-number">5.18</span> (naive) Parallel matrix product</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># input</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(N,P)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>matA <span class="op">=</span> np.array(...).reshape(P,Q)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># output</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>matC <span class="op">=</span> np.zeros((N,Q))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># algorithm</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="at">@parallel</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(N):</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(Q):</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(P):</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>      matC[i,k] <span class="op">+=</span> matA[i,j] <span class="op">*</span> matB[j,k]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="divide-and-conquer-procedure" class="level2" data-number="5.19">
+<h2 data-number="5.19" class="anchored" data-anchor-id="divide-and-conquer-procedure"><span class="header-section-number">5.19</span> Divide-and-conquer procedure</h2>
+<ul>
+<li>Divide output and input matrices into blocks:</li>
+</ul>
+<p><span class="math display">
+C = \begin{bmatrix}
+C_{11} &amp; C_{12} \\
+C_{21} &amp; C_{22} \\
+\end{bmatrix},\,
+A = \begin{bmatrix}
+A_{11} &amp; A_{12} \\
+A_{21} &amp; A_{22} \\
+\end{bmatrix},\,
+B = \begin{bmatrix}
+B_{11} &amp; B_{12} \\
+B_{21} &amp; B_{22} \\
+\end{bmatrix}
+</span></p>
+<ul>
+<li>Compute <span class="math inline">C = A \times B</span> by blocks:</li>
+</ul>
+<p><span class="math display">
+\begin{darray}{rcl}
+\begin{bmatrix}
+C_{11} &amp; C_{12} \\
+C_{21} &amp; C_{22} \\
+\end{bmatrix}  &amp; =
+&amp; \begin{bmatrix}
+A_{11} &amp; A_{12} \\
+A_{21} &amp; A_{22} \\
+\end{bmatrix}
+\begin{bmatrix}
+B_{11} &amp; B_{12} \\
+B_{21} &amp; B_{22} \\
+\end{bmatrix} \\
+&amp; = &amp; \begin{bmatrix}
+A_{11} B_{11} + A_{12} B_{21} &amp; A_{11} B_{12} + A_{12} B_{22}\\
+A_{21} B_{11} + A_{22} B_{21} &amp; A_{21} B_{12} + A_{22} B_{22}\\
+\end{bmatrix}
+\end{darray}
+</span></p>
+<ul>
+<li><strong>Possible parallelization over sub-block products</strong> <span class="math inline">A_{ik} \times B_{kj}</span> and then <strong>over result sums</strong> <span class="math inline">\rightarrow</span> see also “tiled implementation”</li>
+</ul>
+</section>
+<section id="fibonacci-sequence" class="level2" data-number="5.20">
+<h2 data-number="5.20" class="anchored" data-anchor-id="fibonacci-sequence"><span class="header-section-number">5.20</span> Fibonacci sequence</h2>
+<p><strong>Initialization:</strong> <span class="math inline">f_0 = 0</span>, <span class="math inline">f_1 = 1</span></p>
+<p><strong>Iteration:</strong> <span class="math inline">f_i = f_{i-1} + f_{i-2}</span> for any <span class="math inline">i \geq 2</span></p>
+<p><strong>Sequence:</strong> 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, …</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Algorithm:</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>fib <span class="op">=</span> np.zeros(<span class="dv">100</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fib[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>fib[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>,n):</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    res[i] <span class="op">=</span> res[i<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> res[i<span class="op">-</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Parallel version? (<em>NO!</em>) (at least not directly)</li>
+<li><span class="math inline">\rightarrow</span> result <span class="math inline">i</span> depends of result from previous iterations (<span class="math inline">i-1</span> and <span class="math inline">i-2</span>) </li>
+<li><span class="math inline">\rightarrow</span> dependency between iterations</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="markov-chain" class="level2" data-number="5.21">
+<h2 data-number="5.21" class="anchored" data-anchor-id="markov-chain"><span class="header-section-number">5.21</span> Markov chain</h2>
+<p>Markov chain: sequence of random variables <span class="math inline">(X_i)_{i&gt;1}</span> such that <span class="math display">\mathbb{P}(X_i = x_i \vert X_1 = x_1, X_2 = x_2, \dots , X_{i-1} = x_{i-1}) = \mathbb{P}(X_i = x_i \vert X_{i-1} = x_{i-1})</span></p>
+<p><span class="math inline">X_i\in S</span> where <span class="math inline">S</span> is the <strong>state space</strong></p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p>Example:</p>
+<ul>
+<li><p>two states <span class="math inline">E</span> and <span class="math inline">A</span>, i.e <span class="math inline">S = \{A, E\}</span></p></li>
+<li><p>transition probability matrix:</p></li>
+</ul>
+<p><span class="math display">
+\begin{array}{cl}
+\begin{array}{cc}
+A &amp; E
+\end{array} \\
+\left(\begin{array}{cc}
+0.6 &amp; 0.4 \\
+0.3 &amp; 0.7 \\
+\end{array}\right) &amp;
+\begin{array}{l}
+A \\
+E
+\end{array}
+\end{array}
+</span></p>
+</div><div class="column" style="width:30%;">
+<p><img src="figs/markov_chain.png" class="notransparent img-fluid"></p>
+</div>
+</div>
+<div class="attribution">
+<p><a href="https://commons.wikimedia.org/wiki/Category:Markov_chains">wikimedia.org</a></p>
+</div>
+</section>
+<section id="markov-chain-simulation-algorithm" class="level2" data-number="5.22">
+<h2 data-number="5.22" class="anchored" data-anchor-id="markov-chain-simulation-algorithm"><span class="header-section-number">5.22</span> Markov chain simulation algorithm</h2>
+<ol type="1">
+<li><p>Pick an initial state <span class="math inline">X_0 = x</span> with <span class="math inline">x\in S</span></p></li>
+<li><p>For <span class="math inline">in</span> in <span class="math inline">1,\dots, N</span>:</p>
+<ul>
+<li>Simulate <span class="math inline">X_i\in S</span> from the probability distribution given by state <span class="math inline">X_{i-1}</span></li>
+</ul></li>
+</ol>
+<p>For the simulation:</p>
+<ul>
+<li>If <span class="math inline">X_{i-1} = A</span> then <span class="math inline">\mathbb{P}(X_i = A) = 0.6</span> and <span class="math inline">\mathbb{P}(X_i = E) = 0.4</span></li>
+<li>If <span class="math inline">X_{i-1} = E</span> then <span class="math inline">\mathbb{P}(X_i = A) = 0.7</span> and <span class="math inline">\mathbb{P}(X_i = E) = 0.3</span></li>
+</ul>
+<p><strong>Exercise:</strong> parallel algorithm?</p>
+<div class="fragment">
+<p>NO!</p>
+</div>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
+<section id="take-home-message" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="take-home-message"><span class="header-section-number">6.1</span> Take home message</h2>
+<ul>
+<li><p><strong>Parallel computing</strong> can be used to <strong>run</strong> computations <strong>faster</strong> (i.e.&nbsp;save time)</p></li>
+<li><p>Relationship between <strong>time gain</strong> and number of tasks run in parallel is <strong>not linear</strong></p></li>
+<li><p>Potential <strong>bottlenecks</strong> leading to potential performance loss:</p>
+<ul>
+<li>management of parallel tasks</li>
+<li>overhead for computing resource access</li>
+<li>overhead for memory access</li>
+<li>concurrent memory access by parallel tasks</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="references" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> References</h1>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-pelcat2010prototypage" class="csl-entry" role="listitem">
+Pelcat, Maxime. 2010. <span>“Prototypage Rapide Et g<span>é</span>n<span>é</span>ration de Code Pour DSP Multi-Coeurs Appliqu<span>é</span>s <span class="nocase">à</span> La Couche Physique Des Stations de Base 3GPP LTE.”</span> PhD thesis, INSA de Rennes.
+</div>
+<div id="ref-robey2021parallel" class="csl-entry" role="listitem">
+Robey, R., and Y. Zamora. 2021. <em>Parallel and High Performance Computing</em>. Manning. <a href="https://www.manning.com/books/parallel-and-high-performance-computing">https://www.manning.com/books/parallel-and-high-performance-computing</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>i.e.&nbsp;a set of tools/machines used by a worker to complete a task<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>overhead on resource access<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>or “processors”<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>the size of the block depends on the size of the cache<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../intro.html" class="pagination-link" aria-label="Prerequisites">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Prerequisites</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../Courses/2_Concepts.html" class="pagination-link" aria-label="Advanced concepts in parallel programming">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Advanced concepts in parallel programming</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -200,4 +200,13 @@ Finally we now extract the indices where there is “match” thanks to
 ``` python
 array([3, 7], dtype=int64)
 ```
+
+## External resources
+
+-   Exercises from [numpy-100](https://github.com/rougier/numpy-100)
+-   Data Sciences oriented exercises there [101 NumPy Exercises for Data
+    Analysis
+    (Python)](https://www.machinelearningplus.com/python/101-numpy-exercises-python/)
+-   [W3Schools numpy
+    exercises](https://www.w3schools.com/python/numpy/numpy_exercises.asp)
 """

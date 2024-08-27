@@ -327,3 +327,8 @@ array([3, 7], dtype=int64)
 np.nonzero(np.all(data[data_ind + seq_ind] == sequence,1))[0]
 ```
 
+## External resources
+
+- Exercises from [numpy-100](https://github.com/rougier/numpy-100)
+- Data Sciences oriented exercises there [101 NumPy Exercises for Data Analysis (Python)](https://www.machinelearningplus.com/python/101-numpy-exercises-python/)
+- [W3Schools numpy exercises](https://www.w3schools.com/python/numpy/numpy_exercises.asp)

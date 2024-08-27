@@ -1,6 +1,5 @@
 /.quarto/
 /.luarc.json
-/docs/
 /docs-resources/
 .jupyter_cache
 Courses/Applications/*

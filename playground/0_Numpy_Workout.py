@@ -47,13 +47,15 @@ Use `np.testing` with the right assert function for comparison purpose.
 """
 #%%
 
-np.dot(a,b) 
+res1 = np.dot(a,b) 
 #%%
 result=0
 for i in range(len(a)):
-    result += a[i]*b[i]
-result     
+    result += a[i]*b[i]/2
+res2 = result     
 
+#%%
+np.testing.assert_array_equal(res1,res2)
 #%%
 matrix_a = np.random.rand(5,5)
 matrix_b = np.random.rand(5,5)
@@ -69,6 +71,12 @@ for i in range(matrix_a.shape[0]):
             matrix[i, j] += matrix_a[i, k] * matrix_b[k, j]
 
 matrix
+#%%
+np.testing.assert_array_equal(matrix_prod,matrix)
+
+#%%
+np.testing.assert_array_almost_equal(matrix_prod,matrix)
+
 #%%
 matrix = np.zeros((5, 5))
 for i in range(matrix_a.shape[0]):
@@ -115,17 +123,58 @@ alt="Sequence search" />
 
 ## First blocks
 """
+#%%
+
+col_sum = np.sum(D, axis=0)
+print(col_sum.shape)
+col_sum
+
+# %%
+
+col_sum2 = np.zeros(D.shape[1])
+for j in range(D.shape[1]) :
+    for i in range(D.shape[0]) :
+        col_sum2[j] += D[i, j]
+
+np.testing.assert_array_equal(col_sum, col_sum2)
 
 # %%
 data = np.array([1,3,2,0,1,9,2,0,1,1,0],dtype=np.uint8)
 sequence = np.array([0,1],dtype=np.uint8)
 
+#%%
+seq_size = sequence.shape[0]
+seq_ind = np.arange(seq_size)
+seq_ind
+
+#%%
+data_size = data.shape[0]
+cor_size = data_size-seq_size+1
+data_ind = np.arange(cor_size).reshape(cor_size,1)
+data_ind
+
+#%%
+ind_seq = data_ind + seq_ind
+ind_seq
+
+#%%
+data[ind_seq]
+
+#%%
+data[ind_seq] == sequence
+
+#%%
+np.all(data[ind_seq] == sequence, axis=1)
+
+#%%
+np.argwhere(np.all(data[ind_seq] == sequence, axis=1)).flatten()
 # %% [markdown]
 """
 We want to get
 
 ``` python
 numpy_search_sequence(data,séquence)
+
 ```
 
 ``` python

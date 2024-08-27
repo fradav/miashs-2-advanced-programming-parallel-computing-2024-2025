@@ -7,6 +7,9 @@ project:
   output-dir: docs-resources/Slides
   resources:
     - "Courses/tikz-figures/*.svg"  
+    - "!/docs"
+    - "!/docs-resources"
+
 
 history: true
 lang: en-EN
@@ -42,7 +45,6 @@ filters:
     - animate
     - reveal-header
     - filters/make-transparent-img.lua
-    - filters/unclutter-tp.lua
     - filters/slides-meta.lua
 editor:
   render-on-save: true

@@ -1,10 +1,14 @@
 project:
   render:
-    - ./Courses/Solutions/0_Numpy_Workout.qmd
+    - ./Courses/Solutions/0_Numpy_Workout-sol.qmd
     - ./Courses/Applications/*.qmd
   output-dir: docs-resources/Notebooks
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py
+  resources:
+    - "Courses/tikz-figures/*.svg" 
+    - "!/docs"
+    - "!/docs-resources"
 
 theme:
   dark: darkly
@@ -24,7 +28,8 @@ format:
     echo: true
 
 execute: 
-  eval: false
+  eval: true
+  output: true
 
 filters:
   - filters/unclutter-slides.lua

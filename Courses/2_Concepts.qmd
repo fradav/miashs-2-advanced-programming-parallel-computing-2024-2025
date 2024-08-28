@@ -85,9 +85,15 @@ $\Longrightarrow$ half of the power use
 
 # Laws
 
+## Terms and definitions
+
+- **Speedup** $S_{up}(N)$: ratio of the time of execution in serial and parallel mode
+- Number of computing units $N$
+- $P$ (resp. $S$) is the parallel (resp. serial) fraction of the time spent in the parallel (resp. serial) part of the program ($P+S=1$).
+
 ## Asymptote of parallel computing : [Amdahl's Law](https://en.wikipedia.org/wiki/Amdahl%27s_law){ .notransparent }
 
-If $P$ (resp. $S$) is the parallel (resp. serial) fraction of the time of the execution and $N$ the number of computing units:
+There $P$ is the fraction of the time spent in the parallel part of the program in *a sequential execution*.
 
 $$S_{up}(N) \le \frac{1}{S+\frac{P}{N}}$$
 
@@ -99,6 +105,8 @@ $$S_{up}(N) \le \frac{1}{S+\frac{P}{N}}$$
 
 
 [Gustafson's law](https://en.wikipedia.org/wiki/Gustafson%27s_law){ .notransparent }
+
+There now, $P$ is the fraction of the time spent in the parallel part of the program in *a parallel execution*.
 
 :::::::::::::: {.columns}
 ::: {.column width="60%"}

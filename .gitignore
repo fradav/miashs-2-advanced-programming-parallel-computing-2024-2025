@@ -3,5 +3,6 @@
 /docs-resources/
 .jupyter_cache
 Courses/Applications/*
+!Courses/Applications/.gitkeep
 /applications.yml
 /slides.yml

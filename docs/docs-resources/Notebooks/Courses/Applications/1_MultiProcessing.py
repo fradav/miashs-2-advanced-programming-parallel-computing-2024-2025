@@ -1,11 +1,13 @@
 # %% [markdown]
 """
-# ⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️
+# MultiProcessing, Strong Scaling
 
 François-David Collin (CNRS, IMAG, Paul-Valéry Montpellier 3
 University)  
 Ghislain Durif (CNRS, LBMC)  
 Monday, August 26, 2024
+
+## ⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️
 
 Under *Windows*, with python the multiprocessing module
 `multiprocessing` works in a normal script but **not in notebooks**.

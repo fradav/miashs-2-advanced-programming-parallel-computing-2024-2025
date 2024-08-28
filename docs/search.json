@@ -630,21 +630,31 @@
     ]
   },
   {
-    "objectID": "Courses/2_Concepts.html#asymtptote-of-parallel-computing-amdahls-law",
-    "href": "Courses/2_Concepts.html#asymtptote-of-parallel-computing-amdahls-law",
+    "objectID": "Courses/2_Concepts.html#terms-and-definitions",
+    "href": "Courses/2_Concepts.html#terms-and-definitions",
     "title": "3  Advanced concepts in parallel programming",
-    "section": "6.1 Asymtptote of parallel computing : Amdahl’s Law",
-    "text": "6.1 Asymtptote of parallel computing : Amdahl’s Law\nIf P and S is the parallel (resp. serial) fraction of the code and N the number of computing units:\nS_{up}(N) \\le \\frac{1}{S+\\frac{P}{N}}",
+    "section": "6.1 Terms and definitions",
+    "text": "6.1 Terms and definitions\n\nSpeedup S_{up}(N): ratio of the time of execution in serial and parallel mode\nNumber of computing units N\nP (resp. S) is the parallel (resp. serial) fraction of the time spent in the parallel (resp. serial) part of the program (P+S=1).",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
   },
   {
-    "objectID": "Courses/2_Concepts.html#asymtptote-of-parallel-computing-amdahls-law-graphic",
-    "href": "Courses/2_Concepts.html#asymtptote-of-parallel-computing-amdahls-law-graphic",
+    "objectID": "Courses/2_Concepts.html#asymptote-of-parallel-computing-amdahls-law",
+    "href": "Courses/2_Concepts.html#asymptote-of-parallel-computing-amdahls-law",
     "title": "3  Advanced concepts in parallel programming",
-    "section": "6.2 Asymtptote of parallel computing : Amdahl’s Law, Graphic",
-    "text": "6.2 Asymtptote of parallel computing : Amdahl’s Law, Graphic\n\n\n\nIdeal speedup : 100% of the code parallelized; 90%, 75%, and 50% : limited by the fractions of code that remain serial. (Robey and Zamora 2021)",
+    "section": "6.2 Asymptote of parallel computing : Amdahl’s Law",
+    "text": "6.2 Asymptote of parallel computing : Amdahl’s Law\nThere P is the fraction of the time spent in the parallel part of the program in a sequential execution.\nS_{up}(N) \\le \\frac{1}{S+\\frac{P}{N}}",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/2_Concepts.html#asymptote-of-parallel-computing-amdahls-law-graphic",
+    "href": "Courses/2_Concepts.html#asymptote-of-parallel-computing-amdahls-law-graphic",
+    "title": "3  Advanced concepts in parallel programming",
+    "section": "6.3 Asymptote of parallel computing : Amdahl’s Law, Graphic",
+    "text": "6.3 Asymptote of parallel computing : Amdahl’s Law, Graphic\n\n\n\nIdeal speedup : 100% of the code parallelized; 90%, 75%, and 50% : limited by the fractions of code that remain serial. (Robey and Zamora 2021)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -653,8 +663,8 @@
     "objectID": "Courses/2_Concepts.html#more-with-almost-less-the-pump-it-up-approach",
     "href": "Courses/2_Concepts.html#more-with-almost-less-the-pump-it-up-approach",
     "title": "3  Advanced concepts in parallel programming",
-    "section": "6.3 More with (almost) less : the pump it up approach",
-    "text": "6.3 More with (almost) less : the pump it up approach\nGustafson’s law\n\n\n\n\nWhen the size of the problem grows up proportionnaly to the number of computing units.\nS_{up}(N) \\le N - S*(N-1)\nwhere N is the number of computing units and S the serial fraction as before.",
+    "section": "6.4 More with (almost) less : the pump it up approach",
+    "text": "6.4 More with (almost) less : the pump it up approach\nGustafson’s law\nThere now, P is the fraction of the time spent in the parallel part of the program in a parallel execution.\n\n\n\n\nWhen the size of the problem grows up proportionnaly to the number of computing units.\nS_{up}(N) \\le N - S*(N-1)\nwhere N is the number of computing units and S the serial fraction as before.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -663,8 +673,8 @@
     "objectID": "Courses/2_Concepts.html#more-with-almost-less-graphic",
     "href": "Courses/2_Concepts.html#more-with-almost-less-graphic",
     "title": "3  Advanced concepts in parallel programming",
-    "section": "6.4 More with (almost) less : graphic",
-    "text": "6.4 More with (almost) less : graphic\n\n\n\nLinear growth with the number of processor (and data size too)",
+    "section": "6.5 More with (almost) less : graphic",
+    "text": "6.5 More with (almost) less : graphic\n\n\n\nLinear growth with the number of processor (and data size too)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -673,8 +683,8 @@
     "objectID": "Courses/2_Concepts.html#strong-vs-weak-scaling-definitions",
     "href": "Courses/2_Concepts.html#strong-vs-weak-scaling-definitions",
     "title": "3  Advanced concepts in parallel programming",
-    "section": "6.5 Strong vs Weak Scaling, definitions",
-    "text": "6.5 Strong vs Weak Scaling, definitions\n\n\nStrong Scaling\n\nStrong scaling represents the time to solution with respect to the number of processors for a fixed total size.\n\nWeak Scaling\n\nWeak scaling represents the time to solution with respect to the number of processors for a fixed-sized problem per processor.",
+    "section": "6.6 Strong vs Weak Scaling, definitions",
+    "text": "6.6 Strong vs Weak Scaling, definitions\n\n\nStrong Scaling\n\nStrong scaling represents the time to solution with respect to the number of processors for a fixed total size.\n\n\n\\Rightarrow Amdahl’s law\n\nWeak Scaling\n\nWeak scaling represents the time to solution with respect to the number of processors for a fixed-sized problem per processor.\n\n\n\\Rightarrow Gustafson’s law",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -683,8 +693,8 @@
     "objectID": "Courses/2_Concepts.html#strong-vs-weak-scaling-schemas",
     "href": "Courses/2_Concepts.html#strong-vs-weak-scaling-schemas",
     "title": "3  Advanced concepts in parallel programming",
-    "section": "6.6 Strong vs Weak Scaling, schemas",
-    "text": "6.6 Strong vs Weak Scaling, schemas\n\n\n┌────────────────────────────────────┐\n│                 1000               │\n│         ┌───────────────────┐      │\n│         │                   │      │           1 processor\n│         │                   │      │\n│         │                   │      │\n│ 1000    │                   │      │           \n│         │                   │      │\n│         │                   │      │\n│         └───────────────────┘      │\n│        ┌─────────┐  ┌─────────┐    │\n│        │         │  │         │    │\n│ 500    │         │  │         │    │\n│        │         │  │         │    │\n│        └─────────┘  └─────────┘    │\n│           500                      │           4 processors\n│        ┌─────────┐  ┌─────────┐    │\n│        │         │  │         │    │\n│        │         │  │         │    │\n│        │         │  │         │    │\n│        └─────────┘  └─────────┘    │\n│      250                           │\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│ 250 │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│     │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │           16 processors\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│     │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│     │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │\n└────────────────────────────────────┘\n\n┌───────────────────────────────────────────────────────────┐\n│                         1000                              │\n│                      ┌─────────┐                          │\n│                      │         │                          │\n│              1000    │      ───┼──┐                       │\n│                      │         │  │                       │\n│                      └─────────┘  │                       │\n│                   1000            │                       │\n│                 ┌─────────┐  ┌────┼────┐                  │\n│                 │         │  │    │    │                  │\n│           1000  │         │  │    │    │                  │\n│                 │         │  │    │    │                  │\n│                 └─────────┘  └────┼────┘                  │\n│                 ┌─────────┐  ┌────┼────┐                  │\n│                 │         │  │    │    │                  │\n│                 │         │  │    │    │                  │\n│                 │         │  │    │    │                  │\n│                 └─────────┘  └────┼────┘                  │\n│                                   │         1000          │\n│    ┌─────────┐  ┌─────────┐  ┌────┼────┐  ┌─────────┐     │\n│    │         │  │         │  │    │    │  │         │     │\n│    │         │  │         │  │    ▼    │  │         │1000 │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n└───────────────────────────────────────────────────────────┘",
+    "section": "6.7 Strong vs Weak Scaling, schemas",
+    "text": "6.7 Strong vs Weak Scaling, schemas\n\n\n┌────────────────────────────────────┐\n│                 1000               │\n│         ┌───────────────────┐      │\n│         │                   │      │           1 processor\n│         │                   │      │\n│         │                   │      │\n│ 1000    │                   │      │           \n│         │                   │      │\n│         │                   │      │\n│         └───────────────────┘      │\n│        ┌─────────┐  ┌─────────┐    │\n│        │         │  │         │    │\n│ 500    │         │  │         │    │\n│        │         │  │         │    │\n│        └─────────┘  └─────────┘    │\n│           500                      │           4 processors\n│        ┌─────────┐  ┌─────────┐    │\n│        │         │  │         │    │\n│        │         │  │         │    │\n│        │         │  │         │    │\n│        └─────────┘  └─────────┘    │\n│      250                           │\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│ 250 │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│     │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │           16 processors\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│     │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │\n│     ┌────┐  ┌────┐  ┌────┐  ┌────┐ │\n│     │    │  │    │  │    │  │    │ │\n│     └────┘  └────┘  └────┘  └────┘ │\n└────────────────────────────────────┘\n\n┌───────────────────────────────────────────────────────────┐\n│                         1000                              │\n│                      ┌─────────┐                          │\n│                      │         │                          │\n│              1000    │      ───┼──┐                       │\n│                      │         │  │                       │\n│                      └─────────┘  │                       │\n│                   1000            │                       │\n│                 ┌─────────┐  ┌────┼────┐                  │\n│                 │         │  │    │    │                  │\n│           1000  │         │  │    │    │                  │\n│                 │         │  │    │    │                  │\n│                 └─────────┘  └────┼────┘                  │\n│                 ┌─────────┐  ┌────┼────┐                  │\n│                 │         │  │    │    │                  │\n│                 │         │  │    │    │                  │\n│                 │         │  │    │    │                  │\n│                 └─────────┘  └────┼────┘                  │\n│                                   │         1000          │\n│    ┌─────────┐  ┌─────────┐  ┌────┼────┐  ┌─────────┐     │\n│    │         │  │         │  │    │    │  │         │     │\n│    │         │  │         │  │    ▼    │  │         │1000 │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n│    ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    │         │  │         │  │         │  │         │     │\n│    └─────────┘  └─────────┘  └─────────┘  └─────────┘     │\n└───────────────────────────────────────────────────────────┘",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -744,7 +754,7 @@
     "href": "applications.html",
     "title": "Appendix A — Applications",
     "section": "",
-    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\n⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️\n\n\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\n\n\nNo matching items",
+    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\nMultiProcessing, Strong Scaling\n\n\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\n\n\nNo matching items",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Applications</span>"

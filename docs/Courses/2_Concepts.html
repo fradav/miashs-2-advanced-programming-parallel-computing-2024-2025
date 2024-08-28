@@ -261,12 +261,13 @@ window.Quarto = {
   </ul></li>
   <li><a href="#laws" id="toc-laws" class="nav-link" data-scroll-target="#laws"><span class="header-section-number">6</span> Laws</a>
   <ul>
-  <li><a href="#asymtptote-of-parallel-computing-amdahls-law" id="toc-asymtptote-of-parallel-computing-amdahls-law" class="nav-link" data-scroll-target="#asymtptote-of-parallel-computing-amdahls-law"><span class="header-section-number">6.1</span> Asymtptote of parallel computing : Amdahl’s Law</a></li>
-  <li><a href="#asymtptote-of-parallel-computing-amdahls-law-graphic" id="toc-asymtptote-of-parallel-computing-amdahls-law-graphic" class="nav-link" data-scroll-target="#asymtptote-of-parallel-computing-amdahls-law-graphic"><span class="header-section-number">6.2</span> Asymtptote of parallel computing : Amdahl’s Law, Graphic</a></li>
-  <li><a href="#more-with-almost-less-the-pump-it-up-approach" id="toc-more-with-almost-less-the-pump-it-up-approach" class="nav-link" data-scroll-target="#more-with-almost-less-the-pump-it-up-approach"><span class="header-section-number">6.3</span> More with (almost) less : the <em>pump it up</em> approach</a></li>
-  <li><a href="#more-with-almost-less-graphic" id="toc-more-with-almost-less-graphic" class="nav-link" data-scroll-target="#more-with-almost-less-graphic"><span class="header-section-number">6.4</span> More with (almost) less : graphic</a></li>
-  <li><a href="#strong-vs-weak-scaling-definitions" id="toc-strong-vs-weak-scaling-definitions" class="nav-link" data-scroll-target="#strong-vs-weak-scaling-definitions"><span class="header-section-number">6.5</span> Strong vs Weak Scaling, definitions</a></li>
-  <li><a href="#strong-vs-weak-scaling-schemas" id="toc-strong-vs-weak-scaling-schemas" class="nav-link" data-scroll-target="#strong-vs-weak-scaling-schemas"><span class="header-section-number">6.6</span> Strong vs Weak Scaling, schemas</a></li>
+  <li><a href="#terms-and-definitions" id="toc-terms-and-definitions" class="nav-link" data-scroll-target="#terms-and-definitions"><span class="header-section-number">6.1</span> Terms and definitions</a></li>
+  <li><a href="#asymptote-of-parallel-computing-amdahls-law" id="toc-asymptote-of-parallel-computing-amdahls-law" class="nav-link" data-scroll-target="#asymptote-of-parallel-computing-amdahls-law"><span class="header-section-number">6.2</span> Asymptote of parallel computing : Amdahl’s Law</a></li>
+  <li><a href="#asymptote-of-parallel-computing-amdahls-law-graphic" id="toc-asymptote-of-parallel-computing-amdahls-law-graphic" class="nav-link" data-scroll-target="#asymptote-of-parallel-computing-amdahls-law-graphic"><span class="header-section-number">6.3</span> Asymptote of parallel computing : Amdahl’s Law, Graphic</a></li>
+  <li><a href="#more-with-almost-less-the-pump-it-up-approach" id="toc-more-with-almost-less-the-pump-it-up-approach" class="nav-link" data-scroll-target="#more-with-almost-less-the-pump-it-up-approach"><span class="header-section-number">6.4</span> More with (almost) less : the <em>pump it up</em> approach</a></li>
+  <li><a href="#more-with-almost-less-graphic" id="toc-more-with-almost-less-graphic" class="nav-link" data-scroll-target="#more-with-almost-less-graphic"><span class="header-section-number">6.5</span> More with (almost) less : graphic</a></li>
+  <li><a href="#strong-vs-weak-scaling-definitions" id="toc-strong-vs-weak-scaling-definitions" class="nav-link" data-scroll-target="#strong-vs-weak-scaling-definitions"><span class="header-section-number">6.6</span> Strong vs Weak Scaling, definitions</a></li>
+  <li><a href="#strong-vs-weak-scaling-schemas" id="toc-strong-vs-weak-scaling-schemas" class="nav-link" data-scroll-target="#strong-vs-weak-scaling-schemas"><span class="header-section-number">6.7</span> Strong vs Weak Scaling, schemas</a></li>
   </ul></li>
   <li><a href="#types-of-parallelism" id="toc-types-of-parallelism" class="nav-link" data-scroll-target="#types-of-parallelism"><span class="header-section-number">7</span> Types of parallelism</a>
   <ul>
@@ -422,13 +423,21 @@ Note
 </section>
 <section id="laws" class="level1" data-number="6">
 <h1 data-number="6"><span class="header-section-number">6</span> Laws</h1>
-<section id="asymtptote-of-parallel-computing-amdahls-law" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="asymtptote-of-parallel-computing-amdahls-law"><span class="header-section-number">6.1</span> Asymtptote of parallel computing : <a href="https://en.wikipedia.org/wiki/Amdahl%27s_law" class="notransparent">Amdahl’s Law</a></h2>
-<p>If <span class="math inline">P</span> and <span class="math inline">S</span> is the parallel (resp. serial) fraction of the code and <span class="math inline">N</span> the number of computing units:</p>
+<section id="terms-and-definitions" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="terms-and-definitions"><span class="header-section-number">6.1</span> Terms and definitions</h2>
+<ul>
+<li><strong>Speedup</strong> <span class="math inline">S_{up}(N)</span>: ratio of the time of execution in serial and parallel mode</li>
+<li>Number of computing units <span class="math inline">N</span></li>
+<li><span class="math inline">P</span> (resp. <span class="math inline">S</span>) is the parallel (resp. serial) fraction of the time spent in the parallel (resp. serial) part of the program (<span class="math inline">P+S=1</span>).</li>
+</ul>
+</section>
+<section id="asymptote-of-parallel-computing-amdahls-law" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="asymptote-of-parallel-computing-amdahls-law"><span class="header-section-number">6.2</span> Asymptote of parallel computing : <a href="https://en.wikipedia.org/wiki/Amdahl%27s_law" class="notransparent">Amdahl’s Law</a></h2>
+<p>There <span class="math inline">P</span> is the fraction of the time spent in the parallel part of the program in <em>a sequential execution</em>.</p>
 <p><span class="math display">S_{up}(N) \le \frac{1}{S+\frac{P}{N}}</span></p>
 </section>
-<section id="asymtptote-of-parallel-computing-amdahls-law-graphic" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="asymtptote-of-parallel-computing-amdahls-law-graphic"><span class="header-section-number">6.2</span> Asymtptote of parallel computing : Amdahl’s Law, Graphic</h2>
+<section id="asymptote-of-parallel-computing-amdahls-law-graphic" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="asymptote-of-parallel-computing-amdahls-law-graphic"><span class="header-section-number">6.3</span> Asymptote of parallel computing : Amdahl’s Law, Graphic</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./figs/amdhals.png" class="notransparent img-fluid figure-img"></p>
@@ -436,9 +445,10 @@ Note
 </figure>
 </div>
 </section>
-<section id="more-with-almost-less-the-pump-it-up-approach" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="more-with-almost-less-the-pump-it-up-approach"><span class="header-section-number">6.3</span> More with (almost) less : the <em>pump it up</em> approach</h2>
+<section id="more-with-almost-less-the-pump-it-up-approach" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="more-with-almost-less-the-pump-it-up-approach"><span class="header-section-number">6.4</span> More with (almost) less : the <em>pump it up</em> approach</h2>
 <p><a href="https://en.wikipedia.org/wiki/Gustafson%27s_law" class="notransparent">Gustafson’s law</a></p>
+<p>There now, <span class="math inline">P</span> is the fraction of the time spent in the parallel part of the program in <em>a parallel execution</em>.</p>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p><img src="figs/gimmemore-meme.png" class="notransparent noinvert img-fluid"></p>
@@ -449,8 +459,8 @@ Note
 </div>
 </div>
 </section>
-<section id="more-with-almost-less-graphic" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="more-with-almost-less-graphic"><span class="header-section-number">6.4</span> More with (almost) less : graphic</h2>
+<section id="more-with-almost-less-graphic" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="more-with-almost-less-graphic"><span class="header-section-number">6.5</span> More with (almost) less : graphic</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="./figs/gustafsons.png" class="notransparent img-fluid figure-img"></p>
@@ -458,23 +468,27 @@ Note
 </figure>
 </div>
 </section>
-<section id="strong-vs-weak-scaling-definitions" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="strong-vs-weak-scaling-definitions"><span class="header-section-number">6.5</span> Strong vs Weak Scaling, definitions</h2>
+<section id="strong-vs-weak-scaling-definitions" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="strong-vs-weak-scaling-definitions"><span class="header-section-number">6.6</span> Strong vs Weak Scaling, definitions</h2>
 <div class="incremental">
 <dl class="incremental">
 <dt>Strong Scaling</dt>
 <dd>
 <p>Strong scaling represents the time to solution with respect to the number of processors for a fixed total size.</p>
 </dd>
+</dl>
+<p><span class="math inline">\Rightarrow</span> Amdahl’s law</p>
+<dl class="incremental">
 <dt>Weak Scaling</dt>
 <dd>
 <p>Weak scaling represents the time to solution with respect to the number of processors for a fixed-sized problem per processor.</p>
 </dd>
 </dl>
+<p><span class="math inline">\Rightarrow</span> Gustafson’s law</p>
 </div>
 </section>
-<section id="strong-vs-weak-scaling-schemas" class="level2 smaller" data-number="6.6">
-<h2 class="smaller anchored" data-number="6.6" data-anchor-id="strong-vs-weak-scaling-schemas"><span class="header-section-number">6.6</span> Strong vs Weak Scaling, schemas</h2>
+<section id="strong-vs-weak-scaling-schemas" class="level2 smaller" data-number="6.7">
+<h2 class="smaller anchored" data-number="6.7" data-anchor-id="strong-vs-weak-scaling-schemas"><span class="header-section-number">6.7</span> Strong vs Weak Scaling, schemas</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <pre style="font-size: 0.6em;"><code>┌────────────────────────────────────┐

@@ -1,3 +1,7 @@
+---
+title: MultiProcessing, Strong Scaling
+---
+
 ## ⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️
  Under _Windows_, with python the multiprocessing module `multiprocessing` works in a normal script but **not in notebooks**.
  

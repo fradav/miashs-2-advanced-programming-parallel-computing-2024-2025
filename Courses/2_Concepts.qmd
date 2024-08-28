@@ -134,9 +134,13 @@ Strong Scaling
 
 : Strong scaling represents the time to solution with respect to the number of processors for a fixed total size.
 
+$\Rightarrow$ Amdahl's law
+
 Weak Scaling
 
 : Weak scaling represents the time to solution with respect to the number of processors for a fixed-sized problem per processor.
+
+$\Rightarrow$ Gustafson's law
 
 ::::::: 
 

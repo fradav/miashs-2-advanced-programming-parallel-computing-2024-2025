@@ -11,7 +11,7 @@
 <script src="2_Concepts_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.js" defer="true"></script>
 <link href="2_Concepts_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.css" rel="stylesheet">
 <link href="2_Concepts_files/libs/quarto-contrib/grid-no-htext-1.0.0/grid_no_htext.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.55">
+  <meta name="generator" content="quarto-1.5.56">
 
   <meta name="author" content="François-David Collin">
   <meta name="author" content="Ghislain Durif">
@@ -507,18 +507,27 @@ Ghislain Durif
 <h1>Laws</h1>
 
 </section>
-<section id="asymtptote-of-parallel-computing-amdahls-law" class="slide level2 center">
-<h2>Asymtptote of parallel computing : <a href="https://en.wikipedia.org/wiki/Amdahl%27s_law" class="notransparent">Amdahl’s Law</a></h2>
-<p>If <span class="math inline">P</span> and <span class="math inline">S</span> is the parallel (resp. serial) fraction of the code and <span class="math inline">N</span> the number of computing units:</p>
+<section id="terms-and-definitions" class="slide level2 center">
+<h2>Terms and definitions</h2>
+<ul>
+<li><strong>Speedup</strong> <span class="math inline">S_{up}(N)</span>: ratio of the time of execution in serial and parallel mode</li>
+<li>Number of computing units <span class="math inline">N</span></li>
+<li><span class="math inline">P</span> (resp. <span class="math inline">S</span>) is the parallel (resp. serial) fraction of the time spent in the parallel (resp. serial) part of the program (<span class="math inline">P+S=1</span>).</li>
+</ul>
+</section>
+<section id="asymptote-of-parallel-computing-amdahls-law" class="slide level2 center">
+<h2>Asymptote of parallel computing : <a href="https://en.wikipedia.org/wiki/Amdahl%27s_law" class="notransparent">Amdahl’s Law</a></h2>
+<p>There <span class="math inline">P</span> is the fraction of the time spent in the parallel part of the program in <em>a sequential execution</em>.</p>
 <p><span class="math display">S_{up}(N) \le \frac{1}{S+\frac{P}{N}}</span></p>
 </section>
-<section id="asymtptote-of-parallel-computing-amdahls-law-graphic" class="slide level2 center">
-<h2>Asymtptote of parallel computing : Amdahl’s Law, Graphic</h2>
+<section id="asymptote-of-parallel-computing-amdahls-law-graphic" class="slide level2 center">
+<h2>Asymptote of parallel computing : Amdahl’s Law, Graphic</h2>
 
 <img data-src="./figs/amdhals.png" class="notransparent r-stretch quarto-figure-center"><p class="caption">Ideal speedup : 100% of the code parallelized; 90%, 75%, and 50% : limited by the fractions of code that remain serial. <span class="citation" data-cites="robey2021parallel">(<a href="#/references" role="doc-biblioref" onclick="">Robey and Zamora 2021</a>)</span></p></section>
 <section id="more-with-almost-less-the-pump-it-up-approach" class="slide level2 center">
 <h2>More with (almost) less : the <em>pump it up</em> approach</h2>
 <p><a href="https://en.wikipedia.org/wiki/Gustafson%27s_law" class="notransparent">Gustafson’s law</a></p>
+<p>There now, <span class="math inline">P</span> is the fraction of the time spent in the parallel part of the program in <em>a parallel execution</em>.</p>
 <div class="columns">
 <div class="column" style="width:60%;">
 <p><img data-src="figs/gimmemore-meme.png" class="notransparent noinvert"></p>
@@ -540,11 +549,15 @@ Ghislain Durif
 <dd class="fragment">
 <p>Strong scaling represents the time to solution with respect to the number of processors for a fixed total size.</p>
 </dd>
+</dl>
+<p><span class="math inline">\Rightarrow</span> Amdahl’s law</p>
+<dl>
 <dt class="fragment">Weak Scaling</dt>
 <dd class="fragment">
 <p>Weak scaling represents the time to solution with respect to the number of processors for a fixed-sized problem per processor.</p>
 </dd>
 </dl>
+<p><span class="math inline">\Rightarrow</span> Gustafson’s law</p>
 </div>
 </section>
 <section id="strong-vs-weak-scaling-schemas" class="slide level2 smaller center">
@@ -643,19 +656,19 @@ Ghislain Durif
 <col style="width: 27%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th></th>
 <th>Simple Instruction</th>
 <th>Multiple Instructions</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Simple Data</td>
 <td><img data-src="figs/SISD.svg" style="max-height: 300px;"></td>
 <td><img data-src="figs/MISD.svg" style="max-height: 300px;"></td>
 </tr>
-<tr>
+<tr class="even">
 <td>Multiple Data</td>
 <td><img data-src="figs/SIMD.svg" style="max-height: 300px;"></td>
 <td><img data-src="figs/MIMD.svg" style="max-height: 300px;"></td>
@@ -673,7 +686,7 @@ Ghislain Durif
 <col style="width: 17%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th>Parallelism level</th>
 <th>Hardware</th>
 <th>Software</th>
@@ -681,19 +694,19 @@ Ghislain Durif
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Instruction</td>
 <td>SIMD (or VLIW)</td>
 <td>Intrinsics</td>
 <td>Compiler</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Thread</td>
 <td>Multi-core RTOS</td>
 <td>Library or language extension</td>
 <td>Partitioning/Scheduling (dependency control)</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Task</td>
 <td>Multi-core (w/o RTOS)</td>
 <td>Processes (OS level)</td>
@@ -764,29 +777,29 @@ Ghislain Durif
 <col style="width: 27%">
 </colgroup>
 <thead>
-<tr>
+<tr class="header">
 <th></th>
 <th>Multi-processing</th>
 <th>Multi-threading</th>
 </tr>
 </thead>
 <tbody>
-<tr>
+<tr class="odd">
 <td>Memory</td>
 <td>Exclusive</td>
 <td>Shared</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Communication</td>
 <td>Inter-process</td>
 <td>At caller site</td>
 </tr>
-<tr>
+<tr class="odd">
 <td>Creation overhead</td>
 <td>Heavy</td>
 <td>Minimal</td>
 </tr>
-<tr>
+<tr class="even">
 <td>Concurrency</td>
 <td>At OS level</td>
 <td>Library/language</td>

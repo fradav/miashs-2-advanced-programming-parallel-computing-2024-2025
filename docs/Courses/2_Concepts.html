@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.56">
+<meta name="generator" content="quarto-1.5.55">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -561,21 +561,21 @@ Note
 <h1 data-number="7"><span class="header-section-number">7</span> Types of parallelism</h1>
 <section id="flynns-taxonomy" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="flynns-taxonomy"><span class="header-section-number">7.1</span> Flynn’s taxonomy</h2>
-<table class="caption-top table">
+<table class="caption-top">
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th>Simple Instruction</th>
 <th>Multiple Instructions</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Simple Data</td>
 <td><img src="figs/SISD.svg" class="img-fluid" style="max-height: 300px;"></td>
 <td><img src="figs/MISD.svg" class="img-fluid" style="max-height: 300px;"></td>
 </tr>
-<tr class="even">
+<tr>
 <td>Multiple Data</td>
 <td><img src="figs/SIMD.svg" class="img-fluid" style="max-height: 300px;"></td>
 <td><img src="figs/MIMD.svg" class="img-fluid" style="max-height: 300px;"></td>
@@ -585,9 +585,9 @@ Note
 </section>
 <section id="a-different-approach" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="a-different-approach"><span class="header-section-number">7.2</span> A different approach</h2>
-<table class="caption-top table">
+<table class="caption-top">
 <thead>
-<tr class="header">
+<tr>
 <th>Parallelism level</th>
 <th>Hardware</th>
 <th>Software</th>
@@ -595,19 +595,19 @@ Note
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Instruction</td>
 <td>SIMD (or VLIW)</td>
 <td>Intrinsics</td>
 <td>Compiler</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Thread</td>
 <td>Multi-core RTOS</td>
 <td>Library or language extension</td>
 <td>Partitioning/Scheduling (dependency control)</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Task</td>
 <td>Multi-core (w/o RTOS)</td>
 <td>Processes (OS level)</td>
@@ -669,31 +669,31 @@ Note
 └──────────────────────────────────────┘</code></pre>
 </div>
 </div>
-<table class="caption-top table">
+<table class="caption-top">
 <thead>
-<tr class="header">
+<tr>
 <th></th>
 <th>Multi-processing</th>
 <th>Multi-threading</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td>Memory</td>
 <td>Exclusive</td>
 <td>Shared</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Communication</td>
 <td>Inter-process</td>
 <td>At caller site</td>
 </tr>
-<tr class="odd">
+<tr>
 <td>Creation overhead</td>
 <td>Heavy</td>
 <td>Minimal</td>
 </tr>
-<tr class="even">
+<tr>
 <td>Concurrency</td>
 <td>At OS level</td>
 <td>Library/language</td>

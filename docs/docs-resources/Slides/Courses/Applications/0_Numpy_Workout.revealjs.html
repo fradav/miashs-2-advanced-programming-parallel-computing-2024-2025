@@ -11,7 +11,7 @@
 <script src="0_Numpy_Workout_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.js" defer="true"></script>
 <link href="0_Numpy_Workout_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.css" rel="stylesheet">
 <link href="0_Numpy_Workout_files/libs/quarto-contrib/grid-no-htext-1.0.0/grid_no_htext.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.56">
+  <meta name="generator" content="quarto-1.5.55">
 
   <meta name="author" content="François-David Collin">
   <meta name="author" content="Ghislain Durif">
@@ -465,7 +465,7 @@ Ghislain Durif
 </section>
 <section id="some-loops" class="slide level2 center">
 <h2>Some loops</h2>
-<div id="1e891cc3" class="cell" data-execution_count="1">
+<div id="9205519d" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> np.random.rand(<span class="dv">100</span>)</span>
@@ -480,19 +480,19 @@ Ghislain Durif
 <li>write manual loop</li>
 <li>compare results</li>
 </ol>
-<div id="3d6bffa3" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="2">
+<div id="8cb9ec68" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="" aria-hidden="true" tabindex="-1"></a>np.dot(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
-<pre><code>np.float64(26.16899284644742)</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>np.float64(24.940752722708304)</code></pre>
 </div>
 </div>
-<div id="bc751b07" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="3">
+<div id="ab9f789f" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="" aria-hidden="true" tabindex="-1"></a>resdot<span class="op">=</span><span class="dv">0</span></span>
 <span id="cb4-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb4-3"><a href="" aria-hidden="true" tabindex="-1"></a>    resdot <span class="op">+=</span> a[i]<span class="op">*</span>b[i]</span>
 <span id="cb4-4"><a href="" aria-hidden="true" tabindex="-1"></a>resdot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
-<pre><code>np.float64(26.16899284644742)</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>np.float64(24.940752722708293)</code></pre>
 </div>
 </div>
 </section>
@@ -506,14 +506,14 @@ Ghislain Durif
 <li>Manual loop with numpy dot product of row-column, conpare resurt</li>
 </ol>
 <p>Use <code>np.testing</code> with the right assert function for comparison purpose.</p>
-<div id="89b8dfb2" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="4">
+<div id="31e2fa25" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> np.random.rand(<span class="dv">5</span>,<span class="dv">5</span>)</span>
 <span id="cb6-2"><a href="" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> np.random.rand(<span class="dv">5</span>,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b37e999a" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="5">
+<div id="afa674b5" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> A <span class="op">@</span> B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e99c2870" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="6">
+<div id="11764732" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a>Cres <span class="op">=</span> np.zeros((<span class="dv">5</span>,<span class="dv">5</span>))</span>
 <span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
 <span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
@@ -521,7 +521,7 @@ Ghislain Durif
 <span id="cb8-5"><a href="" aria-hidden="true" tabindex="-1"></a>            Cres[i,j] <span class="op">+=</span> A[i,k] <span class="op">*</span> B[k,j]</span>
 <span id="cb8-6"><a href="" aria-hidden="true" tabindex="-1"></a>np.testing.assert_array_almost_equal(Cres,C)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7bae2c95" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="7">
+<div id="e0730a82" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="" aria-hidden="true" tabindex="-1"></a>Cres <span class="op">=</span> np.zeros((<span class="dv">5</span>,<span class="dv">5</span>))</span>
 <span id="cb9-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
 <span id="cb9-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
@@ -531,10 +531,10 @@ Ghislain Durif
 </section>
 <section id="colum-wise-sum" class="slide level2 center">
 <h2>Colum-wise sum</h2>
-<div id="f68ca386" class="cell" data-execution_count="8">
+<div id="5854f612" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> np.arange(<span class="dv">10</span>).reshape(<span class="dv">2</span>,<span class="dv">5</span>)</span>
 <span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a>D</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>array([[0, 1, 2, 3, 4],
        [5, 6, 7, 8, 9]])</code></pre>
 </div>
@@ -544,14 +544,14 @@ Ghislain Durif
 <li>Col-wise sum of D with numpy</li>
 <li>the same with loop(s), compare results</li>
 </ol>
-<div id="55aa59fe" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="9">
+<div id="afda53aa" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a>Drowsum <span class="op">=</span> np.<span class="bu">sum</span>(D,axis<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a>Drowsum</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>array([ 5,  7,  9, 11, 13])</code></pre>
 </div>
 </div>
-<div id="96dfd1c4" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="10">
+<div id="2de4aab5" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="" aria-hidden="true" tabindex="-1"></a>Drowsumres <span class="op">=</span> np.zeros(<span class="dv">5</span>)</span>
 <span id="cb14-2"><a href="" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>):</span>
 <span id="cb14-3"><a href="" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">2</span>):</span>
@@ -632,7 +632,7 @@ animation:
 </section>
 <section id="first-blocks" class="slide level2 center">
 <h2>First blocks</h2>
-<div id="a3233508" class="cell" data-execution_count="11">
+<div id="085f0c4d" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.array([<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">9</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>],dtype<span class="op">=</span>np.uint8)</span>
 <span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a>sequence <span class="op">=</span> np.array([<span class="dv">0</span>,<span class="dv">1</span>],dtype<span class="op">=</span>np.uint8)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -645,11 +645,11 @@ animation:
 <p>First create an increasing list of indices avec <code>np.arange</code> with the same size of the search sequence</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a>seq_size <span class="op">=</span> </span>
 <span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a>seq_ind <span class="op">=</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="cbb72ba6" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="12">
+<div id="027402e1" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="" aria-hidden="true" tabindex="-1"></a>seq_size <span class="op">=</span> sequence.size</span>
 <span id="cb19-2"><a href="" aria-hidden="true" tabindex="-1"></a>seq_ind <span class="op">=</span> np.arange(seq_size)</span>
 <span id="cb19-3"><a href="" aria-hidden="true" tabindex="-1"></a>seq_ind</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <pre><code>array([0, 1])</code></pre>
 </div>
 </div>
@@ -661,12 +661,12 @@ animation:
 <div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="" aria-hidden="true" tabindex="-1"></a>data_size <span class="op">=</span></span>
 <span id="cb21-2"><a href="" aria-hidden="true" tabindex="-1"></a>cor_size <span class="op">=</span> data_size<span class="op">-</span>seq_size<span class="op">+</span><span class="dv">1</span></span>
 <span id="cb21-3"><a href="" aria-hidden="true" tabindex="-1"></a>data_ind <span class="op">=</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="98a754b5" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="13">
+<div id="03d22a09" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="" aria-hidden="true" tabindex="-1"></a>data_size <span class="op">=</span> data.size</span>
 <span id="cb22-2"><a href="" aria-hidden="true" tabindex="-1"></a>cor_size <span class="op">=</span> data_size<span class="op">-</span>seq_size<span class="op">+</span><span class="dv">1</span></span>
 <span id="cb22-3"><a href="" aria-hidden="true" tabindex="-1"></a>data_ind <span class="op">=</span> np.arange(cor_size).reshape((cor_size,<span class="dv">1</span>))</span>
 <span id="cb22-4"><a href="" aria-hidden="true" tabindex="-1"></a>data_ind</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="30">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>array([[0],
        [1],
        [2],
@@ -702,9 +702,9 @@ animation:
 </section>
 <section id="broadcasting-cont.-2" class="slide level2 center">
 <h2>Broadcasting cont. 2</h2>
-<div id="716cc711" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="14">
+<div id="2e006a35" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="" aria-hidden="true" tabindex="-1"></a>data_ind <span class="op">+</span> seq_ind</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <pre><code>array([[ 0,  1],
        [ 1,  2],
        [ 2,  3],
@@ -732,9 +732,9 @@ animation:
 <span id="cb27-8"><a href="" aria-hidden="true" tabindex="-1"></a>       [ <span class="va">True</span>,  <span class="va">True</span>],</span>
 <span id="cb27-9"><a href="" aria-hidden="true" tabindex="-1"></a>       [<span class="va">False</span>,  <span class="va">True</span>],</span>
 <span id="cb27-10"><a href="" aria-hidden="true" tabindex="-1"></a>       [<span class="va">False</span>, <span class="va">False</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="8ad7f66c" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="15">
+<div id="d74a1101" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="" aria-hidden="true" tabindex="-1"></a>data[data_ind <span class="op">+</span> seq_ind] <span class="op">==</span> sequence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <pre><code>array([[False, False],
        [False, False],
        [False, False],
@@ -757,9 +757,9 @@ animation:
 <p>Now we are looking for all lines having a perfect match, ie only <code>True</code>. Use the <code>np.all</code> function for this</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="" aria-hidden="true" tabindex="-1"></a>array([<span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>,  <span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>,  <span class="va">True</span>, <span class="va">False</span>,</span>
 <span id="cb30-2"><a href="" aria-hidden="true" tabindex="-1"></a>       <span class="va">False</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="8d32d8a3" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="16">
+<div id="acebf917" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">all</span>(data[data_ind <span class="op">+</span> seq_ind] <span class="op">==</span> sequence,<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>array([False, False, False,  True, False, False, False,  True, False,
        False])</code></pre>
 </div>
@@ -769,9 +769,9 @@ animation:
 <h2>Indice extraction</h2>
 <p>Finally we now extract the indices where there is “match” thanks to <code>np.nonzero</code></p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="" aria-hidden="true" tabindex="-1"></a>array([<span class="dv">3</span>, <span class="dv">7</span>], dtype<span class="op">=</span>int64)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="be9b810f" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="17">
+<div id="5713255b" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="" aria-hidden="true" tabindex="-1"></a>np.nonzero(np.<span class="bu">all</span>(data[data_ind <span class="op">+</span> seq_ind] <span class="op">==</span> sequence,<span class="dv">1</span>))[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>array([3, 7])</code></pre>
 </div>
 </div>

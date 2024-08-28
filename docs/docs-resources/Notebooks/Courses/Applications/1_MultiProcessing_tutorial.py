@@ -1,6 +1,6 @@
 # %% [markdown]
 """
-# Multiprocessing tutotrial in Python 3
+# Multiprocessing in Python 3
 
 Introduction to the `multiprocessing` module
 

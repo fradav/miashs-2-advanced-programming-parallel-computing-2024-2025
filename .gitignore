@@ -1,8 +1,10 @@
 /.quarto/
 /.luarc.json
 /docs-resources/
-.jupyter_cache
 Courses/Applications/*
 !Courses/Applications/.gitkeep
+!Courses/Applications/.jupyter_cache/
 /applications.yml
 /slides.yml
+
+/_*.local

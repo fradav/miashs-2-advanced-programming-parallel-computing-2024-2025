@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.56">
+<meta name="generator" content="quarto-1.5.55">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="François-David Collin">
 <meta name="author" content="Ghislain Durif">
 
-<title>Multiprocessing tutotrial in Python 3</title>
+<title>Multiprocessing in Python 3</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -127,7 +127,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Multiprocessing tutotrial in Python 3</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Multiprocessing in Python 3</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 <p class="subtitle lead">Introduction to the <code>multiprocessing</code> module</p>
 </div>
 
@@ -195,7 +195,7 @@ window.Quarto = {
 <li>Ignores GIL</li>
 </ul></li>
 </ul>
-<div id="efe47052" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-execution_count="2">
+<div id="3a4addb7" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;slide&quot;}" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> os <span class="im">import</span> getpid, getppid</span>
@@ -211,7 +211,7 @@ window.Quarto = {
 <section id="process-instantiation" class="level2">
 <h2 class="anchored" data-anchor-id="process-instantiation">Process Instantiation</h2>
 <p>Let’s start with most basic example of spawning new process to run a function</p>
-<div id="1277b7f2" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-execution_count="3">
+<div id="bc7fa4c8" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Process</span>
@@ -221,8 +221,7 @@ window.Quarto = {
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>p.start()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Starting demo...
-Pid: 25922, PPid: 25887, Value: hello demo</code></pre>
+<pre><code>Starting demo...</code></pre>
 </div>
 </div>
 <section id="process-timing" class="level3">
@@ -233,7 +232,7 @@ Pid: 25922, PPid: 25887, Value: hello demo</code></pre>
 <li>Execute code in main process while chile process is running</li>
 <li>Use Process.join() to wait for processes to finish</li>
 </ul>
-<div id="9ee24ff1" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="4">
+<div id="4ae1d2bc" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>proc_list <span class="op">=</span> []</span>
@@ -249,10 +248,10 @@ Pid: 25922, PPid: 25887, Value: hello demo</code></pre>
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'After processes...'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pid: 25927, PPid: 25887, Value: immediate
+<pre><code>Pid: 187157, PPid: 187123, Value: immediate
 Not waiting for proccesses to finish...
-Pid: 25930, PPid: 25887, Value: delayed
-Pid: 25933, PPid: 25887, Value: eternity
+Pid: 187158, PPid: 187123, Value: delayed
+Pid: 187163, PPid: 187123, Value: eternity
 After processes...</code></pre>
 </div>
 </div>
@@ -266,7 +265,7 @@ After processes...</code></pre>
 <li>Pool.map() works like default python <code>map(f, args)</code> function</li>
 <li>Pool.map() Does not unpack args</li>
 </ul>
-<div id="fc3070cc" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="5">
+<div id="c3e11c0f" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
@@ -276,7 +275,7 @@ After processes...</code></pre>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># each worker process executes one function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pid: 25983, PPid: 25887, Value: ItsPid: 25984, PPid: 25887, Value: ('A', 5)Pid: 25985, PPid: 25887, Value: Race
+<pre><code>Pid: 187172, PPid: 187123, Value: ItsPid: 187173, PPid: 187123, Value: ('A', 5)Pid: 187174, PPid: 187123, Value: Race
 
 </code></pre>
 </div>
@@ -284,7 +283,7 @@ After processes...</code></pre>
 </section>
 <section id="process-argskwargs-iteration-with-starmap" class="level2">
 <h2 class="anchored" data-anchor-id="process-argskwargs-iteration-with-starmap">Process + args/kwargs iteration with starmap</h2>
-<div id="e8971b76" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="6">
+<div id="45eaf6b8" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">2</span>) <span class="im">as</span> pool:</span>
@@ -292,15 +291,15 @@ After processes...</code></pre>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># one worker will execute 2 functions, one worker will execute the 'slow' function</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pid: 26001, PPid: 25887, Value: Its
-Pid: 26001, PPid: 25887, Value: Race
-Pid: 26002, PPid: 25887, Value: A</code></pre>
+<pre><code>Pid: 187190, PPid: 187123, Value: Its
+Pid: 187190, PPid: 187123, Value: Race
+Pid: 187191, PPid: 187123, Value: A</code></pre>
 </div>
 </div>
 </section>
 <section id="thread-pool" class="level2">
 <h2 class="anchored" data-anchor-id="thread-pool">Thread Pool</h2>
-<div id="09f23d84" class="cell" data-execution_count="7">
+<div id="76e55984" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
@@ -310,15 +309,15 @@ Pid: 26002, PPid: 25887, Value: A</code></pre>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    pool.starmap(printer, [(<span class="st">'Its'</span>, <span class="dv">5</span>), (<span class="st">'A'</span>, <span class="dv">10</span>), (<span class="st">'Race'</span>, <span class="dv">15</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pid: 25887, PPid: 25870, Value: Its
-Pid: 25887, PPid: 25870, Value: A
-Pid: 25887, PPid: 25870, Value: Race</code></pre>
+<pre><code>Pid: 187123, PPid: 187121, Value: Its
+Pid: 187123, PPid: 187121, Value: A
+Pid: 187123, PPid: 187121, Value: Race</code></pre>
 </div>
 </div>
 </section>
 <section id="starmap-is-the-bomb" class="level2">
 <h2 class="anchored" data-anchor-id="starmap-is-the-bomb">Starmap is the bomb</h2>
-<div id="59af0660" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="8">
+<div id="f043bfe2" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pretend_delete_method(provider, vm_name):</span>
@@ -333,7 +332,7 @@ Pid: 25887, PPid: 25870, Value: Race</code></pre>
 <span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="a42478f4" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="9">
+<div id="a2bf00f7" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># don't hate me for nested comprehension here - building tuples of provider+name</span></span>
@@ -350,12 +349,12 @@ Pid: 25887, PPid: 25870, Value: Race</code></pre>
 <span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pretend delete: test_vm_1 on vmware. (Pid: 25887)
-Pretend delete: test_vm_2 on vmware. (Pid: 25887)
-Pretend delete: test_vm_3 on rhv. (Pid: 25887)
-Pretend delete: test_vm_4 on rhv. (Pid: 25887)
-Pretend delete: test_vm_5 on osp. (Pid: 25887)
-Pretend delete: test_vm_6 on osp. (Pid: 25887)</code></pre>
+<pre><code>Pretend delete: test_vm_1 on vmware. (Pid: 187123)
+Pretend delete: test_vm_2 on vmware. (Pid: 187123)
+Pretend delete: test_vm_3 on rhv. (Pid: 187123)
+Pretend delete: test_vm_4 on rhv. (Pid: 187123)
+Pretend delete: test_vm_5 on osp. (Pid: 187123)
+Pretend delete: test_vm_6 on osp. (Pid: 187123)</code></pre>
 </div>
 </div>
 </section>
@@ -366,7 +365,7 @@ Pretend delete: test_vm_6 on osp. (Pid: 25887)</code></pre>
 <li>When acquired, only thread that has the lock can run</li>
 <li>Necessary when using shared objects</li>
 </ul>
-<div id="11c87fac" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="10">
+<div id="82e0d7d4" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> not_safe_printing_method(provider, vm_name):</span>
@@ -374,7 +373,7 @@ Pretend delete: test_vm_6 on osp. (Pid: 25887)</code></pre>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>              .<span class="bu">format</span>(vm_name, provider, getpid()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="8f9af07d" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="11">
+<div id="731ceee2" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">6</span>) <span class="im">as</span> pool:</span>
@@ -383,15 +382,15 @@ Pretend delete: test_vm_6 on osp. (Pid: 25887)</code></pre>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        [(key, vm) <span class="cf">for</span> key, vms <span class="kw">in</span> example_provider_vm_lists.items() <span class="cf">for</span> vm <span class="kw">in</span> vms])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pretend delete: test_vm_3 on rhv. (Pid: 26156)Pretend delete: test_vm_2 on vmware. (Pid: 26155)Pretend delete: test_vm_1 on vmware. (Pid: 26154)Pretend delete: test_vm_4 on rhv. (Pid: 26157)Pretend delete: test_vm_5 on osp. (Pid: 26158)Pretend delete: test_vm_6 on osp. (Pid: 26159)
+<pre><code>Pretend delete: test_vm_4 on rhv. (Pid: 187227)Pretend delete: test_vm_5 on osp. (Pid: 187228)Pretend delete: test_vm_3 on rhv. (Pid: 187226)Pretend delete: test_vm_1 on vmware. (Pid: 187224)Pretend delete: test_vm_2 on vmware. (Pid: 187225)
 
 
-
+Pretend delete: test_vm_6 on osp. (Pid: 187229)
 
 </code></pre>
 </div>
 </div>
-<div id="e6d58f1c" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="12">
+<div id="c8d79d31" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;subslide&quot;}" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Printing is thread safe, but will sometimes print separate messages on the same line (above)</span></span>
@@ -406,7 +405,7 @@ Pretend delete: test_vm_6 on osp. (Pid: 25887)</code></pre>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>              .<span class="bu">format</span>(vm_name, provider, getpid()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="336b09f3" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="13">
+<div id="07992c9a" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">6</span>) <span class="im">as</span> pool:</span>
@@ -415,12 +414,12 @@ Pretend delete: test_vm_6 on osp. (Pid: 25887)</code></pre>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        [(key, vm) <span class="cf">for</span> key, vms <span class="kw">in</span> example_provider_vm_lists.items() <span class="cf">for</span> vm <span class="kw">in</span> vms])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Pretend delete: test_vm_1 on vmware. (Pid: 26187)
-Pretend delete: test_vm_2 on vmware. (Pid: 26188)
-Pretend delete: test_vm_3 on rhv. (Pid: 26189)
-Pretend delete: test_vm_4 on rhv. (Pid: 26190)
-Pretend delete: test_vm_5 on osp. (Pid: 26191)
-Pretend delete: test_vm_6 on osp. (Pid: 26192)</code></pre>
+<pre><code>Pretend delete: test_vm_1 on vmware. (Pid: 187257)
+Pretend delete: test_vm_2 on vmware. (Pid: 187258)
+Pretend delete: test_vm_3 on rhv. (Pid: 187259)
+Pretend delete: test_vm_4 on rhv. (Pid: 187260)
+Pretend delete: test_vm_5 on osp. (Pid: 187261)
+Pretend delete: test_vm_6 on osp. (Pid: 187262)</code></pre>
 </div>
 </div>
 </section>
@@ -431,7 +430,7 @@ Pretend delete: test_vm_6 on osp. (Pid: 26192)</code></pre>
 <li>Store data/objects in child thread/processes and retrieve in parent</li>
 <li>FIFO stack with put, get, and empty methods</li>
 </ul>
-<div id="de8bdf1c" class="cell" data-execution_count="14">
+<div id="4e275197" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standard Queue</span></span>
@@ -459,51 +458,51 @@ Size of the queue:
 <h1>Reminder on python serialization : “Pickling”</h1>
 <p>So what is pickling? Pickling is the serializing and de-serializing of python objects to a byte stream. Unpicking is the opposite.</p>
 <p>Pickling is used to store python objects. This means things like lists, dictionaries, class objects, and more.</p>
-<div id="0e5b0a62" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="15">
+<div id="8b330123" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle <span class="co"># First, import pickle to use it</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="6821cca4" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="16">
+<div id="82da16b4" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>example_dict <span class="op">=</span> {<span class="dv">1</span>:<span class="st">"6"</span>,<span class="dv">2</span>:<span class="st">"2"</span>,<span class="dv">3</span>:<span class="st">"f"</span>} <span class="co"># we define an example dictionary, which is a Python object</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="b0a9bbe1" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="17">
+<div id="50cf66df" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pickle_out <span class="op">=</span> <span class="bu">open</span>(<span class="st">"dict.pickle"</span>,<span class="st">"wb"</span>) <span class="co"># Next, we open a file (note that we open to write bytes in Python 3+)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="8e8fd476" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="18">
+<div id="d2eca499" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>pickle.dump(example_dict, pickle_out) <span class="co"># then we use pickle.dump() to put the dict into opened file, then close.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="dd8b58a1" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="19">
+<div id="7c9fbbaf" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="19">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pickle_out.close() <span class="co"># and close(), it's very important to NOT forget to close your opened files.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>The above code will save the pickle file for us, now we need to cover how to access the pickled file:</p>
-<div id="f9fcd29e" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="20">
+<div id="669e3401" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="20">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>pickle_in <span class="op">=</span> <span class="bu">open</span>(<span class="st">"dict.pickle"</span>,<span class="st">"rb"</span>) <span class="co"># Open the pickle file</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="7703fc63" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="21">
+<div id="cbe5ee00" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="21">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>example_dict <span class="op">=</span> pickle.load(pickle_in) <span class="co"># Use pickle.load() to load it to a var.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>That’s all there is to it, now you can do things like:</p>
-<div id="bb743ca0" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="22">
+<div id="9c44aa08" class="cell" data-cell_style="center" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="22">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(example_dict)</span>
@@ -535,7 +534,7 @@ f</code></pre>
 <h2 class="anchored" data-anchor-id="short-example-of-queue-use">Short example of queue use</h2>
 <p>In this example we share a managed queue between processes, and each process can randomly put a boolean (indicating a failure for example) in this queue.</p>
 <p>This is our dummy function to parallelize, getting the shared queue as an additional argument</p>
-<div id="1bb01b8e" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;-&quot;}" data-execution_count="23">
+<div id="79612926" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;-&quot;}" data-execution_count="23">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> random <span class="im">import</span> randint</span>
@@ -551,7 +550,7 @@ f</code></pre>
 </details>
 </div>
 <p>We need to instantiate the manager, and create a queue from it</p>
-<div id="16ff76c7" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;-&quot;}" data-execution_count="24">
+<div id="87c370de" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;-&quot;}" data-execution_count="24">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Manager</span>
@@ -564,7 +563,7 @@ f</code></pre>
 </details>
 </div>
 <p>The (multi)-processing is there</p>
-<div id="1d1c8a0e" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;-&quot;}" data-execution_count="25">
+<div id="d352d4cb" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;-&quot;}" data-execution_count="25">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">2</span>) <span class="im">as</span> pool:</span>
@@ -579,17 +578,17 @@ f</code></pre>
 </div>
 <p>Now what’s up ?</p>
 <p>Results :</p>
-<div id="4d71efc4" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="26">
+<div id="94d35c8d" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="26">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Results are in: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(results))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Results are in: [True, None, None, True, None, True]</code></pre>
+<pre><code>Results are in: [True, True, None, None, None, True]</code></pre>
 </div>
 </div>
 <p>And what is in the queue ?</p>
-<div id="22bced66" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="27">
+<div id="5ac4987c" class="cell" data-slideshow="{&quot;slide_type&quot;:&quot;fragment&quot;}" data-execution_count="27">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>failed_vms <span class="op">=</span> []</span>
@@ -600,7 +599,7 @@ f</code></pre>
 <span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Failures are in: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(failed_vms))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Failures are in: ['test_vm_2', 'test_vm_3', 'test_vm_5']</code></pre>
+<pre><code>Failures are in: ['test_vm_3', 'test_vm_4', 'test_vm_5']</code></pre>
 </div>
 </div>
 <!-- -->
@@ -1226,7 +1225,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb39" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Multiprocessing tutotrial in Python 3</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Multiprocessing in Python 3</span></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> Introduction to the `multiprocessing` module</span></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>

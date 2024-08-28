@@ -1,336 +1,267 @@
----
-title: Multiprocessing in Python 3
-subtitle: Introduction to the `multiprocessing` module
-jupyter: python3
----
+## ⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️
+ Under _Windows_, with python the multiprocessing module `multiprocessing` works in a normal script but **not in notebooks**.
+ 
+If you absolutely must use Windows, use[WSL](https://docs.microsoft.com/fr-fr/windows/wsl/)
 
-# Multiprocessing in Python 3
+# Strong Scaling
 
-## Threads vs Processes
+## Prerequisites
 
-* Thread
-  * Is bound to processor that python process running on
-  * Is controlled by Global Interpreter Lock (GIL)
-    * Single python bytecode executed at a time by any thread
-    
-* Process
-  * Uses multiple processors
-  * Concurrency between threads and processes (local and remote)
-  * Ignores GIL
+For this TP, set the number of **physical** cores available (8 on the cluster nodes), not the number of logical cores.
 
 ```{python}
-#| slideshow: {slide_type: slide}
-from os import getpid, getppid
-from time import sleep
-
-def printer(val, wait=0):
-    sleep(wait)
-    print('Pid: {}, PPid: {}, Value: {}'
-          .format(getpid(), getppid(), val))
+ncores = 4 # 8 on the cluster nodes
 ```
 
-## Process Instantiation
-
-Let's start with most basic example of spawning new process to run a function
-
 ```{python}
-#| slideshow: {slide_type: ''}
-from multiprocessing import Process
-
-print('Starting demo...')
-p = Process(target=printer, args=('hello demo',))
-p.start()
+import math
 ```
 
-### Process timing
+# Introduction
 
-- Use printer's delay to see process timing
-- Track multiple process objects
-- Execute code in main process while chile process is running
-- Use Process.join() to wait for processes to finish
+## Basic functions
+
+Make a function `is_prime` that tests whether an integer $n$ strictly greater than 2 is prime or not.
+
+Hint: First check that it is not even, then list all odd numbers from 3 to $\sqrt{n}$ (upper rounding) and test whether they are factors.
 
 ```{python}
-#| slideshow: {slide_type: subslide}
-proc_list = []
-for values in [('immediate', 0), ('delayed', 2), ('eternity', 5)]:
-    p = Process(target=printer, args=values)
-    proc_list.append(p)
-    p.start()  # start execution of printer
-
-print('Not waiting for proccesses to finish...')
-    
-[p.join() for p in proc_list]
-
-print('After processes...')
+#| tags: [solution]
+def is_prime(n):
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(math.sqrt(n)) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
 ```
 
-## Process Pool
-
-- Worker processes instead of direct instantiation
-- Context manager to handle starting/joining child processes
-- Pool.map() works like default python `map(f, args)` function
-- Pool.map() Does not unpack args
+Make a function `total_primes` that counts the number of primes in a list.
 
 ```{python}
-#| slideshow: {slide_type: subslide}
+#| tags: [solution]
+def total_primes(l):
+    n = 0
+    for i in l:
+        if (i > 0) & (i <= 2):
+            n=n+1
+        elif is_prime(i):
+            n=n+1                
+    return n
+```
+
+Calculate the number of primes from 1 to $N=100 000$ with this function
+
+```{python}
+N=100000
+```
+
+```{python}
+total_primes(range(1,N+1))
+```
+
+## Time measurement
+
+Use `%timeit` to measure the average time taken to count the number of primes up to $N=100000$.
+(note: by default, `timeit` repeats the calculation $7times{}10$ to obtain a reliable average. Please refer to the [magic](https://ipython.readthedocs.io/en/stable/interactive/magics.html) and [timeit](https://docs.python.org/3.9/library/timeit.html) docs).
+
+Store measurements using the -o option in timeit
+
+```{python}
+orig_time = %timeit -o total_primes(range(1,N+1))
+```
+
+# First steps
+
+Our first attempt at multiprocessing will involve partitioning the count into 2. We'll run two processes in parallel on $\{1,...,N/2\}$ and $\{N/2+1,...,N\}$.
+
+Complete the following code ([source](https://notebook.community/izapolsk/integration_tests/notebooks/MultiProcessing)).
+
+Check the result and the performance gain with `%timeit`.
+
+```{python}
+#| eval: false
 from multiprocessing.pool import Pool
 
-with Pool(3) as pool:
-    pool.map(printer, ['Its', ('A', 5), 'Race'])
-    # each worker process executes one function
-```
-
-## Process + args/kwargs iteration with starmap
-
-```{python}
-#| slideshow: {slide_type: fragment}
-with Pool(2) as pool:
-    pool.starmap(printer, [('Its',), ('A', 2), ('Race',)])
-    # one worker will execute 2 functions, one worker will execute the 'slow' function
-```
-
-## Thread Pool
-
-```{python}
-from multiprocessing.pool import ThreadPool
-
-# Threadpool instead of process pool, same interface
-with ThreadPool(2) as pool:
-    pool.starmap(printer, [('Its', 5), ('A', 10), ('Race', 15)])
-```
-
-## Starmap is the bomb
-
-```{python}
-#| slideshow: {slide_type: fragment}
-def pretend_delete_method(provider, vm_name):
-    print('Pretend delete: {} on {}. (Pid: {})'
-          .format(vm_name, provider, getpid()))    
-    
-# Assuming we fetched a list of vm names on providers we want to cleanup...
-example_provider_vm_lists = dict(
-    vmware=['test_vm_1', 'test_vm_2'],
-    rhv=['test_vm_3', 'test_vm_4'],
-    osp=['test_vm_5', 'test_vm_6'],
-)
+def split_total(N):
+    with Pool(2) as pool:
+        return sum(pool.map(total_primes, ...))
 ```
 
 ```{python}
-#| slideshow: {slide_type: subslide}
-# don't hate me for nested comprehension here - building tuples of provider+name
-from multiprocessing.pool import ThreadPool
+#| tags: [solution]
+from multiprocessing.pool import Pool
 
-# Threadpool instead of process pool, same interface
-with ThreadPool(6) as pool:
-    pool.starmap(
-        pretend_delete_method, 
-        [(key, vm) 
-         for key, vms 
-         in example_provider_vm_lists.items() 
-         for vm in vms]
-    )
-```
-
-## Locking
-
-- semaphore-type object that can be acquired and released
-- When acquired, only thread that has the lock can run
-- Necessary when using shared objects
-
-```{python}
-#| slideshow: {slide_type: subslide}
-def not_safe_printing_method(provider, vm_name):
-        print('Pretend delete: {} on {}. (Pid: {})'
-              .format(vm_name, provider, getpid()))
+def split_total(N):
+    with Pool(2) as pool:
+        return sum(pool.map(total_primes, [range(1,int(N/2)), range(int(N/2)+1,N+1)]))
 ```
 
 ```{python}
-#| slideshow: {slide_type: fragment}
-with Pool(6) as pool:
-    pool.starmap(
-        not_safe_printing_method, 
-        [(key, vm) for key, vms in example_provider_vm_lists.items() for vm in vms])
+split_total(N)
 ```
 
 ```{python}
-#| slideshow: {slide_type: subslide}
-# Printing is thread safe, but will sometimes print separate messages on the same line (above)
-# Use a lock around print
-from multiprocessing import Lock
-
-lock = Lock()
-
-def safe_printing_method(provider, vm_name):
-    with lock:
-        print('Pretend delete: {} on {}. (Pid: {})'
-              .format(vm_name, provider, getpid()))
+split_time = %timeit -o split_total(N)
 ```
 
 ```{python}
-#| slideshow: {slide_type: fragment}
-with Pool(6) as pool:
-    pool.starmap(
-        safe_printing_method, 
-        [(key, vm) for key, vms in example_provider_vm_lists.items() for vm in vms])
+print("Gain with split : {:.1f}".format(orig_time.average/split_time.average))
 ```
 
-# Queues
+# Generalization
 
-- Store data/objects in child thread/processes and retrieve in parent
-- FIFO stack with put, get, and empty methods
+Generalize the function with partitioning into *n* tasks instead of just 2. We'll use a generalized `multi_process_list` function, which takes as arguments :
+- f` the main computation function, which takes an integer list as argument
+- n` the number of partitions (here, one partition = task)
+- par_f` a function which takes as argument a list and a number of partitions to be performed, and returns the list of partitions in this list
+- l` the list to be partitioned
 
 ```{python}
-# Standard Queue
-import queue
-q = queue.Queue()
-for x in range(4):
-    q.put(x)
-print("Members of the queue:")
-y=z=q.qsize()
-
-for n in list(q.queue):
-    print(n, end=" ")
-print("\nSize of the queue:")
-print(q.qsize())
+#| eval: false
+def multi_process_list(f,n,par_f,l):
+    with Pool(ncores) as pool:
+        return sum(pool.map(...)
 ```
 
-# Reminder on python serialization : "Pickling"
-
-So what is pickling? Pickling is the serializing and de-serializing of python objects to a byte stream. Unpicking is the opposite.
-
-Pickling is used to store python objects. This means things like lists, dictionaries, class objects, and more.
+First, we write the `naive_par` partitioning function.
 
 ```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-import pickle # First, import pickle to use it
+#| eval: false
+def naive_par(lst,n):
+    return ...
 ```
 
-```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-example_dict = {1:"6",2:"2",3:"f"} # we define an example dictionary, which is a Python object
-```
+We'll use the `chunks` function, which partitions a list into chunks of fixed size (except for the last one).
+
+We'll test the gain obtained with 8 tasks/partitions.
 
 ```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-pickle_out = open("dict.pickle","wb") # Next, we open a file (note that we open to write bytes in Python 3+)
+def chunks(lst, m):
+    """Yield successive m-sized chunks from lst."""
+    for i in range(0, len(lst), m):
+        yield lst[i:i + m]
+```
+
+Vérifier le fonctionnement de `naive_par`
+
+```{python}
+#| tags: [solution]
+def naive_par(lst,n):
+    return chunks(lst,int(len(lst)/n))
 ```
 
 ```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-pickle.dump(example_dict, pickle_out) # then we use pickle.dump() to put the dict into opened file, then close.
+#| tags: [solution]
+list(naive_par(range(1,100001),4))
 ```
 
 ```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-pickle_out.close() # and close(), it's very important to NOT forget to close your opened files.
-```
-
-The above code will save the pickle file for us, now we need to cover how to access the pickled file:
-
-```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-pickle_in = open("dict.pickle","rb") # Open the pickle file
+#| tags: [solution]
+def multi_process_list(f,n,par_f,l):
+    with Pool(n) as pool:
+        return sum(pool.map(f,par_f(l,n)))
 ```
 
 ```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-example_dict = pickle.load(pickle_in) # Use pickle.load() to load it to a var.
+#| tags: [solution]
+multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
 ```
 
-That's all there is to it, now you can do things like:
-
 ```{python}
-#| cell_style: center
-#| slideshow: {slide_type: fragment}
-print(example_dict)
-print(example_dict[3])
+multi_time = %timeit -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
 ```
 
-This shows that we've retained the dict data-type.
-
-## Queues
-
-- multiprocessing.Queue
-  - **cannot be pickled** and thus can't be passed to Pool methods
-  - can deadlock with improper join use
-- multiprocessing.Manager.Queue
-  - is proxy, can be pickled
-  - can be shared between processes
-  
-$\Longrightarrow$ prefer the use of managed queues
-
-## Short example of queue use
-
-In this example we share a managed queue between processes, and each process can randomly put a boolean (indicating a failure for example) in this queue.
-
-This is our dummy function to parallelize, getting the shared queue as an additional argument
-
 ```{python}
-#| slideshow: {slide_type: '-'}
-from random import randint
-
-def multiple_output_method(provider, vm_name, fail_queue):
-    # random success of called method
-    if randint(0, 1):
-        return True
-    else:
-        # Store our failure vm on the queue
-        fail_queue.put(vm_name)
-        return None
+print("Gain avec multi : {:.1f}".format(orig_time.average/multi_time.average))
 ```
 
-We need to instantiate the manager, and create a queue from it
+Repeat all calculations and payoff comparisons with $N=5000000$. To avoid long calculation times, we'll restrict ourselves to a single iteration (option `-r 1 -n 1` in `%timeit`).
 
 ```{python}
-#| slideshow: {slide_type: '-'}
-from multiprocessing import Manager
-
-# Create instance of manager
-manager = Manager()
-
-# Create queue object to give to child processes
-queue_for_failures = manager.Queue()
+N = 5000000
 ```
 
-The (multi)-processing is there
-
 ```{python}
-#| slideshow: {slide_type: '-'}
-with Pool(2) as pool:
-    results = pool.starmap(
-        multiple_output_method, 
-        [(key, vm, queue_for_failures)
-         for key, vms
-         in example_provider_vm_lists.items()
-         for vm in vms]
-    )
+orig_time = %timeit -r 1 -n 1 -o total_primes(range(1,N+1))
+split_time = %timeit -r 1 -n 1 -o split_total(N)
+multi_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+
+print("Gain with split : {:.1f}".format(orig_time.average/split_time.average))
+print("Gain with multi : {:.1f}".format(orig_time.average/multi_time.average))
 ```
 
-Now what's up ? 
+# Optional refinement
 
-Results :
+
+How much time is spent on each task? Use the following function to get an idea. What do you observe?
 
 ```{python}
-#| slideshow: {slide_type: fragment}
-print('Results are in: {}'.format(results))
+def timed_total_primes(l):
+    %timeit -r 1 -n 1 total_primes(l)
+    return 0
 ```
 
-And what is in the queue ?
+```{python}
+#| tags: [solution]
+multi_process_list(timed_total_primes,ncores,naive_par,range(1,N+1))
+```
+
+How can we solve this problem?
+
+Find a simple solution that requires only one line of code. Check the execution times of individual tasks.
+
+Compare again with $N = 10000000$ (which will take about 1 minute sequentially).
 
 ```{python}
-#| slideshow: {slide_type: fragment}
-failed_vms = []
-# get items from the queue while its not empty
-while not queue_for_failures.empty():
-    failed_vms.append(queue_for_failures.get())
-    
-print('Failures are in: {}'.format(failed_vms))
+#| tags: [solution]
+import random
+
+N = 10000000
+
+shuffled = random.sample(range(1,N+1),N)
+```
+
+```{python}
+#| tags: [solution]
+multi_process_list(total_primes,ncores,naive_par,shuffled)
+```
+
+```{python}
+#| tags: [solution]
+temps_shuffled = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,shuffled)
+```
+
+```{python}
+#| tags: [solution]
+multi_process_list(timed_total_primes,ncores,naive_par,shuffled)
+```
+
+```{python}
+#| tags: [solution]
+shuffled = random.sample(range(1,N+1),N)
+orig_time = %timeit -r 1 -n 1 -o total_primes(range(1,N+1))
+multi_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+shuffled_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,shuffled)
+
+print("Gain with multi : {:.1f}".format(orig_time.average/multi_time.average))
+print("Gain with shuffled : {:.1f}".format(orig_time.average/shuffled_time.average))
+```
+
+# Recreational interlude
+
+If you have a CPU with SMT (Hyperthreading), redo the measurements with `ncores` equal to the number of logic cores, and explain the results.
+
+```{python}
+#| tags: [solution]
+ncores = 8 # On a machine with 4 physical cores/8 logical cores
+
+shuffled = random.sample(range(1,N+1),N)
+orig_time = %timeit -r 1 -n 1 -o total_primes(range(1,N+1))
+multi_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,range(1,N+1))
+shuffled_time = %timeit -r 1 -n 1 -o multi_process_list(total_primes,ncores,naive_par,shuffled)
+
+print("Gain with multi : {:.1f}".format(orig_time.average/multi_time.average))
+print("Gain with shuffled : {:.1f}".format(orig_time.average/shuffled_time.average))
 ```
 

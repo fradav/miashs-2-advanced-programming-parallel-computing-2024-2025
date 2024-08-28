@@ -1,6 +1,8 @@
 function Div(element)
   -- only execute this filter on files not ending with "-sol.qmd"
-  if quarto.doc.input_file:match("-sol%.qmd$") ~= nil then
+  local dir = string.match(quarto.doc.input_file, "(.-)([^\\/]-%.?([^%.\\/]*))$")
+  dir = dir:gsub("\\", "/")
+  if quarto.doc.input_file:match("-sol%.qmd$") ~= nil or dir:match("Solutions/$") then
     return nil
   end
   if element.classes[1] == "cell" then

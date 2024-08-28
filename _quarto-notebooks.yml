@@ -1,9 +1,9 @@
 project:
   render:
-    - ./Courses/Solutions/0_Numpy_Workout-sol.qmd
-    - ./Courses/Solutions/1_Multiprocessing_tutorial-sol.qmd
-    - ./Courses/Solutions/1_Multiprocessing.qmd
-    - ./Courses/Applications/*.qmd
+    - Courses/Applications/*.qmd
+    - Courses/Solutions/0_Numpy_Workout-sol.qmd
+    - Courses/Solutions/1_MultiProcessing_tutorial-sol.qmd
+    - Courses/Solutions/1_MultiProcessing.qmd
   output-dir: docs-resources/Notebooks
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py

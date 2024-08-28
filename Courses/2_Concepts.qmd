@@ -85,13 +85,13 @@ $\Longrightarrow$ half of the power use
 
 # Laws
 
-## Asymtptote of parallel computing : [Amdahl's Law](https://en.wikipedia.org/wiki/Amdahl%27s_law){ .notransparent }
+## Asymptote of parallel computing : [Amdahl's Law](https://en.wikipedia.org/wiki/Amdahl%27s_law){ .notransparent }
 
-If $P$ and $S$ is the parallel (resp. serial) fraction of the code and $N$ the number of computing units:
+If $P$ (resp. $S$) is the parallel (resp. serial) fraction of the time of the execution and $N$ the number of computing units:
 
 $$S_{up}(N) \le \frac{1}{S+\frac{P}{N}}$$
 
-## Asymtptote of parallel computing : Amdahl's Law, Graphic
+## Asymptote of parallel computing : Amdahl's Law, Graphic
 
 ![Ideal speedup : 100% of the code parallelized; 90%, 75%, and 50% : limited by the fractions of code that remain serial. [@robey2021parallel]](./figs/amdhals.png){ .notransparent }
 

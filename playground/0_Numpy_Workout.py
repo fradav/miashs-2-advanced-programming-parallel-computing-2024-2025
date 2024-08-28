@@ -51,11 +51,11 @@ res1 = np.dot(a,b)
 #%%
 result=0
 for i in range(len(a)):
-    result += a[i]*b[i]/2
+    result += a[i]*b[i]
 res2 = result     
 
 #%%
-np.testing.assert_array_equal(res1,res2)
+np.testing.assert_array_almost_equal(res1,res2)
 #%%
 matrix_a = np.random.rand(5,5)
 matrix_b = np.random.rand(5,5)

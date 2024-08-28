@@ -8,3 +8,5 @@ Courses/Applications/*
 /slides.yml
 
 /_*.local
+quarto.err
+quarto.out

@@ -1,5 +1,6 @@
-# `asyncio` example
-
+---
+title: `asyncio` application
+---
 
 ## Simple *Hello world* example
 
@@ -44,7 +45,7 @@ print(await queue.get())
 
 # Producer/Consumer example
 
-![](figs/producer-consumer.png)
+![](../figs/producer-consumer.png)
 
 - We want to produce, asynchronously, a sequence of integers and consume them as they are produced, also asynchronously.
 - Producing and consuming are two separate tasks, communicating through a queue.

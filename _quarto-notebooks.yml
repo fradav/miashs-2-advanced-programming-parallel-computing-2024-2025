@@ -4,6 +4,7 @@ project:
     - Courses/Solutions/0_Numpy_Workout-sol.qmd
     - Courses/Solutions/1_MultiProcessing_tutorial-sol.qmd
     - Courses/Solutions/1_MultiProcessing.qmd
+    - Courses/Solutions/2_Scaling.qmd
   output-dir: docs-resources/Notebooks
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py

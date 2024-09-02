@@ -7,3 +7,6 @@
 - title: "Numpy Workout"
   html: "docs-resources/Slides/Courses/Applications/0_Numpy_Workout.revealjs.html"
   name: "0_Numpy_Workout.qmd"
+- title: "Asynchronous Programming with Python"
+  html: "docs-resources/Slides/Courses/3_Asynchronous.revealjs.html"
+  name: "3_Asynchronous.qmd"

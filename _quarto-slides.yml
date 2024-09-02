@@ -3,6 +3,7 @@ project:
     - Courses/Applications/0_Numpy_Workout.qmd
     - Courses/1_Intro.qmd
     - Courses/2_Concepts.qmd
+    - Courses/3_Asynchronous.qmd
   pre-render: project-scripts/prepare-slides.py
   output-dir: docs-resources/Slides
   resources:

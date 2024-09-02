@@ -730,13 +730,413 @@
     ]
   },
   {
+    "objectID": "Courses/3_Asynchronous.html",
+    "href": "Courses/3_Asynchronous.html",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "",
+    "text": "5 Asynchronous, Basics",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#what-is-asynchronous-programming",
+    "href": "Courses/3_Asynchronous.html#what-is-asynchronous-programming",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "5.1 What is Asynchronous Programming?",
+    "text": "5.1 What is Asynchronous Programming?\n\nAsynchronous programming is a programming paradigm that allows the program to continue executing other tasks before the current task is finished.\nIt is a way to achieve concurrency in a program.\n\n\\Rightarrow it is an abstraction over concurrency, it does not necessarily mean that the program is executed in parallel.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#io-bound-vs.-cpu-bound",
+    "href": "Courses/3_Asynchronous.html#io-bound-vs.-cpu-bound",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "5.2 I/O Bound vs. CPU Bound",
+    "text": "5.2 I/O Bound vs. CPU Bound\nimport requests\n \n1response = requests.get('https://www.example.com')\n \nitems = response.headers.items()\n \n2headers = [f'{key}: {header}' for key, header in items]\n \n3formatted_headers = '\\n'.join(headers)\n \nwith open('headers.txt', 'w') as file:\n4    file.write(formatted_headers)\n\n1\n\nI/O-bound web request\n\n2\n\nCPU-bound response processing\n\n3\n\nCPU-bound string concatenation\n\n4\n\nI/O-bound write to disk",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#concurrency-vs.-parallelism",
+    "href": "Courses/3_Asynchronous.html#concurrency-vs.-parallelism",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "6.1 Concurrency vs. Parallelism",
+    "text": "6.1 Concurrency vs. Parallelism\n\n\nOne baker and two cakes to prepare.\n\nCan preheat the oven while preparing the first cake.\nCan start the second cake while the first one is in the oven.\n\n\\Rightarrow Switching between tasks is concurrency (or concurrent behavior).\n\nTwo bakers and two cakes to prepare.\n\nCan prepare both cakes at the same time.\n\n\\Rightarrow Doing multiple tasks in parallel is parallelism (or parallel behavior).\n\n\n\n\n\nWith concurrency, we have multiple tasks happening at the same time, but only one we’re actively doing at a given point in time. With parallelism, we have multiple tasks happening and are actively doing more than one simultaneously.\n\n\n\nFrom Fowler (2022)\n\n\n\n\nWith concurrency, we switch between running two applications. With parallelism, we actively run two applications simultaneously.\n\n\n\nFrom Fowler (2022)\n\n\nConcurrency is about multiple independent tasks that can happen.\nParallelism is concurrency AND simultaneous execution.\n\nWhile parallelism implies concurrency, concurrency does not always imply parallelism.\n\\Rightarrow Concurrency is a broader concept than parallelism.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#multitasking",
+    "href": "Courses/3_Asynchronous.html#multitasking",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "6.2 Multitasking",
+    "text": "6.2 Multitasking\n\n\n\n6.2.1 Preemptive multitasking\n\nThe operating system decides when to switch between tasks.\nThe tasks are not aware of each other.\n\n\n\n\n6.2.2 Cooperative multitasking\n\nIn this model we have to explicitly to decide when to switch between tasks.\nThe tasks are aware of each other.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#benefits-of-cooperative-multitasking",
+    "href": "Courses/3_Asynchronous.html#benefits-of-cooperative-multitasking",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "6.3 Benefits of cooperative multitasking",
+    "text": "6.3 Benefits of cooperative multitasking\n\nLess overhead than preemptive multitasking.\nGranular/optimal control over when to switch between tasks.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#multi-processing-vs-multi-threading",
+    "href": "Courses/3_Asynchronous.html#multi-processing-vs-multi-threading",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "7.1 Multi-processing vs Multi-threading",
+    "text": "7.1 Multi-processing vs Multi-threading\n\n\n                   Main Process\n                 ┌─────────────┐\n                 │             │\n                 │   CPU       │\n                 ├─────────────┤\n                 │             │\n                 │   Memory    │\n                 └─┬────┬────┬─┘\n                   │    │    │\n                   │    │    │\n       ┌───────────┘    │    └───────────┐\n       │                │                │\n┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐\n│             │  │             │  │             │\n│   CPU       │  │   CPU       │  │   CPU       │\n├─────────────┤  ├─────────────┤  ├─────────────┤\n│             │  │             │  │             │\n│   Memory    │  │   Memory    │  │   Memory    │\n└─────────────┘  └─────────────┘  └─────────────┘\n\n   Process 1        Process 1        Process 1\n\n┌──────────────────────────────────────┐\n│            MAIN PROCESS              │\n│                                      │\n│                                      │\n│     ┌──────────┐                     │\n│     │          │                     │\n│     │   CPU    │   ┌───────────┐     │\n│     │          │   │           │     │\n│     └──────────┘   │   Memory  │     │\n│                    │           │     │\n│                    └───────────┘     │\n│                                      │\n│                                      │\n│                                      │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│   Thread 1    Thread 2    Thread 3   │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│                                      │\n└──────────────────────────────────────┘",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#processes-and-threads",
+    "href": "Courses/3_Asynchronous.html#processes-and-threads",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "7.2 Processes and threads",
+    "text": "7.2 Processes and threads\n\nimport os\nimport threading\n \nprint(f'Python process running with process id: {os.getpid()}')\ntotal_threads = threading.active_count()\nthread_name = threading.current_thread().name\n \nprint(f'Python is currently running {total_threads} thread(s)')\nprint(f'The current thread is {thread_name}')\n\nPython process running with process id: 119943\nPython is currently running 8 thread(s)\nThe current thread is MainThread",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#creating-processes",
+    "href": "Courses/3_Asynchronous.html#creating-processes",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "7.3 Creating processes",
+    "text": "7.3 Creating processes\n\nimport multiprocessing\nimport os\n \n \ndef hello_from_process():\n    print(f'Hello from child process {os.getpid()}!')\nif __name__ == '__main__':\n    hello_process = multiprocessing.Process(target=hello_from_process)\n    hello_process.start()\n \n    print(f'Hello from parent process {os.getpid()}')\n \n    hello_process.join()\n\nHello from child process 119972!\nHello from parent process 119943",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#creating-threads",
+    "href": "Courses/3_Asynchronous.html#creating-threads",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "7.4 Creating threads",
+    "text": "7.4 Creating threads\n\nimport threading\n \n \ndef hello_from_thread():\n    print(f'Hello from thread {threading.current_thread()}!')\n \n \nhello_thread = threading.Thread(target=hello_from_thread)\nhello_thread.start()\n \ntotal_threads = threading.active_count()\nthread_name = threading.current_thread().name\n \nprint(f'Python is currently running {total_threads} thread(s)')\nprint(f'The current thread is {thread_name}')\n \nhello_thread.join()\n\nHello from thread &lt;Thread(Thread-6 (hello_from_thread), started 139685613672192)&gt;!\nPython is currently running 8 thread(s)\nThe current thread is MainThread",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#what-about-python",
+    "href": "Courses/3_Asynchronous.html#what-about-python",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "8.1 What about Python?",
+    "text": "8.1 What about Python?\n\n\nDesigned for sequential and single-core architecture from the beginning\nEverything is interpreted\nAll dynamic (no static types)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#the-gil",
+    "href": "Courses/3_Asynchronous.html#the-gil",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "8.2 The GIL",
+    "text": "8.2 The GIL\nAka Global Interpreter Lock\n. . .\n\nThe GIL allows thread usage, you can create threads and launch them: YES!\n\n. . .\n\nbut…\n\n. . .\n\nOnly ONE thread can actually execute code at python level..",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#multi-threaded-parallel-execution",
+    "href": "Courses/3_Asynchronous.html#multi-threaded-parallel-execution",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "8.3 Multi-threaded != Parallel execution",
+    "text": "8.3 Multi-threaded != Parallel execution\nMulti-threading doesn’t guarantee parallel executien…\n\n\n\n\n\n\\Longrightarrow Python seems to have started off with the wrong foot by a long way…",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#high-performance-python",
+    "href": "Courses/3_Asynchronous.html#high-performance-python",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "8.4 High performance Python 😬",
+    "text": "8.4 High performance Python 😬\n\n\n\n\n\n\nBut wait!\n\n\nActually we can run (real) parallel programs with the multiprocessing package.\n\\Rightarrow But this is an “OS level” multiprocessing, with associated huge overhead (relatively)\nPython actually releases the GIL when executing everything that is not Python code (e.g. C/C++ extensions and libraries)\n\\Rightarrow It means we can parallelize our code by using I/O bound and CPU bound libraries that release the GIL (this is the case for most of them)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#socket",
+    "href": "Courses/3_Asynchronous.html#socket",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "9.1 Socket",
+    "text": "9.1 Socket\n\n\n\nWriting bytes to a socket and reading bytes from a socket\n\n\n\nFrom Fowler (2022)\n\n\nThis a mailbox metaphor\nBy default, the socket is blocking, i.e. the program will wait until the socket is ready to be read or written.\nWe can make the socket non-blocking, i.e. the program will not wait for the socket to be ready to be read or written. \\Rightarrow Later on, the OS will tell us we received byte and we deal with it.\n\n\n\n\n\n\n\nMaking a non-blocking I/O request returns immediately\ntells the O/S to watch sockets for data \\Rightarrow This allows execute_other_code() to run right away instead of waiting for the I/O requests to finish\nLater, we can be alerted when I/O is complete and process the response.\n\n\n\n\n\nFrom Fowler (2022)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#event-loop",
+    "href": "Courses/3_Asynchronous.html#event-loop",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "9.2 Event Loop",
+    "text": "9.2 Event Loop\n\n\nfrom collections import deque\n \nmessages = deque()\n \nwhile True:\n    if messages:\n        message = messages.pop()\n        process_message(message)\n\n\n\nThe event loop is a loop that runs forever.\nIt checks if there are any messages to process.\nIf there are, it processes them.\nIf there are not, it waits for messages to arrive.\n\n\n\n\n\\Rightarrow In asyncio, the event loop is queue of tasks instead of messages, Tasks are wrapped coroutines.\n\ndef make_request():\n    cpu_bound_setup()\n    io_bound_web_request()\n    cpu_bound_postprocess()\n \ntask_one = make_request()\ntask_two = make_request()\ntask_three = make_request()",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#what-is-it",
+    "href": "Courses/3_Asynchronous.html#what-is-it",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "10.1 What is it?",
+    "text": "10.1 What is it?\n\nasync def coroutine_add_one(number: int) -&gt; int:\n    return number + 1\n \ndef add_one(number: int) -&gt; int:\n    return number + 1\n \n1function_result = add_one(1)\n2coroutine_result = coroutine_add_one(1)\n \nprint(f'Function result is {function_result}\\n\\\n    and the type is {type(function_result)}')\nprint(f'Coroutine result is {coroutine_result}\\n\\\n    and the type is {type(coroutine_result)}')\n\n\n1\n\nfunction call, is executed immediately.\n\n2\n\ncoroutine call, is not executed at all, but returns a coroutine object.\n\n\n\n\nFunction result is 2\n    and the type is &lt;class 'int'&gt;\nCoroutine result is &lt;coroutine object coroutine_add_one at 0x7f0afc9c1a80&gt;\n    and the type is &lt;class 'coroutine'&gt;\n\n\n\nFrom Fowler (2022)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#how-to-execute-a-coroutine",
+    "href": "Courses/3_Asynchronous.html#how-to-execute-a-coroutine",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "10.2 How to execute a coroutine?",
+    "text": "10.2 How to execute a coroutine?\nYou need an event loop.\nimport asyncio\n \nasync def coroutine_add_one(number: int) -&gt; int:\n    return number + 1\n \n1result = asyncio.run(coroutine_add_one(1))\n\nprint(result)\n\n1\n\nThis launches the event loop, executes the coroutine, and returns the result.\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThis code will not work in a Jupyter notebook, because the event loop is already running (by Jupyter itself). So you just have to replace the line 4 by:\nresult = await coroutine_add_one(1)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#await-keyword",
+    "href": "Courses/3_Asynchronous.html#await-keyword",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "10.3 await keyword",
+    "text": "10.3 await keyword\n\nimport asyncio\n \nasync def add_one(number: int) -&gt; int:\n    return number + 1\n \n \nasync def main() -&gt; None:\n1    one_plus_one = await add_one(1)\n2    two_plus_one = await add_one(2)\n    print(one_plus_one)\n    print(two_plus_one)\n \n3await main()\n\n\n1\n\nPause, and wait for the result of add_one(1).\n\n2\n\nPause, and wait for the result of add_one(2).\n\n3\n\nPause, and wait for the result of main(). (outside of a Jupyter notebook, you have to launch the event loop somewhere, like asyncio.run(main()) instead of await main())\n\n\n\n\n2\n3\n\n\n\n\nFrom Fowler (2022)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#simulating-the-real-thing-with-asyncio.sleep",
+    "href": "Courses/3_Asynchronous.html#simulating-the-real-thing-with-asyncio.sleep",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "10.4 Simulating the real thing with asyncio.sleep",
+    "text": "10.4 Simulating the real thing with asyncio.sleep\n\nimport asyncio\n \nasync def hello_world_message() -&gt; str:\n1    await asyncio.sleep(1)\n    return 'Hello World!'\n \nasync def main() -&gt; None:\n2    message = await hello_world_message()\n    print(message)\n \nawait main()\n\n\n1\n\nPause hello_world_message for 1 second.\n\n2\n\nPause main until hello_world_message is finished.\n\n\n\n\nHello World!",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#utility-function-delayseconds",
+    "href": "Courses/3_Asynchronous.html#utility-function-delayseconds",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "10.5 Utility function delay(seconds)",
+    "text": "10.5 Utility function delay(seconds)\n\nimport asyncio\n \n \n1async def delay(delay_seconds: int) -&gt; int:\n2    print(f'sleeping for {delay_seconds} second(s)')\n    await asyncio.sleep(delay_seconds)\n    print(f'finished sleeping for {delay_seconds} second(s)')\n3    return delay_seconds\n\n\n1\n\nTakes an integer of the duration in seconds that we’d like the function to sleep.\n\n2\n\nPrints when sleep begins and ends.\n\n3\n\nReturns that integer to the caller once it has finished sleeping.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#running-two-coroutines",
+    "href": "Courses/3_Asynchronous.html#running-two-coroutines",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "10.6 Running two coroutines",
+    "text": "10.6 Running two coroutines\n\nimport asyncio\n \nasync def add_one(number: int) -&gt; int:\n    return number + 1\n \nasync def hello_world_message() -&gt; str:\n    await delay(1)\n    return 'Hello World!'\n \nasync def main() -&gt; None:\n1    message = await hello_world_message()\n2    one_plus_one = await add_one(1)\n    print(one_plus_one)\n    print(message)\n \nawait main()\n\n\n1\n\nPause main until hello_world_message is finished.\n\n2\n\nPause main until add_one is finished.\n\n\n\n\nsleeping for 1 second(s)\nfinished sleeping for 1 second(s)\n2\nHello World!\n\n\n\n\nFrom Fowler (2022)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#what-to-do-next",
+    "href": "Courses/3_Asynchronous.html#what-to-do-next",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "10.7 What to do next?",
+    "text": "10.7 What to do next?\nMoving away from sequential execution and run add_one and hello_world_message concurrently.\nFor that we need…",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#creating-tasks",
+    "href": "Courses/3_Asynchronous.html#creating-tasks",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "11.1 Creating tasks",
+    "text": "11.1 Creating tasks\n\nimport asyncio\n\nasync def main():\n    sleep_for_three = asyncio.create_task(delay(3))\n    print(type(sleep_for_three))\n    result = await sleep_for_three\n    print(result)\n \nawait main()\n\n&lt;class '_asyncio.Task'&gt;\nsleeping for 3 second(s)\nfinished sleeping for 3 second(s)\n3\n\n\n\nthe coroutine is scheduled to run in the event loop as soon as possible.\nbefore, it was just run at the await statement (pausing the caller).",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#running-tasks-concurrently",
+    "href": "Courses/3_Asynchronous.html#running-tasks-concurrently",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "11.2 Running tasks concurrently",
+    "text": "11.2 Running tasks concurrently\n\nimport asyncio\n \nasync def main():\n    sleep_for_three = \\\n        asyncio.create_task(delay(3))\n    sleep_again = \\\n        asyncio.create_task(delay(3))\n    sleep_once_more = \\\n        asyncio.create_task(delay(3))\n \n    await sleep_for_three\n    await sleep_again\n    await sleep_once_more\n\nawait main()\n\nsleeping for 3 second(s)\nsleeping for 3 second(s)\nsleeping for 3 second(s)\nfinished sleeping for 3 second(s)\nfinished sleeping for 3 second(s)\nfinished sleeping for 3 second(s)\n\n\n\n\nFrom Fowler (2022)\n\n\nimport asyncio\n \nasync def hello_every_second():\n    for i in range(2):\n        await asyncio.sleep(1)\n        print(\"I'm running other code while I'm waiting!\")\n \nasync def main():\n    first_delay = asyncio.create_task(delay(3))\n    second_delay = asyncio.create_task(delay(3))\n    await hello_every_second()\n    await first_delay\n    await second_delay\n\nawait main()\n\nsleeping for 3 second(s)\nsleeping for 3 second(s)\nI'm running other code while I'm waiting!\nI'm running other code while I'm waiting!\nfinished sleeping for 3 second(s)\nfinished sleeping for 3 second(s)\n\n\n\n\nFrom Fowler (2022)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#canceling-tasks",
+    "href": "Courses/3_Asynchronous.html#canceling-tasks",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "11.3 Canceling tasks",
+    "text": "11.3 Canceling tasks\n\nimport asyncio\nfrom asyncio import CancelledError\n\nasync def main():\n    long_task = asyncio.create_task(delay(10))\n \n    seconds_elapsed = 0\n \n    while not long_task.done():\n        print('Task not finished, checking again in a second.')\n        await asyncio.sleep(1)\n        seconds_elapsed = seconds_elapsed + 1\n        if seconds_elapsed == 5:\n            long_task.cancel()\n \n    try:\n        await long_task\n    except CancelledError:\n        print('Our task was cancelled')\n \nawait main()\n\nTask not finished, checking again in a second.\nsleeping for 10 second(s)\nTask not finished, checking again in a second.\nTask not finished, checking again in a second.\nTask not finished, checking again in a second.\nTask not finished, checking again in a second.\nTask not finished, checking again in a second.\nOur task was cancelled",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#setting-a-timeout",
+    "href": "Courses/3_Asynchronous.html#setting-a-timeout",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "11.4 Setting a timeout",
+    "text": "11.4 Setting a timeout\n\nimport asyncio\n\nasync def main():\n    delay_task = asyncio.create_task(delay(2))\n    try:\n        result = await asyncio.wait_for(delay_task, timeout=1)\n        print(result)\n    except asyncio.exceptions.TimeoutError:\n        print('Got a timeout!')\n        print(f'Was the task cancelled? {delay_task.cancelled()}')\n \nawait main()\n\nsleeping for 2 second(s)\nGot a timeout!\nWas the task cancelled? True",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#introducing-futures",
+    "href": "Courses/3_Asynchronous.html#introducing-futures",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "12.1 Introducing futures",
+    "text": "12.1 Introducing futures\n\nfrom asyncio import Future\n \nmy_future = Future()\n \nprint(f'Is my_future done? {my_future.done()}')\n \nmy_future.set_result(42)\n \nprint(f'Is my_future done? {my_future.done()}')\nprint(f'What is the result of my_future? {my_future.result()}')\n\nIs my_future done? False\nIs my_future done? True\nWhat is the result of my_future? 42",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#awaiting-futures",
+    "href": "Courses/3_Asynchronous.html#awaiting-futures",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "12.2 Awaiting futures",
+    "text": "12.2 Awaiting futures\n\nfrom asyncio import Future\nimport asyncio\n \n \ndef make_request() -&gt; Future:\n    future = Future()\n1    asyncio.create_task(set_future_value(future))\n    return future\n \n \nasync def set_future_value(future) -&gt; None:\n2    await asyncio.sleep(1)\n    future.set_result(42)\n \n \nasync def main():\n    future = make_request()\n    print(f'Is the future done? {future.done()}')\n3    value = await future\n    print(f'Is the future done? {future.done()}')\n    print(value)\n \nawait main()\n\n\n1\n\nCreate a task to asynchronously set the value of the future.\n\n2\n\nWait 1 second before setting the value of the future.\n\n3\n\nPause main until the future’s value is set.\n\n\n\n\nIs the future done? False\nIs the future done? True\n42",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#comparing-tasks-coroutines-futures-and-awaitables",
+    "href": "Courses/3_Asynchronous.html#comparing-tasks-coroutines-futures-and-awaitables",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "12.3 Comparing tasks, coroutines, futures, and awaitables",
+    "text": "12.3 Comparing tasks, coroutines, futures, and awaitables\n\n\n\n\n\n\n\nAwaitables\n\nObjects that can be awaited in an async function, including coroutines, tasks, and futures.\n\nCoroutines\n\nSpecial functions that can be paused and resumed later, defined using async def, and can be awaited to allow other coroutines to run.\n\nFutures\n\nRepresent the result of an asynchronous operation, manage its state, and can be awaited to get the result.\n\nTasks\n\nSchedule and run coroutines concurrently, and can be used to cancel or check their status.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#with-a-decorator",
+    "href": "Courses/3_Asynchronous.html#with-a-decorator",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "13.1 With a decorator",
+    "text": "13.1 With a decorator\n\n\n\nimport functools\nimport time\nfrom typing import Callable, Any\n \ndef async_timed():\n    def wrapper(func: Callable) -&gt; Callable:\n        @functools.wraps(func)\n        async def wrapped(*args, **kwargs) -&gt; Any:\n            print(f'starting {func} with args {args} {kwargs}')\n            start = time.time()\n            try:\n                return await func(*args, **kwargs)\n            finally:\n                end = time.time()\n                total = end - start\n                print(f'finished {func} in {total:.4f} second(s)')\n \n        return wrapped\n \n    return wrapper\n\n\nOfficial Python documentation for decorators\n\nadd functionality to an existing function\nwithout modifying the function itself\nit intercepts the function call and runs “decorated” code before and after it",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#using-it",
+    "href": "Courses/3_Asynchronous.html#using-it",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "13.2 Using it",
+    "text": "13.2 Using it\n\nimport asyncio\n \n@async_timed()\nasync def delay(delay_seconds: int) -&gt; int:\n    print(f'sleeping for {delay_seconds} second(s)')\n    await asyncio.sleep(delay_seconds)\n    print(f'finished sleeping for {delay_seconds} second(s)')\n    return delay_seconds\n \n \n@async_timed()\nasync def main():\n    task_one = asyncio.create_task(delay(2))\n    task_two = asyncio.create_task(delay(3))\n \n    await task_one\n    await task_two\n\nawait main()\n\nstarting &lt;function main at 0x7f0b593465c0&gt; with args () {}\nstarting &lt;function delay at 0x7f0b59345e40&gt; with args (2,) {}\nsleeping for 2 second(s)\nstarting &lt;function delay at 0x7f0b59345e40&gt; with args (3,) {}\nsleeping for 3 second(s)\nfinished sleeping for 2 second(s)\nfinished &lt;function delay at 0x7f0b59345e40&gt; in 2.0021 second(s)\nfinished sleeping for 3 second(s)\nfinished &lt;function delay at 0x7f0b59345e40&gt; in 3.0011 second(s)\nfinished &lt;function main at 0x7f0b593465c0&gt; in 3.0013 second(s)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#asyncio.gather",
+    "href": "Courses/3_Asynchronous.html#asyncio.gather",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "13.3 asyncio.gather",
+    "text": "13.3 asyncio.gather\nasyncio.gather() runs multiple asynchronous operations, wraps a coroutine as a task, and returns a list of results in the same order of awaitables.\n\nimport asyncio\n\n\nasync def call_api(message, result, delay=3):\n    print(message)\n    await asyncio.sleep(delay)\n    return result\n\n\nasync def main():\n    return await asyncio.gather(\n        call_api('Calling API 1 ...', 1),\n        call_api('Calling API 2 ...', 2)\n    )\n\nawait main()\n\nCalling API 1 ...\nCalling API 2 ...\n\n\n[1, 2]\n\n\n\n\n\n\n\n\nCaution\n\n\n\nasyncio.gather takes a tuple of awaitables, not a list of awaitables, but returns a list of results in the same order of awaitables.\nIf you want to pass a list, use the * operator to unpack it as a tuple.",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#running-cpu-bound-code",
+    "href": "Courses/3_Asynchronous.html#running-cpu-bound-code",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "14.1 Running CPU-bound code",
+    "text": "14.1 Running CPU-bound code\n\nimport asyncio\n\n@async_timed()\nasync def cpu_bound_work() -&gt; int:\n    counter = 0\n    for i in range(100000000):\n        counter = counter + 1\n    return counter\n \n \n@async_timed()\nasync def main():\n    task_one = asyncio.create_task(cpu_bound_work())\n    task_two = asyncio.create_task(cpu_bound_work())\n    await task_one\n    await task_two\n \nawait main()\n\nstarting &lt;function main at 0x7f0b59346ac0&gt; with args () {}\nstarting &lt;function cpu_bound_work at 0x7f0b593468e0&gt; with args () {}\nfinished &lt;function cpu_bound_work at 0x7f0b593468e0&gt; in 4.1800 second(s)\nstarting &lt;function cpu_bound_work at 0x7f0b593468e0&gt; with args () {}\nfinished &lt;function cpu_bound_work at 0x7f0b593468e0&gt; in 4.1962 second(s)\nfinished &lt;function main at 0x7f0b59346ac0&gt; in 8.3767 second(s)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#running-blocking-apis",
+    "href": "Courses/3_Asynchronous.html#running-blocking-apis",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "14.2 Running blocking APIs",
+    "text": "14.2 Running blocking APIs\n\nimport asyncio\nimport requests\n \n@async_timed()\nasync def get_example_status() -&gt; int:\n    return requests.get('http://www.example.com').status_code\n \n \n@async_timed()\nasync def main():\n    task_1 = asyncio.create_task(get_example_status())\n    task_2 = asyncio.create_task(get_example_status())\n    task_3 = asyncio.create_task(get_example_status())\n    await task_1\n    await task_2\n    await task_3\n \nawait main()\n\nstarting &lt;function main at 0x7f0b586cafc0&gt; with args () {}\nstarting &lt;function get_example_status at 0x7f0b59323ec0&gt; with args () {}\nfinished &lt;function get_example_status at 0x7f0b59323ec0&gt; in 0.3124 second(s)\nstarting &lt;function get_example_status at 0x7f0b59323ec0&gt; with args () {}\nfinished &lt;function get_example_status at 0x7f0b59323ec0&gt; in 0.1888 second(s)\nstarting &lt;function get_example_status at 0x7f0b59323ec0&gt; with args () {}\nfinished &lt;function get_example_status at 0x7f0b59323ec0&gt; in 0.1788 second(s)\nfinished &lt;function main at 0x7f0b586cafc0&gt; in 0.6803 second(s)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#example-of-blocking-code",
+    "href": "Courses/3_Asynchronous.html#example-of-blocking-code",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "15.1 Example of blocking code",
+    "text": "15.1 Example of blocking code\n\nimport requests\n \n \ndef get_status_code(url: str) -&gt; int:\n    response = requests.get(url)\n    return response.status_code\n \n \nurl = 'https://www.example.com'\nprint(get_status_code(url))\nprint(get_status_code(url))\n\n200\n200",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#thread-pool",
+    "href": "Courses/3_Asynchronous.html#thread-pool",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "15.2 Thread Pool",
+    "text": "15.2 Thread Pool\n\nimport time\nimport requests\nfrom concurrent.futures import ThreadPoolExecutor\n \n \ndef get_status_code(url: str) -&gt; int:\n    response = requests.get(url)\n    return response.status_code\n \n \nstart = time.time()\n \nwith ThreadPoolExecutor() as pool:\n    urls = ['https://www.example.com' for _ in range(10)]\n    results = pool.map(get_status_code, urls)\n    for result in results:\n        # print(result)\n        pass\n\n \nend = time.time()\n \nprint(f'finished requests in {end - start:.4f} second(s)')\n\nfinished requests in 0.3860 second(s)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#compare-with-sequential-code",
+    "href": "Courses/3_Asynchronous.html#compare-with-sequential-code",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "15.3 Compare with sequential code",
+    "text": "15.3 Compare with sequential code\n\nstart = time.time()\n \nurls = ['https://www.example.com' for _ in range(10)]\n \nfor url in urls:\n    result = get_status_code(url)\n    # print(result)\n \nend = time.time()\n \nprint(f'finished requests in {end - start:.4f} second(s)')\n\nfinished requests in 3.6004 second(s)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#thread-pool-with-asyncio",
+    "href": "Courses/3_Asynchronous.html#thread-pool-with-asyncio",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "15.4 Thread pool with asyncio",
+    "text": "15.4 Thread pool with asyncio\n\nimport functools\nimport requests\nimport asyncio\nfrom concurrent.futures import ThreadPoolExecutor\n \ndef get_status_code(url: str) -&gt; int:\n    response = requests.get(url)\n    return response.status_code\n \n \n@async_timed()\nasync def main():\n    loop = asyncio.get_running_loop()\n    with ThreadPoolExecutor() as pool:\n        urls = ['https://www.example.com' for _ in range(10)]\n        tasks = [loop.run_in_executor(pool, functools.partial(get_status_code, url)) for url in urls]\n        results = await asyncio.gather(*tasks)\n        print(results)\n \nawait main()\n\nstarting &lt;function main at 0x7f0b5871bd80&gt; with args () {}\n[200, 200, 200, 200, 200, 200, 200, 200, 200, 200]\nfinished &lt;function main at 0x7f0b5871bd80&gt; in 0.3865 second(s)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/3_Asynchronous.html#multithreading-with-numpy",
+    "href": "Courses/3_Asynchronous.html#multithreading-with-numpy",
+    "title": "4  Asynchronous Programming with Python",
+    "section": "15.5 Multithreading with numpy",
+    "text": "15.5 Multithreading with numpy\nLet’s define a big matrix on which we will compute the mean of each row.\nNow process the matrix sequentially.\n\ns = time.time()\n \nres_seq = np.mean(matrix, axis=1)\n \ne = time.time()\nprint(e - s)\n\n0.47089385986328125\n\n\nAnd then the same with multithreading (we check that the results are exactly the same).\n\nimport functools\nfrom concurrent.futures.thread import ThreadPoolExecutor\nimport asyncio\n \ndef mean_for_row(arr, row):\n    return np.mean(arr[row])\n \n@async_timed()\nasync def main():\n    loop = asyncio.get_running_loop()\n    with ThreadPoolExecutor() as pool:\n        tasks = []\n        for i in range(rows):\n            mean = functools.partial(mean_for_row, matrix, i)\n            tasks.append(loop.run_in_executor(pool, mean))\n \n        return await asyncio.gather(*tasks)\n\nres_threads = np.array(await main())\nnp.testing.assert_array_equal(res_seq, res_threads)\n\nstarting &lt;function main at 0x7f0b5871b9c0&gt; with args () {}\nfinished &lt;function main at 0x7f0b5871b9c0&gt; in 0.0771 second(s)",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "4  Summary",
+    "title": "5  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.",
     "crumbs": [
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
@@ -744,7 +1144,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "Robey, R., and Y. Zamora. 2021. Parallel and High Performance\nComputing. Manning. https://www.manning.com/books/parallel-and-high-performance-computing.",
+    "text": "Fowler, M. 2022. Python Concurrency with Asyncio. Manning. https://www.manning.com/books/python-concurrency-with-asyncio.\n\n\nRobey, R., and Y. Zamora. 2021. Parallel and High Performance\nComputing. Manning. https://www.manning.com/books/parallel-and-high-performance-computing.",
     "crumbs": [
       "References"
     ]
@@ -754,7 +1154,7 @@
     "href": "applications.html",
     "title": "Appendix A — Applications",
     "section": "",
-    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\nMultiProcessing, Strong Scaling\n\n\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\n\n\nNo matching items",
+    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\nMultiProcessing, Strong Scaling\n\n\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\nMean Pooling\n\n\n\n\n\n\nNo matching items",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Applications</span>"
@@ -765,7 +1165,7 @@
     "href": "slides.html",
     "title": "Appendix B — Slides in reveal.js",
     "section": "",
-    "text": "Numpy Workout\nIntroduction to parallel computing\nAdvanced concepts in parallel programming\n\n\nNo matching items",
+    "text": "Numpy Workout\nIntroduction to parallel computing\nAdvanced concepts in parallel programming\nAsynchronous Programming with Python\n\n\nNo matching items",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Slides in reveal.js</span>"

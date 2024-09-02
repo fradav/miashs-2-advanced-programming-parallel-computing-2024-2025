@@ -4,6 +4,7 @@
 Courses/Applications/*
 !Courses/Applications/.gitkeep
 !Courses/Applications/.jupyter_cache/
+!Courses/Applications/1_1_MultiProcessing-smt-sol.ipynb
 /applications.yml
 /slides.yml
 

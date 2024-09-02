@@ -270,3 +270,13 @@ print("Gain with multi : {:.1f}".format(orig_time.average/multi_time.average))
 print("Gain with shuffled : {:.1f}".format(orig_time.average/shuffled_time.average))
 ```
 
+:::{.solution-box}
+
+This has been run on a machine with 4 physical cores and 8 logical cores, 
+[Intel Xeon CPU E5-1620 v4](https://www.intel.com/content/www/us/en/products/sku/92991/intel-xeon-processor-e51620-v4-10m-cache-3-50-ghz/specifications.html).
+
+The results show that the gain is less than with 4 physical cores. This is because the logical cores share the same physical core, and the overhead of sharing the same physical core is greater than the gain from parallelization.
+
+{{< embed 1_1_MultiProcessing-smt-sol.ipynb#smt-example >}}
+
+:::

@@ -1130,13 +1130,203 @@
     ]
   },
   {
+    "objectID": "Courses/4_IPC_and_Locking.html",
+    "href": "Courses/4_IPC_and_Locking.html",
+    "title": "5  IPC and locking",
+    "section": "",
+    "text": "6 Inter-Process Communication",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#remainder-on-process-level-parallelization",
+    "href": "Courses/4_IPC_and_Locking.html#remainder-on-process-level-parallelization",
+    "title": "5  IPC and locking",
+    "section": "6.1 Remainder on Process-level parallelization",
+    "text": "6.1 Remainder on Process-level parallelization\n\n\n                   Main Process\n                 ┌─────────────┐\n                 │             │\n                 │   CPU       │\n                 ├─────────────┤\n                 │             │\n                 │   Memory    │\n                 └─┬────┬────┬─┘\n                   │    │    │\n                   │    │    │\n       ┌───────────┘    │    └───────────┐\n       │                │                │\n┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐\n│             │  │             │  │             │\n│   CPU       │  │   CPU       │  │   CPU       │\n├─────────────┤  ├─────────────┤  ├─────────────┤\n│             │  │             │  │             │\n│   Memory    │  │   Memory    │  │   Memory    │\n└─────────────┘  └─────────────┘  └─────────────┘\n\n   Process 1        Process 1        Process 1\n\n┌──────────────────────────────────────┐\n│            MAIN PROCESS              │\n│                                      │\n│                                      │\n│     ┌──────────┐                     │\n│     │          │                     │\n│     │   CPU    │   ┌───────────┐     │\n│     │          │   │           │     │\n│     └──────────┘   │   Memory  │     │\n│                    │           │     │\n│                    └───────────┘     │\n│                                      │\n│                                      │\n│                                      │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│   Thread 1    Thread 2    Thread 3   │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│                                      │\n└──────────────────────────────────────┘",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#inter-process-is-easy",
+    "href": "Courses/4_IPC_and_Locking.html#inter-process-is-easy",
+    "title": "5  IPC and locking",
+    "section": "6.2 Inter-process is easy…",
+    "text": "6.2 Inter-process is easy…\n\n\nBut if my algorithm is not “embarrassingly parallel”, what if we want to share data between processes ?\nlet’s go for Shared Memory",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#shared-memory-model",
+    "href": "Courses/4_IPC_and_Locking.html#shared-memory-model",
+    "title": "5  IPC and locking",
+    "section": "6.3 Shared Memory Model",
+    "text": "6.3 Shared Memory Model\n┌─────────────────────────────┐    ┌─────────────────────────────┐\n│                             │    │                             │\n│ ┌──────────┐   ┌──────────┐ │    │ ┌──────────┐   ┌──────────┐ │\n│ │          │   │          │ │    │ │          │   │          │ │\n│ │  CORE 1  │   │  CORE 2  │ │    │ │  CORE 3  │   │  CORE 4  │ │\n│ │          │   │          │ │    │ │          │   │          │ │\n│ └─┬──┬─────┘   └────┬─────┘ │    │ └┬─────────┘   └──────┬───┘ │\n│   │  │              │       │    │  │                    │     │\n│   │  │              │       │    │  │                    │     │\n│   │  │  CPU 1       │       │    │  │      CPU 2         │     │\n│   │  │              │       │    │  │                    │     │\n└───┼──┼──────────────┼───────┘    └──┼────────────────────┼─────┘\n    │  │              │               │                    │\n    │  │              └────────────┐  │                    │\n    │  │                           │  │                    │\n    │  └─────────────────────────┐ │  │                    │\n    │                            │ │  │  ┌─────────────────┘\n    └──────────────────────────┐ │ │  │  │\n                               │ │ │  │  │\n┌──────────────────────────────┼─┼─┼──┼──┼──────────────────────┐\n│                              │ │ │  │  │                      │\n│ ┌─────┐  ┌─────┐  ┌─────┐  ┌─▼─▼─▼──▼──▼─┐                    │\n│ │     │  │     │  │     │  │Shared Memory│                    │\n│ └─────┘  └─────┘  └─────┘  └─────────────┘                    │\n│                                      Main Memory              │\n└───────────────────────────────────────────────────────────────┘",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#aside-memory-models",
+    "href": "Courses/4_IPC_and_Locking.html#aside-memory-models",
+    "title": "5  IPC and locking",
+    "section": "6.4 Aside : memory models",
+    "text": "6.4 Aside : memory models\n\n\n\n\n\n\n\n\n\nUMA\n\n\n\n\n \n\n\n\n\n\nNUMA\n\n\n\n\n\n\nThere are differents models",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#shared-fifos-queues",
+    "href": "Courses/4_IPC_and_Locking.html#shared-fifos-queues",
+    "title": "5  IPC and locking",
+    "section": "6.5 Shared FIFOs : Queues",
+    "text": "6.5 Shared FIFOs : Queues\nAn ubiquitous tool in multiprocessing (and distributed computing) is shared memory FIFO list, aka Queues.\nA FIFO is a :\n\nLinked list\nwith FIFO (First In First Out) semantics, with enqueue(x) et dequeue() function (or push(x)/pop())\n\n\n\n\n\n\nIn the context of multi-processing (or multi-threading) :\nShared Memory + FIFO list = Queue\nQueues are the basis of the consumer/producer model, which is widely used in concurrent and distributed applications.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#when-to-use-queues",
+    "href": "Courses/4_IPC_and_Locking.html#when-to-use-queues",
+    "title": "5  IPC and locking",
+    "section": "6.6 When to use queues?",
+    "text": "6.6 When to use queues?\nAn algorithm with two computations A and B where :\n\nB depends on the result of A\nA is independent of B\n\n. . .\nA could be a producer for B, and B a consumer for A.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#how-to-use-queues",
+    "href": "Courses/4_IPC_and_Locking.html#how-to-use-queues",
+    "title": "5  IPC and locking",
+    "section": "6.7 How to use queues?",
+    "text": "6.7 How to use queues?\n┌───────────┐\n│           │\n│ Producer  │\n│           │ Process A\n│           │\n└─────┬─────┘\n      │\n ┌────┼───────────────────────────────────────────────────────────────────┐\n │    │                         Queue                                     │\n │    │        ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┐                │\n │    │        │     │     │     │     │     │     │     │                │\n │    └───────►│     │     │     │     │     │     │     ├──────────┐     │\n │             │     │     │     │     │     │     │     │          │     │\n │             └─────┴─────┴─────┴─────┴─────┴─────┴─────┘          │     │\n │                                                                  │     │\n │        Shared Memory                                             │     │\n └──────────────────────────────────────────────────────────────────┼─────┘\n                                                                    │\n                                                                    ▼\n                                                              ┌───────────┐\n                                                              │           │\n                                                   Process B  │ Consumer  │\n                                                              │           │\n                                                              │           │\n                                                              └───────────┘",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#producerconsumer-examples",
+    "href": "Courses/4_IPC_and_Locking.html#producerconsumer-examples",
+    "title": "5  IPC and locking",
+    "section": "6.8 Producer/consumer, Examples",
+    "text": "6.8 Producer/consumer, Examples\n\nA finds primes in a list of number, B formats and prints them every 10 numbers found.\nA fetches a bunch of images on the web, B downloads them and saves them to disk.\nA takes the orders in the restaurant, B cooks them.\n\n. . .",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#the-main-gotcha",
+    "href": "Courses/4_IPC_and_Locking.html#the-main-gotcha",
+    "title": "5  IPC and locking",
+    "section": "7.1 The main gotcha",
+    "text": "7.1 The main gotcha\nwhat if several processes want to write/read the same shared memory portions at the same time?\n. . .\nEnter the realm of the dreaded race condition",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#simple-example",
+    "href": "Courses/4_IPC_and_Locking.html#simple-example",
+    "title": "5  IPC and locking",
+    "section": "7.2 Simple example",
+    "text": "7.2 Simple example\nPrinting from several processes a string with 10 times the same char.\n\n\nfrom multiprocessing.pool import Pool\nfrom itertools import repeat\n# print \"AAAAAAAAA\", \"BBBBBBBBBBB\" etc.\ndef repeat10Cap(c): \n    print(\"\".join(repeat(chr(c+65),10))) \nwith Pool(8) as pool:\n    pool.map(repeat10Cap, range(10))\n\n\nOutput:\nAAAAAAAAAACCCCCCCCCCBBBBBBBBBBDDDDDDDDDDEEEEEEEEEE\n\n\nFFFFFFFFFFGGGGGGGGGG\nIIIIIIIIII\n\nHHHHHHHHHH\nJJJJJJJJJJ",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#critical-section-workflow",
+    "href": "Courses/4_IPC_and_Locking.html#critical-section-workflow",
+    "title": "5  IPC and locking",
+    "section": "8.1 Critical section workflow",
+    "text": "8.1 Critical section workflow\n\n\n\nThree processes with critical section",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#a-simple-implementation-in-python-lock",
+    "href": "Courses/4_IPC_and_Locking.html#a-simple-implementation-in-python-lock",
+    "title": "5  IPC and locking",
+    "section": "8.2 A simple implementation in Python : Lock",
+    "text": "8.2 A simple implementation in Python : Lock\n\n\nfrom multiprocessing.pool import Pool\nfrom multiprocessing import Lock\nfrom itertools import repeat\nlock = Lock()\ndef safe_repeat10Cap(c):\n    with lock: \n        # Beginning of critical section\n        print(\"\".join(repeat(chr(c+65),10)))\n        # End of critical section\nwith Pool(8) as pool:\n    pool.map(safe_repeat10Cap, range(10))\n\n\nOutput:\nAAAAAAAAAA\nBBBBBBBBBB\nCCCCCCCCCC\nDDDDDDDDDD\nEEEEEEEEEE\nFFFFFFFFFF\nGGGGGGGGGG\nHHHHHHHHHH\nIIIIIIIIII\nJJJJJJJJJJ",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#consistency-problems-with-fifo-example-i",
+    "href": "Courses/4_IPC_and_Locking.html#consistency-problems-with-fifo-example-i",
+    "title": "5  IPC and locking",
+    "section": "9.1 Consistency problems with FIFO example I",
+    "text": "9.1 Consistency problems with FIFO example I\nProcess A (resp. B) wants to push x (resp. y) on the list.\n\n\n\n\\Longrightarrow Consistency problem if they both create a new linked node to node 3.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#consistency-problems-with-fifo-example-2",
+    "href": "Courses/4_IPC_and_Locking.html#consistency-problems-with-fifo-example-2",
+    "title": "5  IPC and locking",
+    "section": "9.2 Consistency problems with FIFO example 2",
+    "text": "9.2 Consistency problems with FIFO example 2\nProcess A and B both want to pop the list.\n\n\n\n\\Longrightarrow Consistency problem if they both pop the same node.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#no-consistency-problems-with-fifo-example-3",
+    "href": "Courses/4_IPC_and_Locking.html#no-consistency-problems-with-fifo-example-3",
+    "title": "5  IPC and locking",
+    "section": "9.3 (No) Consistency problems with FIFO example 3",
+    "text": "9.3 (No) Consistency problems with FIFO example 3\n\n\n\nNo problem there.\n\n\n. . .\n\n\n\n\n\n\nWarning\n\n\n\n⚠ ⚠ As long the list is not empty ⚠ ⚠",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#deadlock-example",
+    "href": "Courses/4_IPC_and_Locking.html#deadlock-example",
+    "title": "5  IPC and locking",
+    "section": "10.1 Deadlock example",
+    "text": "10.1 Deadlock example",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#deadlock-serious-example",
+    "href": "Courses/4_IPC_and_Locking.html#deadlock-serious-example",
+    "title": "5  IPC and locking",
+    "section": "10.2 Deadlock (serious) example",
+    "text": "10.2 Deadlock (serious) example\n\n\n\nDeadlock illustration\n\n\n\nProcess A acquires lock L1. Process B acquires lock L2. Process A tries to acquire lock L2, but it is already held by B. Process B tries to acquire lock L1, but it is already held by A. Both processes are blocked.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/4_IPC_and_Locking.html#avoiding-deadlocks",
+    "href": "Courses/4_IPC_and_Locking.html#avoiding-deadlocks",
+    "title": "5  IPC and locking",
+    "section": "10.3 Avoiding Deadlocks",
+    "text": "10.3 Avoiding Deadlocks\nThere is several ways to avoid deadlocks. One of them is the Dijkstra’s Resource Hiearchy Solution.\n. . .\nIn the previous example, processes should try the lowest numbered locks first. Instead of B acquiring L2 first, it should tries to acquire L1 instead and L2 after.\n. . .\nThis solution isn’t universal but is pretty usable in general case.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "5  Summary",
+    "title": "6  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
@@ -1154,7 +1344,7 @@
     "href": "applications.html",
     "title": "Appendix A — Applications",
     "section": "",
-    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\nMultiProcessing, Strong Scaling\nSolution\nNotebook\n\n\nScaling App with multiprocessing\n\n\n\n\nasyncio application\n\n\n\n\nA tutorial on Python generators\nSolution\nNotebook\n\n\n\n\nNo matching items",
+    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\nMultiProcessing, Strong Scaling\nSolution\nNotebook\n\n\nScaling App with multiprocessing\n\n\n\n\nAn asyncio application\n\n\n\n\nA tutorial on Python generators\nSolution\nNotebook\n\n\n\n\nNo matching items",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Applications</span>"
@@ -1165,7 +1355,7 @@
     "href": "slides.html",
     "title": "Appendix B — Slides in reveal.js",
     "section": "",
-    "text": "Numpy Workout\nIntroduction to parallel computing\nAdvanced concepts in parallel programming\nAsynchronous Programming with Python\n\n\nNo matching items",
+    "text": "Numpy Workout\nIntroduction to parallel computing\nAdvanced concepts in parallel programming\nAsynchronous Programming with Python\nIPC and locking\n\n\nNo matching items",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Slides in reveal.js</span>"

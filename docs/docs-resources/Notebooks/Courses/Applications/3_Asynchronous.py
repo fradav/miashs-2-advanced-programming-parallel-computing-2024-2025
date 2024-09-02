@@ -1,6 +1,6 @@
 # %% [markdown]
 """
-# `asyncio` application
+# An `asyncio` application
 
 François-David Collin (CNRS, IMAG, Paul-Valéry Montpellier 3
 University)  

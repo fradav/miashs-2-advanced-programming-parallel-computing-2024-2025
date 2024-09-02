@@ -184,13 +184,13 @@ window.Quarto = {
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>For this TP, set the number of <strong>physical</strong> cores available (8 on the cluster nodes), not the number of logical cores.</p>
-<div id="10ab56b5" class="cell" data-execution_count="1">
+<div id="10ab56b5" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ncores <span class="op">=</span> <span class="dv">8</span> <span class="co"># 8 on the cluster nodes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="ac5987d9" class="cell" data-execution_count="2">
+<div id="ac5987d9" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -206,13 +206,13 @@ window.Quarto = {
 <p>Hint: First check that it is not even, then list all odd numbers from 3 to <span class="math inline">\sqrt{n}</span> (upper rounding) and test whether they are factors.</p>
 <p>Make a function <code>total_primes</code> that counts the number of primes in a list.</p>
 <p>Calculate the number of primes from 1 to <span class="math inline">N=100 000</span> with this function</p>
-<div id="d39fd6ea" class="cell" data-execution_count="5">
+<div id="d39fd6ea" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">100000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="4a8dac1f" class="cell" data-execution_count="6">
+<div id="4a8dac1f" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -226,7 +226,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="time-measurement">Time measurement</h2>
 <p>Use <code>%timeit</code> to measure the average time taken to count the number of primes up to <span class="math inline">N=100000</span>. (note: by default, <code>timeit</code> repeats the calculation <span class="math inline">7times{}10</span> to obtain a reliable average. Please refer to the <a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html">magic</a> and <a href="https://docs.python.org/3.9/library/timeit.html">timeit</a> docs).</p>
 <p>Store measurements using the -o option in timeit</p>
-<div id="39c7d596" class="cell" data-execution_count="7">
+<div id="39c7d596" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -242,7 +242,7 @@ window.Quarto = {
 <p>Our first attempt at multiprocessing will involve partitioning the count into 2. We’ll run two processes in parallel on <span class="math inline">\{1,...,N/2\}</span> and <span class="math inline">\{N/2+1,...,N\}</span>.</p>
 <p>Complete the following code (<a href="https://notebook.community/izapolsk/integration_tests/notebooks/MultiProcessing">source</a>).</p>
 <p>Check the result and the performance gain with <code>%timeit</code>.</p>
-<div id="35980ae8" class="cell" data-execution_count="8">
+<div id="35980ae8" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
@@ -252,7 +252,7 @@ window.Quarto = {
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(total_primes, ...))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="49baedfa" class="cell" data-execution_count="10">
+<div id="49baedfa" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>split_total(N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -261,7 +261,7 @@ window.Quarto = {
 <pre><code>9593</code></pre>
 </div>
 </div>
-<div id="c30b5a06" class="cell" data-execution_count="11">
+<div id="c30b5a06" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>split_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o split_total(N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -270,7 +270,7 @@ window.Quarto = {
 <pre><code>51.9 ms ± 190 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="e7b9cffe" class="cell" data-execution_count="12">
+<div id="e7b9cffe" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with split : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>split_time.average))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -283,7 +283,7 @@ window.Quarto = {
 <section id="generalization" class="level1">
 <h1>Generalization</h1>
 <p>Generalize the function with partitioning into <em>n</em> tasks instead of just 2. We’ll use a generalized <code>multi_process_list</code> function, which takes as arguments : - f<code>the main computation function, which takes an integer list as argument - n</code> the number of partitions (here, one partition = task) - par_f<code>a function which takes as argument a list and a number of partitions to be performed, and returns the list of partitions in this list - l</code> the list to be partitioned</p>
-<div id="ff67a650" class="cell" data-execution_count="13">
+<div id="ff67a650" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_process_list(f,n,par_f,l):</span>
@@ -292,7 +292,7 @@ window.Quarto = {
 </details>
 </div>
 <p>First, we write the <code>naive_par</code> partitioning function.</p>
-<div id="de5f03af" class="cell" data-execution_count="14">
+<div id="de5f03af" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> naive_par(lst,n):</span>
@@ -301,7 +301,7 @@ window.Quarto = {
 </div>
 <p>We’ll use the <code>chunks</code> function, which partitions a list into chunks of fixed size (except for the last one).</p>
 <p>We’ll test the gain obtained with 8 tasks/partitions.</p>
-<div id="30afa2dd" class="cell" data-execution_count="15">
+<div id="30afa2dd" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chunks(lst, m):</span>
@@ -311,7 +311,7 @@ window.Quarto = {
 </details>
 </div>
 <p>Vérifier le fonctionnement de <code>naive_par</code></p>
-<div id="655e62aa" class="cell" data-execution_count="20">
+<div id="655e62aa" class="cell" data-execution_count="21">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -320,7 +320,7 @@ window.Quarto = {
 <pre><code>45.9 ms ± 602 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="b63b087a" class="cell" data-execution_count="21">
+<div id="b63b087a" class="cell" data-execution_count="22">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain avec multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -330,13 +330,13 @@ window.Quarto = {
 </div>
 </div>
 <p>Repeat all calculations and payoff comparisons with <span class="math inline">N=5000000</span>. To avoid long calculation times, we’ll restrict ourselves to a single iteration (option <code>-r 1 -n 1</code> in <code>%timeit</code>).</p>
-<div id="e68316fc" class="cell" data-execution_count="22">
+<div id="e68316fc" class="cell" data-execution_count="23">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5000000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="e3879dd2" class="cell" data-execution_count="23">
+<div id="e3879dd2" class="cell" data-execution_count="24">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
@@ -358,7 +358,7 @@ Gain with multi : 5.9</code></pre>
 <section id="optional-refinement" class="level1">
 <h1>Optional refinement</h1>
 <p>How much time is spent on each task? Use the following function to get an idea. What do you observe?</p>
-<div id="7696966b" class="cell" data-execution_count="24">
+<div id="7696966b" class="cell" data-execution_count="25">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timed_total_primes(l):</span>
@@ -1265,6 +1265,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb26-331"><a href="#cb26-331" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
 <span id="cb26-332"><a href="#cb26-332" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with shuffled : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>shuffled_time.average))</span>
 <span id="cb26-333"><a href="#cb26-333" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb26-334"><a href="#cb26-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-335"><a href="#cb26-335" aria-hidden="true" tabindex="-1"></a>:::{.solution<span class="op">-</span>box}</span>
+<span id="cb26-336"><a href="#cb26-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-337"><a href="#cb26-337" aria-hidden="true" tabindex="-1"></a>This has been run on a machine <span class="cf">with</span> <span class="dv">4</span> physical cores <span class="kw">and</span> <span class="dv">8</span> logical cores, </span>
+<span id="cb26-338"><a href="#cb26-338" aria-hidden="true" tabindex="-1"></a>[Intel Xeon CPU E5<span class="op">-</span><span class="dv">1620</span> v4](https:<span class="op">//</span>www.intel.com<span class="op">/</span>content<span class="op">/</span>www<span class="op">/</span>us<span class="op">/</span>en<span class="op">/</span>products<span class="op">/</span>sku<span class="op">/</span><span class="dv">92991</span><span class="op">/</span>intel<span class="op">-</span>xeon<span class="op">-</span>processor<span class="op">-</span>e51620<span class="op">-</span>v4<span class="op">-</span><span class="dv">10</span><span class="er">m</span><span class="op">-</span>cache<span class="op">-</span><span class="dv">3</span><span class="op">-</span><span class="dv">50</span><span class="op">-</span>ghz<span class="op">/</span>specifications.html).</span>
+<span id="cb26-339"><a href="#cb26-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-340"><a href="#cb26-340" aria-hidden="true" tabindex="-1"></a>The results show that the gain <span class="kw">is</span> less than <span class="cf">with</span> <span class="dv">4</span> physical cores. This <span class="kw">is</span> because the logical cores share the same physical core, <span class="kw">and</span> the overhead of sharing the same physical core <span class="kw">is</span> greater than the gain <span class="im">from</span> parallelization.</span>
+<span id="cb26-341"><a href="#cb26-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-342"><a href="#cb26-342" aria-hidden="true" tabindex="-1"></a>{{<span class="op">&lt;</span> embed <span class="dv">1_1</span><span class="er">_MultiProcessing</span><span class="op">-</span>smt<span class="op">-</span>sol.ipynb<span class="co">#smt-example &gt;}}</span></span>
+<span id="cb26-343"><a href="#cb26-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-344"><a href="#cb26-344" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

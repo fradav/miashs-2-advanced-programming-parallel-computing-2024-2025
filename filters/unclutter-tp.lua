@@ -5,7 +5,7 @@ function Div(element)
   if quarto.doc.input_file:match("-sol%.qmd$") ~= nil or dir:match("Solutions/$") ~= nil then
     return nil
   end
-  if element.classes ~= nil then
+  if element.classes ~= nil and element.classes[1] ~= nil then
     if element.classes[1] == "cell" then
       if element.attr.attributes["tags"] ~= nil then
         tags = element.attr.attributes["tags"]

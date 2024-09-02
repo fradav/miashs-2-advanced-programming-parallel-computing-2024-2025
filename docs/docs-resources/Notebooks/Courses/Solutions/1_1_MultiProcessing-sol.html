@@ -122,7 +122,7 @@ window.Quarto = {
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="1_1_MultiProcessing-sol.ipynb" download="1_1_MultiProcessing-sol.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></div>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="1_1_MultiProcessing-sol.ipynb" download="1_1_MultiProcessing-sol.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div><div class="quarto-alternate-notebooks"><h2>Notebooks</h2><ul><li><a href="1_1_MultiProcessing-smt-sol-preview.html"><i class="bi bi-journal-code"></i>MultiProcessing, Strong Scaling</a></li></ul></div></div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -184,13 +184,13 @@ window.Quarto = {
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>For this TP, set the number of <strong>physical</strong> cores available (8 on the cluster nodes), not the number of logical cores.</p>
-<div id="a043281f" class="cell" data-execution_count="1">
+<div id="a043281f" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ncores <span class="op">=</span> <span class="dv">8</span> <span class="co"># 8 on the cluster nodes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="d54b1ae7" class="cell" data-execution_count="2">
+<div id="d54b1ae7" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -204,7 +204,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="basic-functions">Basic functions</h2>
 <p>Make a function <code>is_prime</code> that tests whether an integer <span class="math inline">n</span> strictly greater than 2 is prime or not.</p>
 <p>Hint: First check that it is not even, then list all odd numbers from 3 to <span class="math inline">\sqrt{n}</span> (upper rounding) and test whether they are factors.</p>
-<div id="887fec1d" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="3">
+<div id="887fec1d" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="4">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_prime(n):</span>
@@ -217,7 +217,7 @@ window.Quarto = {
 </details>
 </div>
 <p>Make a function <code>total_primes</code> that counts the number of primes in a list.</p>
-<div id="eac25e0e" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="4">
+<div id="eac25e0e" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="5">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> total_primes(l):</span>
@@ -231,13 +231,13 @@ window.Quarto = {
 </details>
 </div>
 <p>Calculate the number of primes from 1 to <span class="math inline">N=100 000</span> with this function</p>
-<div id="3b0cbccf" class="cell" data-execution_count="5">
+<div id="3b0cbccf" class="cell" data-execution_count="6">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">100000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="cf99763f" class="cell" data-execution_count="6">
+<div id="cf99763f" class="cell" data-execution_count="7">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -251,7 +251,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="time-measurement">Time measurement</h2>
 <p>Use <code>%timeit</code> to measure the average time taken to count the number of primes up to <span class="math inline">N=100000</span>. (note: by default, <code>timeit</code> repeats the calculation <span class="math inline">7times{}10</span> to obtain a reliable average. Please refer to the <a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html">magic</a> and <a href="https://docs.python.org/3.9/library/timeit.html">timeit</a> docs).</p>
 <p>Store measurements using the -o option in timeit</p>
-<div id="2398b5d9" class="cell" data-execution_count="7">
+<div id="2398b5d9" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -267,7 +267,7 @@ window.Quarto = {
 <p>Our first attempt at multiprocessing will involve partitioning the count into 2. We’ll run two processes in parallel on <span class="math inline">\{1,...,N/2\}</span> and <span class="math inline">\{N/2+1,...,N\}</span>.</p>
 <p>Complete the following code (<a href="https://notebook.community/izapolsk/integration_tests/notebooks/MultiProcessing">source</a>).</p>
 <p>Check the result and the performance gain with <code>%timeit</code>.</p>
-<div id="47464b29" class="cell" data-execution_count="8">
+<div id="47464b29" class="cell" data-execution_count="9">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
@@ -277,7 +277,7 @@ window.Quarto = {
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(total_primes, ...))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="e61befdb" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="9">
+<div id="e61befdb" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
@@ -287,7 +287,7 @@ window.Quarto = {
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(total_primes, [<span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">int</span>(N<span class="op">/</span><span class="dv">2</span>)), <span class="bu">range</span>(<span class="bu">int</span>(N<span class="op">/</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>)]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="70646b02" class="cell" data-execution_count="10">
+<div id="70646b02" class="cell" data-execution_count="11">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>split_total(N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -296,7 +296,7 @@ window.Quarto = {
 <pre><code>9593</code></pre>
 </div>
 </div>
-<div id="24366cca" class="cell" data-execution_count="11">
+<div id="24366cca" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>split_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o split_total(N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -305,7 +305,7 @@ window.Quarto = {
 <pre><code>52 ms ± 103 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="73989247" class="cell" data-execution_count="12">
+<div id="73989247" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with split : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>split_time.average))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -318,7 +318,7 @@ window.Quarto = {
 <section id="generalization" class="level1">
 <h1>Generalization</h1>
 <p>Generalize the function with partitioning into <em>n</em> tasks instead of just 2. We’ll use a generalized <code>multi_process_list</code> function, which takes as arguments : - f<code>the main computation function, which takes an integer list as argument - n</code> the number of partitions (here, one partition = task) - par_f<code>a function which takes as argument a list and a number of partitions to be performed, and returns the list of partitions in this list - l</code> the list to be partitioned</p>
-<div id="782d73cb" class="cell" data-execution_count="13">
+<div id="782d73cb" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_process_list(f,n,par_f,l):</span>
@@ -327,7 +327,7 @@ window.Quarto = {
 </details>
 </div>
 <p>First, we write the <code>naive_par</code> partitioning function.</p>
-<div id="7557fa7e" class="cell" data-execution_count="14">
+<div id="7557fa7e" class="cell" data-execution_count="15">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> naive_par(lst,n):</span>
@@ -336,7 +336,7 @@ window.Quarto = {
 </div>
 <p>We’ll use the <code>chunks</code> function, which partitions a list into chunks of fixed size (except for the last one).</p>
 <p>We’ll test the gain obtained with 8 tasks/partitions.</p>
-<div id="c1e90d67" class="cell" data-execution_count="15">
+<div id="c1e90d67" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chunks(lst, m):</span>
@@ -346,14 +346,14 @@ window.Quarto = {
 </details>
 </div>
 <p>Vérifier le fonctionnement de <code>naive_par</code></p>
-<div id="4ed80ffb" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="16">
+<div id="4ed80ffb" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> naive_par(lst,n):</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> chunks(lst,<span class="bu">int</span>(<span class="bu">len</span>(lst)<span class="op">/</span>n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="55dba53d" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="17">
+<div id="55dba53d" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(naive_par(<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">100001</span>),<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -365,7 +365,7 @@ window.Quarto = {
  range(75001, 100001)]</code></pre>
 </div>
 </div>
-<div id="127bde26" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="18">
+<div id="127bde26" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="19">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_process_list(f,n,par_f,l):</span>
@@ -373,7 +373,7 @@ window.Quarto = {
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(f,par_f(l,n)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="5a637934" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="19">
+<div id="5a637934" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="20">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -382,7 +382,7 @@ window.Quarto = {
 <pre><code>9593</code></pre>
 </div>
 </div>
-<div id="a338f6fe" class="cell" data-execution_count="20">
+<div id="a338f6fe" class="cell" data-execution_count="21">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -391,7 +391,7 @@ window.Quarto = {
 <pre><code>44.2 ms ± 776 μs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="f826bcb9" class="cell" data-execution_count="21">
+<div id="f826bcb9" class="cell" data-execution_count="22">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain avec multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -401,13 +401,13 @@ window.Quarto = {
 </div>
 </div>
 <p>Repeat all calculations and payoff comparisons with <span class="math inline">N=5000000</span>. To avoid long calculation times, we’ll restrict ourselves to a single iteration (option <code>-r 1 -n 1</code> in <code>%timeit</code>).</p>
-<div id="7acd1c9d" class="cell" data-execution_count="22">
+<div id="7acd1c9d" class="cell" data-execution_count="23">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5000000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="f753b824" class="cell" data-execution_count="23">
+<div id="f753b824" class="cell" data-execution_count="24">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
@@ -429,7 +429,7 @@ Gain with multi : 5.7</code></pre>
 <section id="optional-refinement" class="level1">
 <h1>Optional refinement</h1>
 <p>How much time is spent on each task? Use the following function to get an idea. What do you observe?</p>
-<div id="14491883" class="cell" data-execution_count="24">
+<div id="14491883" class="cell" data-execution_count="25">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timed_total_primes(l):</span>
@@ -437,7 +437,7 @@ Gain with multi : 5.7</code></pre>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="86c887fc" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="25">
+<div id="86c887fc" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="26">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>multi_process_list(timed_total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -459,7 +459,7 @@ Gain with multi : 5.7</code></pre>
 <p>How can we solve this problem?</p>
 <p>Find a simple solution that requires only one line of code. Check the execution times of individual tasks.</p>
 <p>Compare again with <span class="math inline">N = 10000000</span> (which will take about 1 minute sequentially).</p>
-<div id="7283a09a" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="26">
+<div id="7283a09a" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="27">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
@@ -469,7 +469,7 @@ Gain with multi : 5.7</code></pre>
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="6faa9636" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="27">
+<div id="6faa9636" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="28">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>multi_process_list(total_primes,ncores,naive_par,shuffled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -478,7 +478,7 @@ Gain with multi : 5.7</code></pre>
 <pre><code>664580</code></pre>
 </div>
 </div>
-<div id="795c55b2" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="28">
+<div id="795c55b2" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="29">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>temps_shuffled <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,shuffled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -487,7 +487,7 @@ Gain with multi : 5.7</code></pre>
 <pre><code>7.76 s ± 0 ns per loop (mean ± std. dev. of 1 run, 1 loop each)</code></pre>
 </div>
 </div>
-<div id="aa78e792" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="29">
+<div id="aa78e792" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="30">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>multi_process_list(timed_total_primes,ncores,naive_par,shuffled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -506,7 +506,7 @@ Gain with multi : 5.7</code></pre>
 <pre><code>0</code></pre>
 </div>
 </div>
-<div id="e3f266df" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="30">
+<div id="e3f266df" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="31">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span>
@@ -529,7 +529,7 @@ Gain with shuffled : 7.1</code></pre>
 <section id="recreational-interlude" class="level1">
 <h1>Recreational interlude</h1>
 <p>If you have a CPU with SMT (Hyperthreading), redo the measurements with <code>ncores</code> equal to the number of logic cores, and explain the results.</p>
-<div id="0daa1420" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="31">
+<div id="0daa1420" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="32">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>ncores <span class="op">=</span> <span class="dv">8</span> <span class="co"># On a machine with 4 physical cores/8 logical cores</span></span>
@@ -542,6 +542,21 @@ Gain with shuffled : 7.1</code></pre>
 <span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
 <span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with shuffled : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>shuffled_time.average))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+</div>
+<div class="solution-box">
+<p>This has been run on a machine with 4 physical cores and 8 logical cores, <a href="https://www.intel.com/content/www/us/en/products/sku/92991/intel-xeon-processor-e51620-v4-10m-cache-3-50-ghz/specifications.html">Intel Xeon CPU E5-1620 v4</a>.</p>
+<p>The results show that the gain is less than with 4 physical cores. This is because the logical cores share the same physical core, and the overhead of sharing the same physical core is greater than the gain from parallelization.</p>
+<div class="quarto-embed-nb-cell">
+<div id="585704c9" class="cell" data-tags="[&quot;solution&quot;,&quot;smt-example&quot;]" data-execution_count="12">
+<div class="cell-output cell-output-stdout">
+<pre><code>37.4 s ± 0 ns per loop (mean ± std. dev. of 1 run, 1 loop each)
+12.1 s ± 0 ns per loop (mean ± std. dev. of 1 run, 1 loop each)
+12.9 s ± 0 ns per loop (mean ± std. dev. of 1 run, 1 loop each)
+Gain with multi : 3.1
+Gain with shuffled : 2.9</code></pre>
+</div>
+</div>
+<a class="quarto-notebook-link" id="nblink-1" href="1_1_MultiProcessing-smt-sol-preview.html#585704c9">Source: MultiProcessing, Strong Scaling</a></div>
 </div>
 <!-- -->
 
@@ -1164,277 +1179,288 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb49" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> MultiProcessing, Strong Scaling</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## ⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️</span></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a> Under _Windows_, with python the multiprocessing module <span class="in">`multiprocessing`</span> works in a normal script but **not in notebooks**.</span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>If you absolutely must use Windows, use<span class="co">[</span><span class="ot">WSL</span><span class="co">](https://docs.microsoft.com/fr-fr/windows/wsl/)</span></span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># Strong Scaling</span></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>For this TP, set the number of **physical** cores available (8 on the cluster nodes), not the number of logical cores.</span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>ncores <span class="op">=</span> <span class="dv">8</span> <span class="co"># 8 on the cluster nodes</span></span>
-<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
-<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
-<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Basic functions</span></span>
-<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a>Make a function <span class="in">`is_prime`</span> that tests whether an integer $n$ strictly greater than 2 is prime or not.</span>
-<span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-34"><a href="#cb49-34" aria-hidden="true" tabindex="-1"></a>Hint: First check that it is not even, then list all odd numbers from 3 to $\sqrt{n}$ (upper rounding) and test whether they are factors.</span>
-<span id="cb49-35"><a href="#cb49-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-38"><a href="#cb49-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-39"><a href="#cb49-39" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-40"><a href="#cb49-40" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_prime(n):</span>
-<span id="cb49-41"><a href="#cb49-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb49-42"><a href="#cb49-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb49-43"><a href="#cb49-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>, <span class="bu">int</span>(math.sqrt(n)) <span class="op">+</span> <span class="dv">1</span>, <span class="dv">2</span>):</span>
-<span id="cb49-44"><a href="#cb49-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> n <span class="op">%</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb49-45"><a href="#cb49-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
-<span id="cb49-46"><a href="#cb49-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
-<span id="cb49-47"><a href="#cb49-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-48"><a href="#cb49-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-49"><a href="#cb49-49" aria-hidden="true" tabindex="-1"></a>Make a function <span class="in">`total_primes`</span> that counts the number of primes in a list.</span>
-<span id="cb49-50"><a href="#cb49-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-53"><a href="#cb49-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-54"><a href="#cb49-54" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-55"><a href="#cb49-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> total_primes(l):</span>
-<span id="cb49-56"><a href="#cb49-56" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb49-57"><a href="#cb49-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> l:</span>
-<span id="cb49-58"><a href="#cb49-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (i <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (i <span class="op">&lt;=</span> <span class="dv">2</span>):</span>
-<span id="cb49-59"><a href="#cb49-59" aria-hidden="true" tabindex="-1"></a>            n<span class="op">=</span>n<span class="op">+</span><span class="dv">1</span></span>
-<span id="cb49-60"><a href="#cb49-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> is_prime(i):</span>
-<span id="cb49-61"><a href="#cb49-61" aria-hidden="true" tabindex="-1"></a>            n<span class="op">=</span>n<span class="op">+</span><span class="dv">1</span>                </span>
-<span id="cb49-62"><a href="#cb49-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n</span>
-<span id="cb49-63"><a href="#cb49-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-64"><a href="#cb49-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-65"><a href="#cb49-65" aria-hidden="true" tabindex="-1"></a>Calculate the number of primes from 1 to $N=100 000$ with this function</span>
-<span id="cb49-66"><a href="#cb49-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-69"><a href="#cb49-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-70"><a href="#cb49-70" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">100000</span></span>
-<span id="cb49-71"><a href="#cb49-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-72"><a href="#cb49-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-75"><a href="#cb49-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-76"><a href="#cb49-76" aria-hidden="true" tabindex="-1"></a>total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-77"><a href="#cb49-77" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-78"><a href="#cb49-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-79"><a href="#cb49-79" aria-hidden="true" tabindex="-1"></a><span class="fu">## Time measurement</span></span>
-<span id="cb49-80"><a href="#cb49-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-81"><a href="#cb49-81" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`%timeit`</span> to measure the average time taken to count the number of primes up to $N=100000$.</span>
-<span id="cb49-82"><a href="#cb49-82" aria-hidden="true" tabindex="-1"></a>(note: by default, <span class="in">`timeit`</span> repeats the calculation $7times{}10$ to obtain a reliable average. Please refer to the <span class="co">[</span><span class="ot">magic</span><span class="co">](https://ipython.readthedocs.io/en/stable/interactive/magics.html)</span> and <span class="co">[</span><span class="ot">timeit</span><span class="co">](https://docs.python.org/3.9/library/timeit.html)</span> docs).</span>
-<span id="cb49-83"><a href="#cb49-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-84"><a href="#cb49-84" aria-hidden="true" tabindex="-1"></a>Store measurements using the -o option in timeit</span>
-<span id="cb49-85"><a href="#cb49-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-88"><a href="#cb49-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-89"><a href="#cb49-89" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-90"><a href="#cb49-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-91"><a href="#cb49-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-92"><a href="#cb49-92" aria-hidden="true" tabindex="-1"></a><span class="fu"># First steps</span></span>
-<span id="cb49-93"><a href="#cb49-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-94"><a href="#cb49-94" aria-hidden="true" tabindex="-1"></a>Our first attempt at multiprocessing will involve partitioning the count into 2. We'll run two processes in parallel on $<span class="sc">\{</span>1,...,N/2<span class="sc">\}</span>$ and $<span class="sc">\{</span>N/2+1,...,N<span class="sc">\}</span>$.</span>
-<span id="cb49-95"><a href="#cb49-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-96"><a href="#cb49-96" aria-hidden="true" tabindex="-1"></a>Complete the following code (<span class="co">[</span><span class="ot">source</span><span class="co">](https://notebook.community/izapolsk/integration_tests/notebooks/MultiProcessing)</span>).</span>
-<span id="cb49-97"><a href="#cb49-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-98"><a href="#cb49-98" aria-hidden="true" tabindex="-1"></a>Check the result and the performance gain with <span class="in">`%timeit`</span>.</span>
-<span id="cb49-99"><a href="#cb49-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-102"><a href="#cb49-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-103"><a href="#cb49-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb49-104"><a href="#cb49-104" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
-<span id="cb49-105"><a href="#cb49-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-106"><a href="#cb49-106" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_total(N):</span>
-<span id="cb49-107"><a href="#cb49-107" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(<span class="dv">2</span>) <span class="im">as</span> pool:</span>
-<span id="cb49-108"><a href="#cb49-108" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(total_primes, ...))</span>
-<span id="cb49-109"><a href="#cb49-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-110"><a href="#cb49-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-113"><a href="#cb49-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-114"><a href="#cb49-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-115"><a href="#cb49-115" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
-<span id="cb49-116"><a href="#cb49-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-117"><a href="#cb49-117" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_total(N):</span>
-<span id="cb49-118"><a href="#cb49-118" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(<span class="dv">2</span>) <span class="im">as</span> pool:</span>
-<span id="cb49-119"><a href="#cb49-119" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(total_primes, [<span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">int</span>(N<span class="op">/</span><span class="dv">2</span>)), <span class="bu">range</span>(<span class="bu">int</span>(N<span class="op">/</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>)]))</span>
-<span id="cb49-120"><a href="#cb49-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-121"><a href="#cb49-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-124"><a href="#cb49-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-125"><a href="#cb49-125" aria-hidden="true" tabindex="-1"></a>split_total(N)</span>
-<span id="cb49-126"><a href="#cb49-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-127"><a href="#cb49-127" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-130"><a href="#cb49-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-131"><a href="#cb49-131" aria-hidden="true" tabindex="-1"></a>split_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o split_total(N)</span>
-<span id="cb49-132"><a href="#cb49-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-133"><a href="#cb49-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-136"><a href="#cb49-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-137"><a href="#cb49-137" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with split : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>split_time.average))</span>
-<span id="cb49-138"><a href="#cb49-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb49-139"><a href="#cb49-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-140"><a href="#cb49-140" aria-hidden="true" tabindex="-1"></a><span class="fu"># Generalization</span></span>
-<span id="cb49-141"><a href="#cb49-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-142"><a href="#cb49-142" aria-hidden="true" tabindex="-1"></a>Generalize the function with partitioning into *n* tasks instead of just 2. We'll use a generalized <span class="in">`multi_process_list`</span> function, which takes as arguments :</span>
-<span id="cb49-143"><a href="#cb49-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>f` the main computation function, which takes an integer list as argument</span>
-<span id="cb49-144"><a href="#cb49-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>n` the number of partitions (here, one partition = task)</span>
-<span id="cb49-145"><a href="#cb49-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>par_f` a function which takes as argument a list and a number of partitions to be performed, and returns the list of partitions in this list</span>
-<span id="cb49-146"><a href="#cb49-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>l` the list to be partitioned</span>
-<span id="cb49-147"><a href="#cb49-147" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-150"><a href="#cb49-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-151"><a href="#cb49-151" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb49-152"><a href="#cb49-152" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_process_list(f,n,par_f,l):</span>
-<span id="cb49-153"><a href="#cb49-153" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(ncores) <span class="im">as</span> pool:</span>
-<span id="cb49-154"><a href="#cb49-154" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(...)</span>
-<span id="cb49-155"><a href="#cb49-155" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-156"><a href="#cb49-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-157"><a href="#cb49-157" aria-hidden="true" tabindex="-1"></a>First, we write the `naive_par` partitioning function.</span>
-<span id="cb49-158"><a href="#cb49-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-161"><a href="#cb49-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-162"><a href="#cb49-162" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb49-163"><a href="#cb49-163" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> naive_par(lst,n):</span>
-<span id="cb49-164"><a href="#cb49-164" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ...</span>
-<span id="cb49-165"><a href="#cb49-165" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-166"><a href="#cb49-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-167"><a href="#cb49-167" aria-hidden="true" tabindex="-1"></a>We<span class="st">'ll use the `chunks` function, which partitions a list into chunks of fixed size (except for the last one).</span></span>
-<span id="cb49-168"><a href="#cb49-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-169"><a href="#cb49-169" aria-hidden="true" tabindex="-1"></a><span class="er">We'll test the gain obtained with 8 tasks/partitions.</span></span>
-<span id="cb49-170"><a href="#cb49-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-173"><a href="#cb49-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-174"><a href="#cb49-174" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chunks(lst, m):</span>
-<span id="cb49-175"><a href="#cb49-175" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""Yield successive m-sized chunks from lst."""</span></span>
-<span id="cb49-176"><a href="#cb49-176" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(lst), m):</span>
-<span id="cb49-177"><a href="#cb49-177" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> lst[i:i <span class="op">+</span> m]</span>
-<span id="cb49-178"><a href="#cb49-178" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-179"><a href="#cb49-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-180"><a href="#cb49-180" aria-hidden="true" tabindex="-1"></a>Vérifier le fonctionnement de `naive_par`</span>
-<span id="cb49-181"><a href="#cb49-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-184"><a href="#cb49-184" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-185"><a href="#cb49-185" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-186"><a href="#cb49-186" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> naive_par(lst,n):</span>
-<span id="cb49-187"><a href="#cb49-187" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> chunks(lst,<span class="bu">int</span>(<span class="bu">len</span>(lst)<span class="op">/</span>n))</span>
-<span id="cb49-188"><a href="#cb49-188" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-189"><a href="#cb49-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-192"><a href="#cb49-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-193"><a href="#cb49-193" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-194"><a href="#cb49-194" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(naive_par(<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">100001</span>),<span class="dv">4</span>))</span>
-<span id="cb49-195"><a href="#cb49-195" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-196"><a href="#cb49-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-199"><a href="#cb49-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-200"><a href="#cb49-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-201"><a href="#cb49-201" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_process_list(f,n,par_f,l):</span>
-<span id="cb49-202"><a href="#cb49-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(n) <span class="im">as</span> pool:</span>
-<span id="cb49-203"><a href="#cb49-203" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(f,par_f(l,n)))</span>
-<span id="cb49-204"><a href="#cb49-204" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-205"><a href="#cb49-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-208"><a href="#cb49-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-209"><a href="#cb49-209" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-210"><a href="#cb49-210" aria-hidden="true" tabindex="-1"></a>multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-211"><a href="#cb49-211" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-212"><a href="#cb49-212" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-215"><a href="#cb49-215" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-216"><a href="#cb49-216" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-217"><a href="#cb49-217" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-218"><a href="#cb49-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-221"><a href="#cb49-221" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-222"><a href="#cb49-222" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain avec multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
-<span id="cb49-223"><a href="#cb49-223" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-224"><a href="#cb49-224" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-225"><a href="#cb49-225" aria-hidden="true" tabindex="-1"></a>Repeat <span class="bu">all</span> calculations <span class="kw">and</span> payoff comparisons <span class="cf">with</span> $N<span class="op">=</span><span class="dv">5000000</span>$. To avoid <span class="bu">long</span> calculation times, we<span class="st">'ll restrict ourselves to a single iteration (option `-r 1 -n 1` in `%timeit`).</span></span>
-<span id="cb49-226"><a href="#cb49-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-229"><a href="#cb49-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-230"><a href="#cb49-230" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5000000</span></span>
-<span id="cb49-231"><a href="#cb49-231" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-232"><a href="#cb49-232" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-235"><a href="#cb49-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-236"><a href="#cb49-236" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-237"><a href="#cb49-237" aria-hidden="true" tabindex="-1"></a>split_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o split_total(N)</span>
-<span id="cb49-238"><a href="#cb49-238" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-239"><a href="#cb49-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-240"><a href="#cb49-240" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with split : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>split_time.average))</span>
-<span id="cb49-241"><a href="#cb49-241" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
-<span id="cb49-242"><a href="#cb49-242" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-243"><a href="#cb49-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-244"><a href="#cb49-244" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional refinement</span></span>
-<span id="cb49-245"><a href="#cb49-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-246"><a href="#cb49-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-247"><a href="#cb49-247" aria-hidden="true" tabindex="-1"></a>How much time <span class="kw">is</span> spent on each task? Use the following function to get an idea. What do you observe?</span>
-<span id="cb49-248"><a href="#cb49-248" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-251"><a href="#cb49-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-252"><a href="#cb49-252" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timed_total_primes(l):</span>
-<span id="cb49-253"><a href="#cb49-253" aria-hidden="true" tabindex="-1"></a>    <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> total_primes(l)</span>
-<span id="cb49-254"><a href="#cb49-254" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span></span>
-<span id="cb49-255"><a href="#cb49-255" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-256"><a href="#cb49-256" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-259"><a href="#cb49-259" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-260"><a href="#cb49-260" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-261"><a href="#cb49-261" aria-hidden="true" tabindex="-1"></a>multi_process_list(timed_total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-262"><a href="#cb49-262" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-263"><a href="#cb49-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-264"><a href="#cb49-264" aria-hidden="true" tabindex="-1"></a>How can we solve this problem?</span>
-<span id="cb49-265"><a href="#cb49-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-266"><a href="#cb49-266" aria-hidden="true" tabindex="-1"></a>Find a simple solution that requires only one line of code. Check the execution times of individual tasks.</span>
-<span id="cb49-267"><a href="#cb49-267" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-268"><a href="#cb49-268" aria-hidden="true" tabindex="-1"></a>Compare again <span class="cf">with</span> $N <span class="op">=</span> <span class="dv">10000000</span>$ (which will take about <span class="dv">1</span> minute sequentially).</span>
-<span id="cb49-269"><a href="#cb49-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-272"><a href="#cb49-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-273"><a href="#cb49-273" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-274"><a href="#cb49-274" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
-<span id="cb49-275"><a href="#cb49-275" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-276"><a href="#cb49-276" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">10000000</span></span>
-<span id="cb49-277"><a href="#cb49-277" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-278"><a href="#cb49-278" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span>
-<span id="cb49-279"><a href="#cb49-279" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-280"><a href="#cb49-280" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-283"><a href="#cb49-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-284"><a href="#cb49-284" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-285"><a href="#cb49-285" aria-hidden="true" tabindex="-1"></a>multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
-<span id="cb49-286"><a href="#cb49-286" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-287"><a href="#cb49-287" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-290"><a href="#cb49-290" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-291"><a href="#cb49-291" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-292"><a href="#cb49-292" aria-hidden="true" tabindex="-1"></a>temps_shuffled <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
-<span id="cb49-293"><a href="#cb49-293" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-294"><a href="#cb49-294" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-297"><a href="#cb49-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-298"><a href="#cb49-298" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-299"><a href="#cb49-299" aria-hidden="true" tabindex="-1"></a>multi_process_list(timed_total_primes,ncores,naive_par,shuffled)</span>
-<span id="cb49-300"><a href="#cb49-300" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-301"><a href="#cb49-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-304"><a href="#cb49-304" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-305"><a href="#cb49-305" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-306"><a href="#cb49-306" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span>
-<span id="cb49-307"><a href="#cb49-307" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-308"><a href="#cb49-308" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-309"><a href="#cb49-309" aria-hidden="true" tabindex="-1"></a>shuffled_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
-<span id="cb49-310"><a href="#cb49-310" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-311"><a href="#cb49-311" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
-<span id="cb49-312"><a href="#cb49-312" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with shuffled : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>shuffled_time.average))</span>
-<span id="cb49-313"><a href="#cb49-313" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb49-314"><a href="#cb49-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-315"><a href="#cb49-315" aria-hidden="true" tabindex="-1"></a><span class="co"># Recreational interlude</span></span>
-<span id="cb49-316"><a href="#cb49-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-317"><a href="#cb49-317" aria-hidden="true" tabindex="-1"></a>If you have a CPU <span class="cf">with</span> SMT (Hyperthreading), redo the measurements <span class="cf">with</span> `ncores` equal to the number of logic cores, <span class="kw">and</span> explain the results.</span>
-<span id="cb49-318"><a href="#cb49-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-321"><a href="#cb49-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb49-322"><a href="#cb49-322" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
-<span id="cb49-323"><a href="#cb49-323" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
-<span id="cb49-324"><a href="#cb49-324" aria-hidden="true" tabindex="-1"></a>ncores <span class="op">=</span> <span class="dv">8</span> <span class="co"># On a machine with 4 physical cores/8 logical cores</span></span>
-<span id="cb49-325"><a href="#cb49-325" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-326"><a href="#cb49-326" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span>
-<span id="cb49-327"><a href="#cb49-327" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-328"><a href="#cb49-328" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
-<span id="cb49-329"><a href="#cb49-329" aria-hidden="true" tabindex="-1"></a>shuffled_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
-<span id="cb49-330"><a href="#cb49-330" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-331"><a href="#cb49-331" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
-<span id="cb49-332"><a href="#cb49-332" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with shuffled : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>shuffled_time.average))</span>
-<span id="cb49-333"><a href="#cb49-333" aria-hidden="true" tabindex="-1"></a>```</span>
+<div class="sourceCode" id="cb50" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> MultiProcessing, Strong Scaling</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## ⚠️⚠️⚠️⚠️ Attention ⚠️⚠️⚠️⚠️</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a> Under _Windows_, with python the multiprocessing module <span class="in">`multiprocessing`</span> works in a normal script but **not in notebooks**.</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>If you absolutely must use Windows, use<span class="co">[</span><span class="ot">WSL</span><span class="co">](https://docs.microsoft.com/fr-fr/windows/wsl/)</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="fu"># Strong Scaling</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## Prerequisites</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>For this TP, set the number of **physical** cores available (8 on the cluster nodes), not the number of logical cores.</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>ncores <span class="op">=</span> <span class="dv">8</span> <span class="co"># 8 on the cluster nodes</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a><span class="fu"># Introduction</span></span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Basic functions</span></span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>Make a function <span class="in">`is_prime`</span> that tests whether an integer $n$ strictly greater than 2 is prime or not.</span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a>Hint: First check that it is not even, then list all odd numbers from 3 to $\sqrt{n}$ (upper rounding) and test whether they are factors.</span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_prime(n):</span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>, <span class="bu">int</span>(math.sqrt(n)) <span class="op">+</span> <span class="dv">1</span>, <span class="dv">2</span>):</span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> n <span class="op">%</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a>Make a function <span class="in">`total_primes`</span> that counts the number of primes in a list.</span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> total_primes(l):</span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> l:</span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (i <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (i <span class="op">&lt;=</span> <span class="dv">2</span>):</span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a>            n<span class="op">=</span>n<span class="op">+</span><span class="dv">1</span></span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> is_prime(i):</span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a>            n<span class="op">=</span>n<span class="op">+</span><span class="dv">1</span>                </span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> n</span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-65"><a href="#cb50-65" aria-hidden="true" tabindex="-1"></a>Calculate the number of primes from 1 to $N=100 000$ with this function</span>
+<span id="cb50-66"><a href="#cb50-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-69"><a href="#cb50-69" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-70"><a href="#cb50-70" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">100000</span></span>
+<span id="cb50-71"><a href="#cb50-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-72"><a href="#cb50-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-75"><a href="#cb50-75" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-76"><a href="#cb50-76" aria-hidden="true" tabindex="-1"></a>total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-77"><a href="#cb50-77" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-78"><a href="#cb50-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-79"><a href="#cb50-79" aria-hidden="true" tabindex="-1"></a><span class="fu">## Time measurement</span></span>
+<span id="cb50-80"><a href="#cb50-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-81"><a href="#cb50-81" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`%timeit`</span> to measure the average time taken to count the number of primes up to $N=100000$.</span>
+<span id="cb50-82"><a href="#cb50-82" aria-hidden="true" tabindex="-1"></a>(note: by default, <span class="in">`timeit`</span> repeats the calculation $7times{}10$ to obtain a reliable average. Please refer to the <span class="co">[</span><span class="ot">magic</span><span class="co">](https://ipython.readthedocs.io/en/stable/interactive/magics.html)</span> and <span class="co">[</span><span class="ot">timeit</span><span class="co">](https://docs.python.org/3.9/library/timeit.html)</span> docs).</span>
+<span id="cb50-83"><a href="#cb50-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-84"><a href="#cb50-84" aria-hidden="true" tabindex="-1"></a>Store measurements using the -o option in timeit</span>
+<span id="cb50-85"><a href="#cb50-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-88"><a href="#cb50-88" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-89"><a href="#cb50-89" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-90"><a href="#cb50-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-91"><a href="#cb50-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-92"><a href="#cb50-92" aria-hidden="true" tabindex="-1"></a><span class="fu"># First steps</span></span>
+<span id="cb50-93"><a href="#cb50-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-94"><a href="#cb50-94" aria-hidden="true" tabindex="-1"></a>Our first attempt at multiprocessing will involve partitioning the count into 2. We'll run two processes in parallel on $<span class="sc">\{</span>1,...,N/2<span class="sc">\}</span>$ and $<span class="sc">\{</span>N/2+1,...,N<span class="sc">\}</span>$.</span>
+<span id="cb50-95"><a href="#cb50-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-96"><a href="#cb50-96" aria-hidden="true" tabindex="-1"></a>Complete the following code (<span class="co">[</span><span class="ot">source</span><span class="co">](https://notebook.community/izapolsk/integration_tests/notebooks/MultiProcessing)</span>).</span>
+<span id="cb50-97"><a href="#cb50-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-98"><a href="#cb50-98" aria-hidden="true" tabindex="-1"></a>Check the result and the performance gain with <span class="in">`%timeit`</span>.</span>
+<span id="cb50-99"><a href="#cb50-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-102"><a href="#cb50-102" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-103"><a href="#cb50-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb50-104"><a href="#cb50-104" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
+<span id="cb50-105"><a href="#cb50-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-106"><a href="#cb50-106" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_total(N):</span>
+<span id="cb50-107"><a href="#cb50-107" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(<span class="dv">2</span>) <span class="im">as</span> pool:</span>
+<span id="cb50-108"><a href="#cb50-108" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(total_primes, ...))</span>
+<span id="cb50-109"><a href="#cb50-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-110"><a href="#cb50-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-113"><a href="#cb50-113" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-114"><a href="#cb50-114" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-115"><a href="#cb50-115" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
+<span id="cb50-116"><a href="#cb50-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-117"><a href="#cb50-117" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> split_total(N):</span>
+<span id="cb50-118"><a href="#cb50-118" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(<span class="dv">2</span>) <span class="im">as</span> pool:</span>
+<span id="cb50-119"><a href="#cb50-119" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(total_primes, [<span class="bu">range</span>(<span class="dv">1</span>,<span class="bu">int</span>(N<span class="op">/</span><span class="dv">2</span>)), <span class="bu">range</span>(<span class="bu">int</span>(N<span class="op">/</span><span class="dv">2</span>)<span class="op">+</span><span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>)]))</span>
+<span id="cb50-120"><a href="#cb50-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-121"><a href="#cb50-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-124"><a href="#cb50-124" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-125"><a href="#cb50-125" aria-hidden="true" tabindex="-1"></a>split_total(N)</span>
+<span id="cb50-126"><a href="#cb50-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-127"><a href="#cb50-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-130"><a href="#cb50-130" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-131"><a href="#cb50-131" aria-hidden="true" tabindex="-1"></a>split_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o split_total(N)</span>
+<span id="cb50-132"><a href="#cb50-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-133"><a href="#cb50-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-136"><a href="#cb50-136" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-137"><a href="#cb50-137" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with split : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>split_time.average))</span>
+<span id="cb50-138"><a href="#cb50-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb50-139"><a href="#cb50-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-140"><a href="#cb50-140" aria-hidden="true" tabindex="-1"></a><span class="fu"># Generalization</span></span>
+<span id="cb50-141"><a href="#cb50-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-142"><a href="#cb50-142" aria-hidden="true" tabindex="-1"></a>Generalize the function with partitioning into *n* tasks instead of just 2. We'll use a generalized <span class="in">`multi_process_list`</span> function, which takes as arguments :</span>
+<span id="cb50-143"><a href="#cb50-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>f` the main computation function, which takes an integer list as argument</span>
+<span id="cb50-144"><a href="#cb50-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>n` the number of partitions (here, one partition = task)</span>
+<span id="cb50-145"><a href="#cb50-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>par_f` a function which takes as argument a list and a number of partitions to be performed, and returns the list of partitions in this list</span>
+<span id="cb50-146"><a href="#cb50-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>l` the list to be partitioned</span>
+<span id="cb50-147"><a href="#cb50-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-150"><a href="#cb50-150" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-151"><a href="#cb50-151" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb50-152"><a href="#cb50-152" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_process_list(f,n,par_f,l):</span>
+<span id="cb50-153"><a href="#cb50-153" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(ncores) <span class="im">as</span> pool:</span>
+<span id="cb50-154"><a href="#cb50-154" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(...)</span>
+<span id="cb50-155"><a href="#cb50-155" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-156"><a href="#cb50-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-157"><a href="#cb50-157" aria-hidden="true" tabindex="-1"></a>First, we write the `naive_par` partitioning function.</span>
+<span id="cb50-158"><a href="#cb50-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-161"><a href="#cb50-161" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-162"><a href="#cb50-162" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb50-163"><a href="#cb50-163" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> naive_par(lst,n):</span>
+<span id="cb50-164"><a href="#cb50-164" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ...</span>
+<span id="cb50-165"><a href="#cb50-165" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-166"><a href="#cb50-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-167"><a href="#cb50-167" aria-hidden="true" tabindex="-1"></a>We<span class="st">'ll use the `chunks` function, which partitions a list into chunks of fixed size (except for the last one).</span></span>
+<span id="cb50-168"><a href="#cb50-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-169"><a href="#cb50-169" aria-hidden="true" tabindex="-1"></a><span class="er">We'll test the gain obtained with 8 tasks/partitions.</span></span>
+<span id="cb50-170"><a href="#cb50-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-173"><a href="#cb50-173" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-174"><a href="#cb50-174" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> chunks(lst, m):</span>
+<span id="cb50-175"><a href="#cb50-175" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""Yield successive m-sized chunks from lst."""</span></span>
+<span id="cb50-176"><a href="#cb50-176" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(lst), m):</span>
+<span id="cb50-177"><a href="#cb50-177" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> lst[i:i <span class="op">+</span> m]</span>
+<span id="cb50-178"><a href="#cb50-178" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-179"><a href="#cb50-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-180"><a href="#cb50-180" aria-hidden="true" tabindex="-1"></a>Vérifier le fonctionnement de `naive_par`</span>
+<span id="cb50-181"><a href="#cb50-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-184"><a href="#cb50-184" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-185"><a href="#cb50-185" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-186"><a href="#cb50-186" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> naive_par(lst,n):</span>
+<span id="cb50-187"><a href="#cb50-187" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> chunks(lst,<span class="bu">int</span>(<span class="bu">len</span>(lst)<span class="op">/</span>n))</span>
+<span id="cb50-188"><a href="#cb50-188" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-189"><a href="#cb50-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-192"><a href="#cb50-192" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-193"><a href="#cb50-193" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-194"><a href="#cb50-194" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(naive_par(<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">100001</span>),<span class="dv">4</span>))</span>
+<span id="cb50-195"><a href="#cb50-195" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-196"><a href="#cb50-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-199"><a href="#cb50-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-200"><a href="#cb50-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-201"><a href="#cb50-201" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> multi_process_list(f,n,par_f,l):</span>
+<span id="cb50-202"><a href="#cb50-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Pool(n) <span class="im">as</span> pool:</span>
+<span id="cb50-203"><a href="#cb50-203" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(pool.<span class="bu">map</span>(f,par_f(l,n)))</span>
+<span id="cb50-204"><a href="#cb50-204" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-205"><a href="#cb50-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-208"><a href="#cb50-208" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-209"><a href="#cb50-209" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-210"><a href="#cb50-210" aria-hidden="true" tabindex="-1"></a>multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-211"><a href="#cb50-211" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-212"><a href="#cb50-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-215"><a href="#cb50-215" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-216"><a href="#cb50-216" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-217"><a href="#cb50-217" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-218"><a href="#cb50-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-221"><a href="#cb50-221" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-222"><a href="#cb50-222" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain avec multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
+<span id="cb50-223"><a href="#cb50-223" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-224"><a href="#cb50-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-225"><a href="#cb50-225" aria-hidden="true" tabindex="-1"></a>Repeat <span class="bu">all</span> calculations <span class="kw">and</span> payoff comparisons <span class="cf">with</span> $N<span class="op">=</span><span class="dv">5000000</span>$. To avoid <span class="bu">long</span> calculation times, we<span class="st">'ll restrict ourselves to a single iteration (option `-r 1 -n 1` in `%timeit`).</span></span>
+<span id="cb50-226"><a href="#cb50-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-229"><a href="#cb50-229" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-230"><a href="#cb50-230" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5000000</span></span>
+<span id="cb50-231"><a href="#cb50-231" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-232"><a href="#cb50-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-235"><a href="#cb50-235" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-236"><a href="#cb50-236" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-237"><a href="#cb50-237" aria-hidden="true" tabindex="-1"></a>split_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o split_total(N)</span>
+<span id="cb50-238"><a href="#cb50-238" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-239"><a href="#cb50-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-240"><a href="#cb50-240" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with split : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>split_time.average))</span>
+<span id="cb50-241"><a href="#cb50-241" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
+<span id="cb50-242"><a href="#cb50-242" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-243"><a href="#cb50-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-244"><a href="#cb50-244" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional refinement</span></span>
+<span id="cb50-245"><a href="#cb50-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-246"><a href="#cb50-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-247"><a href="#cb50-247" aria-hidden="true" tabindex="-1"></a>How much time <span class="kw">is</span> spent on each task? Use the following function to get an idea. What do you observe?</span>
+<span id="cb50-248"><a href="#cb50-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-251"><a href="#cb50-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-252"><a href="#cb50-252" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timed_total_primes(l):</span>
+<span id="cb50-253"><a href="#cb50-253" aria-hidden="true" tabindex="-1"></a>    <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> total_primes(l)</span>
+<span id="cb50-254"><a href="#cb50-254" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb50-255"><a href="#cb50-255" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-256"><a href="#cb50-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-259"><a href="#cb50-259" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-260"><a href="#cb50-260" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-261"><a href="#cb50-261" aria-hidden="true" tabindex="-1"></a>multi_process_list(timed_total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-262"><a href="#cb50-262" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-263"><a href="#cb50-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-264"><a href="#cb50-264" aria-hidden="true" tabindex="-1"></a>How can we solve this problem?</span>
+<span id="cb50-265"><a href="#cb50-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-266"><a href="#cb50-266" aria-hidden="true" tabindex="-1"></a>Find a simple solution that requires only one line of code. Check the execution times of individual tasks.</span>
+<span id="cb50-267"><a href="#cb50-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-268"><a href="#cb50-268" aria-hidden="true" tabindex="-1"></a>Compare again <span class="cf">with</span> $N <span class="op">=</span> <span class="dv">10000000</span>$ (which will take about <span class="dv">1</span> minute sequentially).</span>
+<span id="cb50-269"><a href="#cb50-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-272"><a href="#cb50-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-273"><a href="#cb50-273" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-274"><a href="#cb50-274" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb50-275"><a href="#cb50-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-276"><a href="#cb50-276" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">10000000</span></span>
+<span id="cb50-277"><a href="#cb50-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-278"><a href="#cb50-278" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span>
+<span id="cb50-279"><a href="#cb50-279" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-280"><a href="#cb50-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-283"><a href="#cb50-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-284"><a href="#cb50-284" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-285"><a href="#cb50-285" aria-hidden="true" tabindex="-1"></a>multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
+<span id="cb50-286"><a href="#cb50-286" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-287"><a href="#cb50-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-290"><a href="#cb50-290" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-291"><a href="#cb50-291" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-292"><a href="#cb50-292" aria-hidden="true" tabindex="-1"></a>temps_shuffled <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
+<span id="cb50-293"><a href="#cb50-293" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-294"><a href="#cb50-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-297"><a href="#cb50-297" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-298"><a href="#cb50-298" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-299"><a href="#cb50-299" aria-hidden="true" tabindex="-1"></a>multi_process_list(timed_total_primes,ncores,naive_par,shuffled)</span>
+<span id="cb50-300"><a href="#cb50-300" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-301"><a href="#cb50-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-304"><a href="#cb50-304" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-305"><a href="#cb50-305" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-306"><a href="#cb50-306" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span>
+<span id="cb50-307"><a href="#cb50-307" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-308"><a href="#cb50-308" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-309"><a href="#cb50-309" aria-hidden="true" tabindex="-1"></a>shuffled_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
+<span id="cb50-310"><a href="#cb50-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-311"><a href="#cb50-311" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
+<span id="cb50-312"><a href="#cb50-312" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with shuffled : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>shuffled_time.average))</span>
+<span id="cb50-313"><a href="#cb50-313" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-314"><a href="#cb50-314" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-315"><a href="#cb50-315" aria-hidden="true" tabindex="-1"></a><span class="co"># Recreational interlude</span></span>
+<span id="cb50-316"><a href="#cb50-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-317"><a href="#cb50-317" aria-hidden="true" tabindex="-1"></a>If you have a CPU <span class="cf">with</span> SMT (Hyperthreading), redo the measurements <span class="cf">with</span> `ncores` equal to the number of logic cores, <span class="kw">and</span> explain the results.</span>
+<span id="cb50-318"><a href="#cb50-318" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-321"><a href="#cb50-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb50-322"><a href="#cb50-322" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb50-323"><a href="#cb50-323" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb50-324"><a href="#cb50-324" aria-hidden="true" tabindex="-1"></a>ncores <span class="op">=</span> <span class="dv">8</span> <span class="co"># On a machine with 4 physical cores/8 logical cores</span></span>
+<span id="cb50-325"><a href="#cb50-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-326"><a href="#cb50-326" aria-hidden="true" tabindex="-1"></a>shuffled <span class="op">=</span> random.sample(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>),N)</span>
+<span id="cb50-327"><a href="#cb50-327" aria-hidden="true" tabindex="-1"></a>orig_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o total_primes(<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-328"><a href="#cb50-328" aria-hidden="true" tabindex="-1"></a>multi_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,<span class="bu">range</span>(<span class="dv">1</span>,N<span class="op">+</span><span class="dv">1</span>))</span>
+<span id="cb50-329"><a href="#cb50-329" aria-hidden="true" tabindex="-1"></a>shuffled_time <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>r <span class="dv">1</span> <span class="op">-</span>n <span class="dv">1</span> <span class="op">-</span>o multi_process_list(total_primes,ncores,naive_par,shuffled)</span>
+<span id="cb50-330"><a href="#cb50-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-331"><a href="#cb50-331" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with multi : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>multi_time.average))</span>
+<span id="cb50-332"><a href="#cb50-332" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Gain with shuffled : </span><span class="sc">{:.1f}</span><span class="st">"</span>.<span class="bu">format</span>(orig_time.average<span class="op">/</span>shuffled_time.average))</span>
+<span id="cb50-333"><a href="#cb50-333" aria-hidden="true" tabindex="-1"></a>```</span>
+<span id="cb50-334"><a href="#cb50-334" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-335"><a href="#cb50-335" aria-hidden="true" tabindex="-1"></a>:::{.solution<span class="op">-</span>box}</span>
+<span id="cb50-336"><a href="#cb50-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-337"><a href="#cb50-337" aria-hidden="true" tabindex="-1"></a>This has been run on a machine <span class="cf">with</span> <span class="dv">4</span> physical cores <span class="kw">and</span> <span class="dv">8</span> logical cores, </span>
+<span id="cb50-338"><a href="#cb50-338" aria-hidden="true" tabindex="-1"></a>[Intel Xeon CPU E5<span class="op">-</span><span class="dv">1620</span> v4](https:<span class="op">//</span>www.intel.com<span class="op">/</span>content<span class="op">/</span>www<span class="op">/</span>us<span class="op">/</span>en<span class="op">/</span>products<span class="op">/</span>sku<span class="op">/</span><span class="dv">92991</span><span class="op">/</span>intel<span class="op">-</span>xeon<span class="op">-</span>processor<span class="op">-</span>e51620<span class="op">-</span>v4<span class="op">-</span><span class="dv">10</span><span class="er">m</span><span class="op">-</span>cache<span class="op">-</span><span class="dv">3</span><span class="op">-</span><span class="dv">50</span><span class="op">-</span>ghz<span class="op">/</span>specifications.html).</span>
+<span id="cb50-339"><a href="#cb50-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-340"><a href="#cb50-340" aria-hidden="true" tabindex="-1"></a>The results show that the gain <span class="kw">is</span> less than <span class="cf">with</span> <span class="dv">4</span> physical cores. This <span class="kw">is</span> because the logical cores share the same physical core, <span class="kw">and</span> the overhead of sharing the same physical core <span class="kw">is</span> greater than the gain <span class="im">from</span> parallelization.</span>
+<span id="cb50-341"><a href="#cb50-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-342"><a href="#cb50-342" aria-hidden="true" tabindex="-1"></a>{{<span class="op">&lt;</span> embed <span class="dv">1_1</span><span class="er">_MultiProcessing</span><span class="op">-</span>smt<span class="op">-</span>sol.ipynb<span class="co">#smt-example &gt;}}</span></span>
+<span id="cb50-343"><a href="#cb50-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-344"><a href="#cb50-344" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

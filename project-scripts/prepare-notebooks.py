@@ -3,6 +3,11 @@ import os
 # check if "applications.yml" file exists and if so, remove it
 if os.path.exists("applications.yml"):
     os.remove("applications.yml")
+
+# remove all *.qmd files in the "Applications" directory
+for file in os.listdir("Courses/Applications"):
+    if file.endswith(".qmd"):
+        os.remove(os.path.join("Courses/Applications", file))
     
 def copy(source, destination):
    with open(source, 'rb') as file:

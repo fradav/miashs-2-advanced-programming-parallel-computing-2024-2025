@@ -1,5 +1,5 @@
 ---
-title: `asyncio` application
+title: "`asyncio` application"
 ---
 
 ## Simple *Hello world* example

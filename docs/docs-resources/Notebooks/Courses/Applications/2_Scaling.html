@@ -9,7 +9,7 @@
 <meta name="author" content="François-David Collin">
 <meta name="author" content="Ghislain Durif">
 
-<title>scaling</title>
+<title>Scaling App with multiprocessing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -146,7 +146,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Mean Pooling</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Scaling App with <code>multiprocessing</code></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -196,7 +196,7 @@ window.Quarto = {
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Let’s say we got a random image and we have to process them mean pooling.</p>
-<div id="ff1d5083" class="cell" data-execution_count="1">
+<div id="ff1d5083" class="cell" data-execution_count="2">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -216,9 +216,12 @@ window.Quarto = {
        [ 3, 15,  2,  2]])</code></pre>
 </div>
 </div>
+</section>
+<section id="mean-pooling" class="level2">
+<h2 class="anchored" data-anchor-id="mean-pooling">Mean Pooling</h2>
 <p>We have a 4x4 image and we want to apply a 2x2 mean pooling with a stride of 2. The output will be a 2x2 image.</p>
 <p>First, we extract the 2x2 windows with a stride of 2. We can use the following function to do so.</p>
-<div id="e54211b4" class="cell" data-execution_count="2">
+<div id="e54211b4" class="cell" data-execution_count="3">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_pools_strides(img: np.array, pool_size: <span class="bu">int</span>, stride: <span class="bu">int</span>) <span class="op">-&gt;</span> np.array:</span>
@@ -263,7 +266,7 @@ window.Quarto = {
 <p>Try it with a 10000x10000 image, and check that the result is the same as the reference run.</p>
 <p>Now let’s multithread it. Just use <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.ThreadPool"><code>multiprocessing.pool.ThreadPool</code></a> to parallelize the computation, and <code>pool.map</code> to apply the function to each chunk (no <code>asyncio</code> here, we want to wait for the result). The function should get the image, the number of chunks, and the number of cores as arguments.</p>
 <p>Check that the result is the same as the reference run and time the execution.</p>
-<div id="b0d9b406" class="cell" data-execution_count="7">
+<div id="b0d9b406" class="cell" data-execution_count="8">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
@@ -289,7 +292,7 @@ window.Quarto = {
 <section id="weak-scaling" class="level1">
 <h1>Weak scaling</h1>
 <p>Now let’s try with a 1000x1000 image and 8 cores on weak scaling. For the sake of the application, we simply replicate the image 8 times, and apply the mean pooling to each image, one on each core.</p>
-<div id="2bd204ae" class="cell" data-execution_count="9">
+<div id="2bd204ae" class="cell" data-execution_count="10">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
@@ -314,7 +317,7 @@ window.Quarto = {
 <h1>The laws</h1>
 <section id="getting-the-speedups" class="level2">
 <h2 class="anchored" data-anchor-id="getting-the-speedups">Getting the speedups</h2>
-<div id="d9228d56" class="cell" data-execution_count="11">
+<div id="d9228d56" class="cell" data-execution_count="12">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
@@ -356,7 +359,7 @@ window.Quarto = {
 <span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({<span class="st">'time'</span>:cluster_times,<span class="st">'speedup'</span>:speedups},index<span class="op">=</span>ncores_range)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="d774fcb2" class="cell" data-execution_count="12">
+<div id="d774fcb2" class="cell" data-execution_count="13">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
@@ -390,7 +393,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="amdahls-law">Amdahl’s law</h2>
 <p>Implement Amdahl’s law in a function <code>amdahl_func</code> that takes the number of cores and the proportion of the code that can be parallelized as arguments. The speedup is given by:</p>
 <p><span class="math display">S_{up}=\frac{1}{s+\frac{1-s}{N}}</span></p>
-<div id="65fb4fb6" class="cell" data-execution_count="13">
+<div id="65fb4fb6" class="cell" data-execution_count="14">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N = workers number</span></span>
@@ -402,7 +405,7 @@ window.Quarto = {
 </section>
 <section id="make-the-scaling-runs" class="level2">
 <h2 class="anchored" data-anchor-id="make-the-scaling-runs">Make the scaling runs</h2>
-<div id="c7d05178" class="cell" data-execution_count="15">
+<div id="c7d05178" class="cell" data-execution_count="16">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>strong_run <span class="op">=</span> strong_scaling_run(strong_scaling_main,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">10000</span>)</span>
@@ -454,7 +457,7 @@ With 8 node(s):
 </section>
 <section id="plot-the-results-for-strong-scaling" class="level2">
 <h2 class="anchored" data-anchor-id="plot-the-results-for-strong-scaling">Plot the results for strong scaling</h2>
-<div id="5f2bfd19" class="cell" data-execution_count="16">
+<div id="5f2bfd19" class="cell" data-execution_count="17">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(strong_run,amdahl_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">0</span>,<span class="st">"Strong run"</span>,<span class="st">"Amdahl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -520,7 +523,7 @@ if (outputEl) {{
 </section>
 <section id="finding-the-real-s-part" class="level2">
 <h2 class="anchored" data-anchor-id="finding-the-real-s-part">Finding the real “S” part</h2>
-<div id="3057ca2d" class="cell" data-execution_count="17">
+<div id="3057ca2d" class="cell" data-execution_count="18">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_s_amdahl(strong_run):</span>
@@ -530,7 +533,7 @@ if (outputEl) {{
 </section>
 <section id="now-compare-the-law-and-the-run-with-the-real-s-part" class="level2">
 <h2 class="anchored" data-anchor-id="now-compare-the-law-and-the-run-with-the-real-s-part">Now compare the law and the run with the real “s” part</h2>
-<div id="4d5142da" class="cell" data-execution_count="19">
+<div id="4d5142da" class="cell" data-execution_count="20">
 <details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>s_strong <span class="op">=</span> find_s_amdahl(strong_run)</span>
@@ -1225,7 +1228,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">titre:</span><span class="co"> Scaling App with `multiprocessing`</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Scaling App with `multiprocessing`</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>

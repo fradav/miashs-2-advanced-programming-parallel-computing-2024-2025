@@ -1,4 +1,6 @@
-# Locking with `multiprocessing.Value`
+---
+title: Locking with `multiprocessing.Value`
+---
 
 Take look at [Python Documentation on `multiprocessing.Value`](https://docs.python.org/3/library/multiprocessing.html#multiprocessing.Value)
 

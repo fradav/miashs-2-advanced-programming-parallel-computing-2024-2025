@@ -1,5 +1,5 @@
 ---
-titre: Scaling App with `multiprocessing`
+title: Scaling App with `multiprocessing`
 ---
 
 ## Introduction

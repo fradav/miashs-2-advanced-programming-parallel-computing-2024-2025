@@ -14,7 +14,7 @@ If you absolutely must use Windows, use[WSL](https://docs.microsoft.com/fr-fr/wi
 For this TP, set the number of **physical** cores available (8 on the cluster nodes), not the number of logical cores.
 
 ```{python}
-ncores = 4 # 8 on the cluster nodes
+ncores = 8 # 8 on the cluster nodes
 ```
 
 ```{python}
@@ -258,6 +258,7 @@ If you have a CPU with SMT (Hyperthreading), redo the measurements with `ncores`
 
 ```{python}
 #| tags: [solution]
+#| eval: false
 ncores = 8 # On a machine with 4 physical cores/8 logical cores
 
 shuffled = random.sample(range(1,N+1),N)

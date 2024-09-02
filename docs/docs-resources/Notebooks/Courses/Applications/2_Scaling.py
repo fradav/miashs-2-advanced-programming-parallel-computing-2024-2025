@@ -1,6 +1,6 @@
 # %% [markdown]
 """
-# Mean Pooling
+# Scaling App with `multiprocessing`
 
 François-David Collin (CNRS, IMAG, Paul-Valéry Montpellier 3
 University)  
@@ -26,6 +26,8 @@ conv_output
 
 # %% [markdown]
 """
+## Mean Pooling
+
 We have a 4x4 image and we want to apply a 2x2 mean pooling with a
 stride of 2. The output will be a 2x2 image.
 

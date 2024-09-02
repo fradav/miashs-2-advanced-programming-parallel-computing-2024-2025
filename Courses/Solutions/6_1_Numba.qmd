@@ -1,4 +1,6 @@
-# Numba first steps
+---
+title: Numba first steps
+---
 
 ## Rewind on sequence searching
 

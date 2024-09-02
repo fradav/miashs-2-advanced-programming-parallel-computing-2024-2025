@@ -2,7 +2,7 @@
 #SBATCH --job-name=quarto
 #SBATCH --output=quarto.out
 #SBATCH --error=quarto.err
-#SBATCH --time=00:10:00
+#SBATCH --time=00:30:00
 #SBATCH --partition=umformation
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

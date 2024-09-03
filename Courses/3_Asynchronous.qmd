@@ -63,7 +63,7 @@ $\Rightarrow$ **Doing multiple tasks in parallel** is **parallelism** (or parall
 
 ## Concurrency vs. Parallelism (2)
 
-![With concurrency, we have multiple tasks happening at the same time, but only one we’re actively doing at a given point in time. With parallelism, we have multiple tasks happening and are actively doing more than one simultaneously.](figs/bakers.png)
+![With concurrency, we have multiple tasks happening at the same time, but only one we’re actively doing at a given point in time. With parallelism, we have multiple tasks happening and are actively doing more than one simultaneously.](d2-figures/bakers.svg)
 
 :::{.attribution}
 From @fowler2022python

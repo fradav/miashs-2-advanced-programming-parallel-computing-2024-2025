@@ -277,6 +277,6 @@ This has been run on a machine with 4 physical cores and 8 logical cores,
 
 The results show that the gain is less than with 4 physical cores. This is because the logical cores share the same physical core, and the overhead of sharing the same physical core is greater than the gain from parallelization.
 
-{{< embed 1_1_MultiProcessing-smt-sol.ipynb#smt-example >}}
+{{< embed ../Solutions/1_1_MultiProcessing-smt-sol.ipynb#smt-example >}}
 
 :::

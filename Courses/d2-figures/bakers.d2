@@ -1,0 +1,83 @@
+grid-rows: 7
+grid-columns: 3
+horizontal-gap: 0
+vertical-gap: 10
+
+start1 : ""
+Concurrency.class: [title; none]
+end1 : ""
+start2 : ""
+middle2 : ""
+end2 : ""
+start2 -> end2 : { class: time }
+Baker1 : "Baker 1"
+bakerlist: "" {
+    grid-gap: 0
+    grid-columns: 5
+    task1: "Turn on oven"
+    task2: "Mix dry\ningredients\nfor cake #1"
+    task3: "Mix dry\ningredients\nfor cake #2"
+    task4: "Crack eggs\nfor cake #1"
+    task5: "Put eggs\ninto mixer for\ncake #1"
+}
+end3 : ""
+start4 : ""
+Parellelism.class: [title; none]
+end4 : ""
+start5 : ""
+middle5 : ""
+end5 : ""
+start5 -> end5 : { class: time }
+Baker11 : "Baker 1"
+bakerlist2: "" {
+    grid-gap: 0
+    grid-columns: 5
+    task1: "Turn on oven"
+    task2: "Mix dry\ningredients\nfor cake #1"
+    task3: "Start mixer"
+    task4: "Crack eggs\nfor cake #1"
+    task5: "Put eggs\ninto mixer for\ncake #1"
+}
+end6: ""
+Baker2 : "Baker 2"
+bakerlist3: "" {
+    grid-gap: 0
+    grid-columns: 5
+    task1: "Turn on oven"
+    task2: "Mix dry\ningredients\nfor cake #2"
+    task3: "Start mixer"
+    task4: "Crack eggs\nfor cake #2"
+    task5: "Put eggs\ninto mixer for\ncake #2"
+}
+end7 : ""
+
+classes: {
+    none: {
+        style: {
+            fill: transparent
+            stroke: transparent
+        }
+    }
+    title: {
+        style: {
+            font-size: 30
+        }
+    }
+    time: {
+        label: "Time"
+        style: {
+            font-size: 24
+            animated: true
+        }
+    }
+}
+end* : {
+    width: 0
+    class: none
+}
+middle*.class: none
+start* : {
+    width: 0
+    class: none
+}   
+baker*.class: none

@@ -4,7 +4,7 @@ project:
     - Courses/Solutions/0_Numpy_Workout-sol.qmd
     - Courses/Solutions/1_0_MultiProcessing_tutorial-sol.qmd
     - Courses/Solutions/1_1_MultiProcessing-sol.qmd
-    - Courses/Solutions/2_Scaling.qmd
+    - Courses/Solutions/2_Scaling-sol.qmd
     - Courses/Solutions/3_Asynchronous.qmd
     - Courses/Solutions/4_Generators-sol.qmd
   output-dir: docs-resources/Notebooks

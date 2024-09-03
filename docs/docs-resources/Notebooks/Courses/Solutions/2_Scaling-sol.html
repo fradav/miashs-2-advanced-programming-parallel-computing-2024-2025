@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.55">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="François-David Collin">
+<meta name="author" content="Ghislain Durif">
+
+<title>Scaling App with multiprocessing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="2_Scaling-sol_files/libs/clipboard/clipboard.min.js"></script>
+<script src="2_Scaling-sol_files/libs/quarto-html/quarto.js"></script>
+<script src="2_Scaling-sol_files/libs/quarto-html/popper.min.js"></script>
+<script src="2_Scaling-sol_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="2_Scaling-sol_files/libs/quarto-html/anchor.min.js"></script>
+<link href="2_Scaling-sol_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="2_Scaling-sol_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="2_Scaling-sol_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="2_Scaling-sol_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="2_Scaling-sol_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="2_Scaling-sol_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="2_Scaling-sol_files/libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="text/javascript">
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+if (typeof require !== 'undefined') {
+require.undef("plotly");
+requirejs.config({
+    paths: {
+        'plotly': ['https://cdn.plot.ly/plotly-2.34.0.min']
+    }
+});
+require(['plotly'], function(Plotly) {
+    window._Plotly = Plotly;
+});
+}
+</script>
+
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="2_Scaling-sol.ipynb" download="2_Scaling-sol.ipynb"><i class="bi bi-journal-code"></i>Jupyter</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Scaling App with <code>multiprocessing</code></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">François-David Collin <a href="mailto:francois-david.collin@umontpellier.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            CNRS
+          </p>
+        <p class="affiliation">
+            IMAG
+          </p>
+        <p class="affiliation">
+            Paul-Valéry Montpellier 3 University
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Ghislain Durif <a href="mailto:ghislain.durif@ens-lyon.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            CNRS
+          </p>
+        <p class="affiliation">
+            LBMC
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Let’s say we got a random image and we have to process them mean pooling.</p>
+<div id="419b3501" class="cell" data-execution_count="2">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>conv_output <span class="op">=</span> np.array([</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">10</span>, <span class="dv">12</span>,  <span class="dv">8</span>,  <span class="dv">7</span>],</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    [ <span class="dv">4</span>, <span class="dv">11</span>,  <span class="dv">5</span>,  <span class="dv">9</span>],</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">18</span>, <span class="dv">13</span>,  <span class="dv">7</span>,  <span class="dv">7</span>],</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    [ <span class="dv">3</span>, <span class="dv">15</span>,  <span class="dv">2</span>,  <span class="dv">2</span>]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>conv_output</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>array([[10, 12,  8,  7],
+       [ 4, 11,  5,  9],
+       [18, 13,  7,  7],
+       [ 3, 15,  2,  2]])</code></pre>
+</div>
+</div>
+</section>
+<section id="mean-pooling" class="level2">
+<h2 class="anchored" data-anchor-id="mean-pooling">Mean Pooling</h2>
+<p>We have a 4x4 image and we want to apply a 2x2 mean pooling with a stride of 2. The output will be a 2x2 image.</p>
+<p>First, we extract the 2x2 windows with a stride of 2. We can use the following function to do so.</p>
+<div id="65c2a3cf" class="cell" data-execution_count="3">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_pools_strides(img: np.array, pool_size: <span class="bu">int</span>, stride: <span class="bu">int</span>) <span class="op">-&gt;</span> np.array:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the shape of the image</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    shape <span class="op">=</span> img.shape</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the shape of the output</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    out_shape <span class="op">=</span> (</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        (shape[<span class="dv">0</span>] <span class="op">-</span> pool_size) <span class="op">//</span> stride <span class="op">+</span> <span class="dv">1</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        (shape[<span class="dv">1</span>] <span class="op">-</span> pool_size) <span class="op">//</span> stride <span class="op">+</span> <span class="dv">1</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        pool_size,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        pool_size,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the strides of the output</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    strides <span class="op">=</span> (</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">0</span>] <span class="op">*</span> stride,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">1</span>] <span class="op">*</span> stride,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">0</span>],</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">1</span>],</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Return the array</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.lib.stride_tricks.as_strided(</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        img,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        shape<span class="op">=</span>out_shape,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        strides<span class="op">=</span>strides</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We check that the function works as expected.</p>
+<div id="dfeddf3f" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="4">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>get_pools_strides(img<span class="op">=</span>conv_output, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>array([[[[10, 12],
+         [ 4, 11]],
+
+        [[ 8,  7],
+         [ 5,  9]]],
+
+
+       [[[18, 13],
+         [ 3, 15]],
+
+        [[ 7,  7],
+         [ 2,  2]]]])</code></pre>
+</div>
+</div>
+<p>Now, we want to compute the mean of each 2x2 window with <a href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html"><code>np.mean</code></a>.</p>
+<div id="4789f8eb" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="5">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>np.mean(get_pools_strides(img<span class="op">=</span>conv_output, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>), axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>array([[ 9.25,  7.25],
+       [12.25,  4.5 ]])</code></pre>
+</div>
+</div>
+</section>
+<section id="reference-run-single-core" class="level2">
+<h2 class="anchored" data-anchor-id="reference-run-single-core">Reference run (single core)</h2>
+<p>Time the execution of the function with a single core on a 10000x10000 image.</p>
+<div id="fb5317f0" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="6">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>time_ref_single <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o np.mean(get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>),axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>time_ref_single.average</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.15 s ± 253 μs per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>1.1532892569833035</code></pre>
+</div>
+</div>
+</section>
+<section id="strong-scaling" class="level1">
+<h1>Strong scaling</h1>
+<p>What should we do with the image to speed up the computation? We can split the strides into chunks and compute the mean of each chunk in parallel.</p>
+<p><a href="https://numpy.org/doc/stable/reference/generated/numpy.array_split.html"><code>np.array_split</code></a> can be used to split the array into chunks, and <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html"><code>np.vstack</code></a> to stack the results.</p>
+<p>Try it with a 10000x10000 image, and check that the result is the same as the reference run.</p>
+<div id="e2285d8a" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="7">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>res_single <span class="op">=</span> np.mean(get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>),axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>strides <span class="op">=</span> get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>res_split <span class="op">=</span> np.vstack([np.mean(sl,axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>)) <span class="cf">for</span> sl <span class="kw">in</span> np.array_split(strides, <span class="dv">8</span>)])</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>np.testing.assert_array_equal(res_single, res_split)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now let’s multithread it. Just use <a href="https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.ThreadPool"><code>multiprocessing.pool.ThreadPool</code></a> to parallelize the computation, and <code>pool.map</code> to apply the function to each chunk (no <code>asyncio</code> here, we want to wait for the result). The function should get the image, the number of chunks, and the number of cores as arguments.</p>
+<p>Check that the result is the same as the reference run and time the execution.</p>
+<div id="1bb1d297" class="cell" data-execution_count="8">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpool(a):</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> strong_scaling_main(img,ncores):</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>res_thread <span class="op">=</span> strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>np.testing.assert_array_equal(res_single, res_thread)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>time_ref_single<span class="sc">.</span>average <span class="op">/</span> time_threaded<span class="sc">.</span>average<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="ee3314a3" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="9">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpool(a):</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(a,axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> strong_scaling_main(img,ncores):</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    strides <span class="op">=</span> get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPool(ncores) <span class="im">as</span> pool:</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        chunks <span class="op">=</span> np.array_split(strides, ncores)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> pool.<span class="bu">map</span>(meanpool, chunks)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.vstack(res)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>res_thread <span class="op">=</span> strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>np.testing.assert_array_equal(res_single, res_thread)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>time_ref_single<span class="sc">.</span>average <span class="op">/</span> time_threaded<span class="sc">.</span>average<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>222 ms ± 1.14 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+Speedup: 5.185230408464258</code></pre>
+</div>
+</div>
+</section>
+<section id="weak-scaling" class="level1">
+<h1>Weak scaling</h1>
+<p>Now let’s try with a 1000x1000 image and 8 cores on weak scaling. For the sake of the application, we simply replicate the image 8 times, and apply the mean pooling to each image, one on each core.</p>
+<div id="c30c1080" class="cell" data-execution_count="10">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpoolimg(img):</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weak_scaling_main(imgs,ncores):</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">1000</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>time_ref_single <span class="op">=</span> . . .</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o weak_scaling_main([img]<span class="op">*</span><span class="dv">8</span>,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{.</span> <span class="sc">.</span> <span class="sc">.}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="9f97ae85" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="11">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpoolimg(img):</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    strides <span class="op">=</span> get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(strides,axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weak_scaling_main(imgs,ncores):</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPool(ncores) <span class="im">as</span> pool:</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pool.<span class="bu">map</span>(meanpoolimg, imgs)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">1000</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>res_thread <span class="op">=</span> weak_scaling_main([img]<span class="op">*</span><span class="dv">8</span>,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>time_ref_single <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o np.mean(get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>),axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o weak_scaling_main([img]<span class="op">*</span><span class="dv">8</span>,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>(time_ref_single.average<span class="op">*</span><span class="dv">8</span>)<span class="op">/</span> time_threaded<span class="sc">.</span>average<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>11.2 ms ± 5.19 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+13.2 ms ± 28 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+Speedup: 6.768204113072809</code></pre>
+</div>
+</div>
+</section>
+<section id="the-laws" class="level1">
+<h1>The laws</h1>
+<section id="getting-the-speedups" class="level2">
+<h2 class="anchored" data-anchor-id="getting-the-speedups">Getting the speedups</h2>
+<div id="aa7f488a" class="cell" data-execution_count="12">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weak_scaling_run(compute_func,ncores_range,N,verbose<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    cluster_times <span class="op">=</span> []</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    speedups <span class="op">=</span> []</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> nbr_parallel_blocks <span class="kw">in</span> ncores_range:</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>        imgs <span class="op">=</span> [img]<span class="op">*</span>nbr_parallel_blocks</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>        t1 <span class="op">=</span> time.time()</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        compute_func(imgs,nbr_parallel_blocks)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        total_time <span class="op">=</span> time.time() <span class="op">-</span> t1</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        t2 <span class="op">=</span> time.time()</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>        compute_func(imgs,<span class="dv">1</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        total_time_seq <span class="op">=</span> time.time() <span class="op">-</span> t2</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose:</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"With </span><span class="sc">{</span>nbr_parallel_blocks<span class="sc">}</span><span class="ss"> node(s): "</span>)</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t</span><span class="st">Time : </span><span class="sc">{:.2f}</span><span class="st">s"</span>.<span class="bu">format</span>(total_time))</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t</span><span class="st">Time seq : </span><span class="sc">{:.2f}</span><span class="st">s"</span>.<span class="bu">format</span>(total_time_seq))</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>        cluster_times.append(total_time)</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>        speedups.append(total_time_seq<span class="op">/</span>total_time)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({<span class="st">'time'</span>:cluster_times,<span class="st">'speedup'</span>:speedups},index<span class="op">=</span>ncores_range)</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> strong_scaling_run(compute_func,ncores_range,N,verbose<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    cluster_times <span class="op">=</span> []</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    speedups <span class="op">=</span> []</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> nbr_parallel_blocks <span class="kw">in</span> ncores_range:</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        t1 <span class="op">=</span> time.time()</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>        compute_func(img,nbr_parallel_blocks)</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>        total_time <span class="op">=</span> time.time() <span class="op">-</span> t1</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose:</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"With </span><span class="sc">{</span>nbr_parallel_blocks<span class="sc">}</span><span class="ss"> node(s): "</span>)</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t</span><span class="st">Time : </span><span class="sc">{:.2f}</span><span class="st">s"</span>.<span class="bu">format</span>(total_time))</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>        cluster_times.append(total_time)</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>        speedups.append(cluster_times[<span class="dv">0</span>]<span class="op">/</span>total_time)</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({<span class="st">'time'</span>:cluster_times,<span class="st">'speedup'</span>:speedups},index<span class="op">=</span>ncores_range)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="642d6283" class="cell" data-execution_count="13">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Function that takes as an argument the result of a run, a "law" function,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># its parameter s, which corresponds to the estimated "sequential" proportion of the run,</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># the run description, the law description</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Displays the comparative view of the run with the law prediction</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># displays the root-mean-square error between the two</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># returns previous numerical data</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compare_law_and_run(run,law,ncores_range,s,run_description,law_description):</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    law_pred <span class="op">=</span> [law(N,s) <span class="cf">for</span> N <span class="kw">in</span> ncores_range]</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    law_df <span class="op">=</span> pd.DataFrame({law_description:law_pred},index<span class="op">=</span>ncores_range)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    MSE <span class="op">=</span> mean_squared_error(run[<span class="st">'speedup'</span>][<span class="dv">1</span>:],law_pred[<span class="dv">1</span>:])</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> <span class="st">"</span><span class="sc">{}</span><span class="st"> vs </span><span class="sc">{}</span><span class="st"> s=</span><span class="sc">{:2f}</span><span class="st">"</span>.<span class="bu">format</span>(law_description,run_description,s)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    px.line(pd.concat([run.rename(columns<span class="op">=</span>{<span class="st">'speedup'</span>:run_description}),law_df],axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>            y<span class="op">=</span>[run_description,law_description],</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span>title,</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>{<span class="st">"index"</span>:<span class="st">"Number of cores"</span>,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"value"</span>:<span class="st">"Speedup over 1 core"</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"variable"</span>:<span class="st">"Law or Run"</span>},</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>                width<span class="op">=</span><span class="dv">600</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>        ).show()</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"MSE :</span><span class="sc">{:.2e}</span><span class="st">"</span>.<span class="bu">format</span>(MSE))</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.Series({<span class="st">'run'</span>:run_description,<span class="st">'law'</span>:law_description,<span class="st">'s'</span>:s,<span class="st">'MSE'</span>:MSE}).to_frame().T</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="amdahls-law" class="level2">
+<h2 class="anchored" data-anchor-id="amdahls-law">Amdahl’s law</h2>
+<p>Implement Amdahl’s law in a function <code>amdahl_func</code> that takes the number of cores and the proportion of the code that can be parallelized as arguments. The speedup is given by:</p>
+<p><span class="math display">S_{up}=\frac{1}{s+\frac{1-s}{N}}</span></p>
+<div id="279dd237" class="cell" data-execution_count="14">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># N = workers number</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># S = "sequential part" of the code (proportion)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> amdahl_func(N,S):</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ... <span class="co"># speedup </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="e02b92b4" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="15">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> amdahl_func(N,s):</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(s <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>s)<span class="op">/</span>N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="make-the-scaling-runs" class="level2">
+<h2 class="anchored" data-anchor-id="make-the-scaling-runs">Make the scaling runs</h2>
+<div id="f62ea037" class="cell" data-execution_count="16">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>strong_run <span class="op">=</span> strong_scaling_run(strong_scaling_main,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">10000</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>weak_run <span class="op">=</span> weak_scaling_run(weak_scaling_main,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>With 1 node(s): 
+    Time : 1.22s
+With 2 node(s): 
+    Time : 0.65s
+With 3 node(s): 
+    Time : 0.46s
+With 4 node(s): 
+    Time : 0.36s
+With 5 node(s): 
+    Time : 0.31s
+With 6 node(s): 
+    Time : 0.27s
+With 7 node(s): 
+    Time : 0.26s
+With 8 node(s): 
+    Time : 0.23s
+With 1 node(s): 
+    Time : 1.25s
+    Time seq : 1.14s
+With 2 node(s): 
+    Time : 1.25s
+    Time seq : 2.29s
+With 3 node(s): 
+    Time : 1.25s
+    Time seq : 3.44s
+With 4 node(s): 
+    Time : 1.25s
+    Time seq : 4.99s
+With 5 node(s): 
+    Time : 1.25s
+    Time seq : 6.24s
+With 6 node(s): 
+    Time : 1.26s
+    Time seq : 7.49s
+With 7 node(s): 
+    Time : 1.26s
+    Time seq : 8.74s
+With 8 node(s): 
+    Time : 1.27s
+    Time seq : 9.17s</code></pre>
+</div>
+</div>
+</section>
+<section id="plot-the-results-for-strong-scaling" class="level2">
+<h2 class="anchored" data-anchor-id="plot-the-results-for-strong-scaling">Plot the results for strong scaling</h2>
+<div id="61282db5" class="cell" data-execution_count="17">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(strong_run,amdahl_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">0</span>,<span class="st">"Strong run"</span>,<span class="st">"Amdahl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>                            <div id="43e978c6-6ae9-453f-8144-7902711e4ecf" class="plotly-graph-div" style="height:525px; width:600px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("43e978c6-6ae9-453f-8144-7902711e4ecf")) {                    Plotly.newPlot(                        "43e978c6-6ae9-453f-8144-7902711e4ecf",                        [{"hovertemplate":"Law or Run=Strong run\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Strong run","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Strong run","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[1.0,1.877303668962678,2.6567783804253233,3.345259233594164,3.972177287645238,4.5177729855572935,4.768400218463937,5.245880844927497],"yaxis":"y","type":"scatter"},{"hovertemplate":"Law or Run=Amdahl\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Amdahl","line":{"color":"#EF553B","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Amdahl","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0],"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Number of cores"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Speedup over 1 core"}},"legend":{"title":{"text":"Law or Run"},"tracegroupgap":0},"title":{"text":"Amdahl vs Strong run s=0.000000"},"width":600},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('43e978c6-6ae9-453f-8144-7902711e4ecf');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSE :2.34e+00</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">run</th>
+<th data-quarto-table-cell-role="th">law</th>
+<th data-quarto-table-cell-role="th">s</th>
+<th data-quarto-table-cell-role="th">MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-quarto-table-cell-role="th">0</td>
+<td>Strong run</td>
+<td>Amdahl</td>
+<td>0</td>
+<td>2.340024</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="finding-the-real-s-part" class="level2">
+<h2 class="anchored" data-anchor-id="finding-the-real-s-part">Finding the real “S” part</h2>
+<div id="14935032" class="cell" data-execution_count="18">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_s_amdahl(strong_run):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ... <span class="co"># s</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="76535a92" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="19">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_s_amdahl(strong_run):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(strong_run)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    Sup <span class="op">=</span> strong_run[<span class="st">'speedup'</span>][N]</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (N<span class="op">/</span>Sup <span class="op">-</span> <span class="dv">1</span>)<span class="op">/</span>(N<span class="op">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="now-compare-the-law-and-the-run-with-the-real-s-part" class="level2">
+<h2 class="anchored" data-anchor-id="now-compare-the-law-and-the-run-with-the-real-s-part">Now compare the law and the run with the real “s” part</h2>
+<div id="355d38c5" class="cell" data-execution_count="20">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>s_strong <span class="op">=</span> find_s_amdahl(strong_run)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(strong_run,amdahl_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),s_strong,<span class="st">"Strong run"</span>,<span class="st">"Amdahl"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>                            <div id="7f16d847-4da2-4b85-b7ca-9c6284f27297" class="plotly-graph-div" style="height:525px; width:600px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("7f16d847-4da2-4b85-b7ca-9c6284f27297")) {                    Plotly.newPlot(                        "7f16d847-4da2-4b85-b7ca-9c6284f27297",                        [{"hovertemplate":"Law or Run=Strong run\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Strong run","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Strong run","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[1.0,1.877303668962678,2.6567783804253233,3.345259233594164,3.972177287645238,4.5177729855572935,4.768400218463937,5.245880844927497],"yaxis":"y","type":"scatter"},{"hovertemplate":"Law or Run=Amdahl\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Amdahl","line":{"color":"#EF553B","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Amdahl","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[1.0,1.8604636217208272,2.6086917342586102,3.2652992167399426,3.8461436263569984,4.363622660669095,4.8275689559924935,5.245880844927497],"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Number of cores"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Speedup over 1 core"}},"legend":{"title":{"text":"Law or Run"},"tracegroupgap":0},"title":{"text":"Amdahl vs Strong run s=0.075001"},"width":600},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('7f16d847-4da2-4b85-b7ca-9c6284f27297');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSE :7.45e-03</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">run</th>
+<th data-quarto-table-cell-role="th">law</th>
+<th data-quarto-table-cell-role="th">s</th>
+<th data-quarto-table-cell-role="th">MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-quarto-table-cell-role="th">0</td>
+<td>Strong run</td>
+<td>Amdahl</td>
+<td>0.075001</td>
+<td>0.007448</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="apply-it-to-weak-scaling-and-gustafsons-law" class="level2">
+<h2 class="anchored" data-anchor-id="apply-it-to-weak-scaling-and-gustafsons-law">Apply it to weak scaling and gustafson’s law</h2>
+<div id="b3ef1f7e" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="21">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gustafson_func(N,s):</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> N <span class="op">-</span> s<span class="op">*</span>(N<span class="op">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="3742f543" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="22">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(weak_run,gustafson_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),s_strong,<span class="st">"Weak run"</span>,<span class="st">"Gustafson"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>                            <div id="29db64a1-6939-4fec-b07f-df7701f527f8" class="plotly-graph-div" style="height:525px; width:600px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("29db64a1-6939-4fec-b07f-df7701f527f8")) {                    Plotly.newPlot(                        "29db64a1-6939-4fec-b07f-df7701f527f8",                        [{"hovertemplate":"Law or Run=Weak run\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Weak run","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Weak run","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[0.9160405160691492,1.8390905495517618,2.7543017067036386,3.991336963249623,4.974685389926394,5.955078202422537,6.930755588267704,7.247765159187365],"yaxis":"y","type":"scatter"},{"hovertemplate":"Law or Run=Gustafson\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Gustafson","line":{"color":"#EF553B","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Gustafson","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[1.0,1.9249991364248717,2.8499982728497435,3.774997409274615,4.699996545699487,5.624995682124358,6.54999481854923,7.474993954974102],"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Number of cores"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Speedup over 1 core"}},"legend":{"title":{"text":"Law or Run"},"tracegroupgap":0},"title":{"text":"Gustafson vs Weak run s=0.075001"},"width":600},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('29db64a1-6939-4fec-b07f-df7701f527f8');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSE :6.35e-02</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">run</th>
+<th data-quarto-table-cell-role="th">law</th>
+<th data-quarto-table-cell-role="th">s</th>
+<th data-quarto-table-cell-role="th">MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-quarto-table-cell-role="th">0</td>
+<td>Weak run</td>
+<td>Gustafson</td>
+<td>0.075001</td>
+<td>0.06348</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Recalculate real s for weak scaling</p>
+<div id="b12b1214" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="23">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_s_gustafson(weak_run):</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(weak_run)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    Sup <span class="op">=</span> weak_run[<span class="st">'speedup'</span>][N]</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (N<span class="op">-</span>Sup)<span class="op">/</span>(N<span class="op">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="453b3150" class="cell" data-tags="[&quot;solution&quot;]" data-execution_count="24">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>s_weak <span class="op">=</span> find_s_gustafson(weak_run)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(weak_run,gustafson_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),s_weak,<span class="st">"Weak run"</span>,<span class="st">"Gustafson"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>                            <div id="0f4b540f-c07d-4a45-b3ae-acd7b523f1f9" class="plotly-graph-div" style="height:525px; width:600px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("0f4b540f-c07d-4a45-b3ae-acd7b523f1f9")) {                    Plotly.newPlot(                        "0f4b540f-c07d-4a45-b3ae-acd7b523f1f9",                        [{"hovertemplate":"Law or Run=Weak run\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Weak run","line":{"color":"#636efa","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Weak run","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[0.9160405160691492,1.8390905495517618,2.7543017067036386,3.991336963249623,4.974685389926394,5.955078202422537,6.930755588267704,7.247765159187365],"yaxis":"y","type":"scatter"},{"hovertemplate":"Law or Run=Gustafson\u003cbr\u003eNumber of cores=%{x}\u003cbr\u003eSpeedup over 1 core=%{y}\u003cextra\u003e\u003c\u002fextra\u003e","legendgroup":"Gustafson","line":{"color":"#EF553B","dash":"solid"},"marker":{"symbol":"circle"},"mode":"lines","name":"Gustafson","orientation":"v","showlegend":true,"x":[1,2,3,4,5,6,7,8],"xaxis":"x","y":[1.0,1.8925378798839092,2.7850757597678184,3.677613639651728,4.570151519535637,5.4626893994195465,6.355227279303456,7.247765159187365],"yaxis":"y","type":"scatter"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmapgl":[{"type":"heatmapgl","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Number of cores"}},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Speedup over 1 core"}},"legend":{"title":{"text":"Law or Run"},"tracegroupgap":0},"title":{"text":"Gustafson vs Weak run s=0.107462"},"width":600},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('0f4b540f-c07d-4a45-b3ae-acd7b523f1f9');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>MSE :1.20e-01</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">run</th>
+<th data-quarto-table-cell-role="th">law</th>
+<th data-quarto-table-cell-role="th">s</th>
+<th data-quarto-table-cell-role="th">MSE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td data-quarto-table-cell-role="th">0</td>
+<td>Weak run</td>
+<td>Gustafson</td>
+<td>0.107462</td>
+<td>0.119936</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion">Discussion</h2>
+<p>Why the Sequential part is not the same for strong and weak scaling?</p>
+<!-- -->
+
+</section>
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></div></div></section></div></main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb36" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Scaling App with `multiprocessing`</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## Introduction</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>Let’s say we got a random image and we have to process them mean pooling.</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>conv_output <span class="op">=</span> np.array([</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">10</span>, <span class="dv">12</span>,  <span class="dv">8</span>,  <span class="dv">7</span>],</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    [ <span class="dv">4</span>, <span class="dv">11</span>,  <span class="dv">5</span>,  <span class="dv">9</span>],</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">18</span>, <span class="dv">13</span>,  <span class="dv">7</span>,  <span class="dv">7</span>],</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>    [ <span class="dv">3</span>, <span class="dv">15</span>,  <span class="dv">2</span>,  <span class="dv">2</span>]</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>conv_output</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Mean Pooling</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>We have a 4x4 image and we want to apply a 2x2 mean pooling with a stride of 2. The output will be a 2x2 image.</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>First, we extract the 2x2 windows with a stride of 2. We can use the following function to do so.</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_pools_strides(img: np.array, pool_size: <span class="bu">int</span>, stride: <span class="bu">int</span>) <span class="op">-&gt;</span> np.array:</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the shape of the image</span></span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>    shape <span class="op">=</span> img.shape</span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the shape of the output</span></span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>    out_shape <span class="op">=</span> (</span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>        (shape[<span class="dv">0</span>] <span class="op">-</span> pool_size) <span class="op">//</span> stride <span class="op">+</span> <span class="dv">1</span>,</span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>        (shape[<span class="dv">1</span>] <span class="op">-</span> pool_size) <span class="op">//</span> stride <span class="op">+</span> <span class="dv">1</span>,</span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>        pool_size,</span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>        pool_size,</span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get the strides of the output</span></span>
+<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a>    strides <span class="op">=</span> (</span>
+<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">0</span>] <span class="op">*</span> stride,</span>
+<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">1</span>] <span class="op">*</span> stride,</span>
+<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">0</span>],</span>
+<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a>        img.strides[<span class="dv">1</span>],</span>
+<span id="cb36-51"><a href="#cb36-51" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-52"><a href="#cb36-52" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb36-53"><a href="#cb36-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Return the array</span></span>
+<span id="cb36-54"><a href="#cb36-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.lib.stride_tricks.as_strided(</span>
+<span id="cb36-55"><a href="#cb36-55" aria-hidden="true" tabindex="-1"></a>        img,</span>
+<span id="cb36-56"><a href="#cb36-56" aria-hidden="true" tabindex="-1"></a>        shape<span class="op">=</span>out_shape,</span>
+<span id="cb36-57"><a href="#cb36-57" aria-hidden="true" tabindex="-1"></a>        strides<span class="op">=</span>strides</span>
+<span id="cb36-58"><a href="#cb36-58" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb36-59"><a href="#cb36-59" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-60"><a href="#cb36-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-61"><a href="#cb36-61" aria-hidden="true" tabindex="-1"></a>We check that the function works as expected.</span>
+<span id="cb36-62"><a href="#cb36-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-65"><a href="#cb36-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-66"><a href="#cb36-66" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-67"><a href="#cb36-67" aria-hidden="true" tabindex="-1"></a>get_pools_strides(img<span class="op">=</span>conv_output, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb36-68"><a href="#cb36-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-69"><a href="#cb36-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-70"><a href="#cb36-70" aria-hidden="true" tabindex="-1"></a>Now, we want to compute the mean of each 2x2 window with <span class="co">[</span><span class="ot">`np.mean`</span><span class="co">](https://numpy.org/doc/stable/reference/generated/numpy.mean.html)</span>.</span>
+<span id="cb36-71"><a href="#cb36-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-74"><a href="#cb36-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-75"><a href="#cb36-75" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-76"><a href="#cb36-76" aria-hidden="true" tabindex="-1"></a>np.mean(get_pools_strides(img<span class="op">=</span>conv_output, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>), axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb36-77"><a href="#cb36-77" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-78"><a href="#cb36-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-79"><a href="#cb36-79" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reference run (single core)</span></span>
+<span id="cb36-80"><a href="#cb36-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-81"><a href="#cb36-81" aria-hidden="true" tabindex="-1"></a>Time the execution of the function with a single core on a 10000x10000 image. </span>
+<span id="cb36-82"><a href="#cb36-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-85"><a href="#cb36-85" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-86"><a href="#cb36-86" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-87"><a href="#cb36-87" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb36-88"><a href="#cb36-88" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-89"><a href="#cb36-89" aria-hidden="true" tabindex="-1"></a>time_ref_single <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o np.mean(get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>),axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb36-90"><a href="#cb36-90" aria-hidden="true" tabindex="-1"></a>time_ref_single.average</span>
+<span id="cb36-91"><a href="#cb36-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-92"><a href="#cb36-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-93"><a href="#cb36-93" aria-hidden="true" tabindex="-1"></a><span class="fu"># Strong scaling</span></span>
+<span id="cb36-94"><a href="#cb36-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-95"><a href="#cb36-95" aria-hidden="true" tabindex="-1"></a>What should we do with the image to speed up the computation?</span>
+<span id="cb36-96"><a href="#cb36-96" aria-hidden="true" tabindex="-1"></a>We can split the strides into chunks and compute the mean of each chunk in parallel. </span>
+<span id="cb36-97"><a href="#cb36-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-98"><a href="#cb36-98" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`np.array_split`</span><span class="co">](https://numpy.org/doc/stable/reference/generated/numpy.array_split.html)</span> can be used to split the array into chunks, and <span class="co">[</span><span class="ot">`np.vstack`</span><span class="co">](https://numpy.org/doc/stable/reference/generated/numpy.vstack.html)</span> to stack the results.</span>
+<span id="cb36-99"><a href="#cb36-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-100"><a href="#cb36-100" aria-hidden="true" tabindex="-1"></a>Try it with a 10000x10000 image, and check that the result is the same as the reference run.</span>
+<span id="cb36-101"><a href="#cb36-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-104"><a href="#cb36-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-105"><a href="#cb36-105" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-106"><a href="#cb36-106" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb36-107"><a href="#cb36-107" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-108"><a href="#cb36-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-109"><a href="#cb36-109" aria-hidden="true" tabindex="-1"></a>res_single <span class="op">=</span> np.mean(get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>),axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb36-110"><a href="#cb36-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-111"><a href="#cb36-111" aria-hidden="true" tabindex="-1"></a>strides <span class="op">=</span> get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb36-112"><a href="#cb36-112" aria-hidden="true" tabindex="-1"></a>res_split <span class="op">=</span> np.vstack([np.mean(sl,axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>)) <span class="cf">for</span> sl <span class="kw">in</span> np.array_split(strides, <span class="dv">8</span>)])</span>
+<span id="cb36-113"><a href="#cb36-113" aria-hidden="true" tabindex="-1"></a>np.testing.assert_array_equal(res_single, res_split)</span>
+<span id="cb36-114"><a href="#cb36-114" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-115"><a href="#cb36-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-116"><a href="#cb36-116" aria-hidden="true" tabindex="-1"></a>Now let’s multithread it.</span>
+<span id="cb36-117"><a href="#cb36-117" aria-hidden="true" tabindex="-1"></a>Just use <span class="co">[</span><span class="ot">`multiprocessing.pool.ThreadPool`</span><span class="co">](https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.ThreadPool)</span> to parallelize the computation, and <span class="in">`pool.map`</span> to apply the function to each chunk (no <span class="in">`asyncio`</span> here, we want to wait for the result). The function should get the image, the number of chunks, and the number of cores as arguments.</span>
+<span id="cb36-118"><a href="#cb36-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-119"><a href="#cb36-119" aria-hidden="true" tabindex="-1"></a>Check that the result is the same as the reference run and time the execution.</span>
+<span id="cb36-120"><a href="#cb36-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-123"><a href="#cb36-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-124"><a href="#cb36-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb36-125"><a href="#cb36-125" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb36-126"><a href="#cb36-126" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb36-127"><a href="#cb36-127" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb36-128"><a href="#cb36-128" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpool(a):</span>
+<span id="cb36-129"><a href="#cb36-129" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb36-130"><a href="#cb36-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-131"><a href="#cb36-131" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> strong_scaling_main(img,ncores):</span>
+<span id="cb36-132"><a href="#cb36-132" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb36-133"><a href="#cb36-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-134"><a href="#cb36-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-135"><a href="#cb36-135" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb36-136"><a href="#cb36-136" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-137"><a href="#cb36-137" aria-hidden="true" tabindex="-1"></a>res_thread <span class="op">=</span> strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb36-138"><a href="#cb36-138" aria-hidden="true" tabindex="-1"></a>np.testing.assert_array_equal(res_single, res_thread)</span>
+<span id="cb36-139"><a href="#cb36-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-140"><a href="#cb36-140" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb36-141"><a href="#cb36-141" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>time_ref_single<span class="sc">.</span>average <span class="op">/</span> time_threaded<span class="sc">.</span>average<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb36-142"><a href="#cb36-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-143"><a href="#cb36-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-146"><a href="#cb36-146" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-147"><a href="#cb36-147" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-148"><a href="#cb36-148" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb36-149"><a href="#cb36-149" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb36-150"><a href="#cb36-150" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb36-151"><a href="#cb36-151" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpool(a):</span>
+<span id="cb36-152"><a href="#cb36-152" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(a,axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb36-153"><a href="#cb36-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-154"><a href="#cb36-154" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> strong_scaling_main(img,ncores):</span>
+<span id="cb36-155"><a href="#cb36-155" aria-hidden="true" tabindex="-1"></a>    strides <span class="op">=</span> get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb36-156"><a href="#cb36-156" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPool(ncores) <span class="im">as</span> pool:</span>
+<span id="cb36-157"><a href="#cb36-157" aria-hidden="true" tabindex="-1"></a>        chunks <span class="op">=</span> np.array_split(strides, ncores)</span>
+<span id="cb36-158"><a href="#cb36-158" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> pool.<span class="bu">map</span>(meanpool, chunks)</span>
+<span id="cb36-159"><a href="#cb36-159" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> np.vstack(res)</span>
+<span id="cb36-160"><a href="#cb36-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-161"><a href="#cb36-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-162"><a href="#cb36-162" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">10000</span></span>
+<span id="cb36-163"><a href="#cb36-163" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-164"><a href="#cb36-164" aria-hidden="true" tabindex="-1"></a>res_thread <span class="op">=</span> strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb36-165"><a href="#cb36-165" aria-hidden="true" tabindex="-1"></a>np.testing.assert_array_equal(res_single, res_thread)</span>
+<span id="cb36-166"><a href="#cb36-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-167"><a href="#cb36-167" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o strong_scaling_main(img,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb36-168"><a href="#cb36-168" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>time_ref_single<span class="sc">.</span>average <span class="op">/</span> time_threaded<span class="sc">.</span>average<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb36-169"><a href="#cb36-169" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-170"><a href="#cb36-170" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-171"><a href="#cb36-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-172"><a href="#cb36-172" aria-hidden="true" tabindex="-1"></a><span class="fu"># Weak scaling</span></span>
+<span id="cb36-173"><a href="#cb36-173" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-174"><a href="#cb36-174" aria-hidden="true" tabindex="-1"></a>Now let’s try with a 1000x1000 image and 8 cores on weak scaling. For the sake of the application, we simply replicate the image 8 times, and apply the mean pooling to each image, one on each core.</span>
+<span id="cb36-175"><a href="#cb36-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-178"><a href="#cb36-178" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-179"><a href="#cb36-179" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb36-180"><a href="#cb36-180" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb36-181"><a href="#cb36-181" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb36-182"><a href="#cb36-182" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb36-183"><a href="#cb36-183" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpoolimg(img):</span>
+<span id="cb36-184"><a href="#cb36-184" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb36-185"><a href="#cb36-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-186"><a href="#cb36-186" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weak_scaling_main(imgs,ncores):</span>
+<span id="cb36-187"><a href="#cb36-187" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb36-188"><a href="#cb36-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-189"><a href="#cb36-189" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">1000</span></span>
+<span id="cb36-190"><a href="#cb36-190" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-191"><a href="#cb36-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-192"><a href="#cb36-192" aria-hidden="true" tabindex="-1"></a>time_ref_single <span class="op">=</span> . . .</span>
+<span id="cb36-193"><a href="#cb36-193" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o weak_scaling_main([img]<span class="op">*</span><span class="dv">8</span>,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb36-194"><a href="#cb36-194" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{.</span> <span class="sc">.</span> <span class="sc">.}</span><span class="ss">"</span>)</span>
+<span id="cb36-195"><a href="#cb36-195" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-196"><a href="#cb36-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-199"><a href="#cb36-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-200"><a href="#cb36-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-201"><a href="#cb36-201" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
+<span id="cb36-202"><a href="#cb36-202" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> ThreadPool</span>
+<span id="cb36-203"><a href="#cb36-203" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb36-204"><a href="#cb36-204" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> meanpoolimg(img):</span>
+<span id="cb36-205"><a href="#cb36-205" aria-hidden="true" tabindex="-1"></a>    strides <span class="op">=</span> get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb36-206"><a href="#cb36-206" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(strides,axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb36-207"><a href="#cb36-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-208"><a href="#cb36-208" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weak_scaling_main(imgs,ncores):</span>
+<span id="cb36-209"><a href="#cb36-209" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> ThreadPool(ncores) <span class="im">as</span> pool:</span>
+<span id="cb36-210"><a href="#cb36-210" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pool.<span class="bu">map</span>(meanpoolimg, imgs)</span>
+<span id="cb36-211"><a href="#cb36-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-212"><a href="#cb36-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-213"><a href="#cb36-213" aria-hidden="true" tabindex="-1"></a>N<span class="op">=</span><span class="dv">1000</span></span>
+<span id="cb36-214"><a href="#cb36-214" aria-hidden="true" tabindex="-1"></a>img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-215"><a href="#cb36-215" aria-hidden="true" tabindex="-1"></a>res_thread <span class="op">=</span> weak_scaling_main([img]<span class="op">*</span><span class="dv">8</span>,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb36-216"><a href="#cb36-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-217"><a href="#cb36-217" aria-hidden="true" tabindex="-1"></a>time_ref_single <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o np.mean(get_pools_strides(img, pool_size<span class="op">=</span><span class="dv">2</span>, stride<span class="op">=</span><span class="dv">2</span>),axis<span class="op">=</span>(<span class="dv">2</span>,<span class="dv">3</span>))</span>
+<span id="cb36-218"><a href="#cb36-218" aria-hidden="true" tabindex="-1"></a>time_threaded <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o weak_scaling_main([img]<span class="op">*</span><span class="dv">8</span>,ncores<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb36-219"><a href="#cb36-219" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Speedup: </span><span class="sc">{</span>(time_ref_single.average<span class="op">*</span><span class="dv">8</span>)<span class="op">/</span> time_threaded<span class="sc">.</span>average<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb36-220"><a href="#cb36-220" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-221"><a href="#cb36-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-222"><a href="#cb36-222" aria-hidden="true" tabindex="-1"></a><span class="fu"># The laws</span></span>
+<span id="cb36-223"><a href="#cb36-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-224"><a href="#cb36-224" aria-hidden="true" tabindex="-1"></a><span class="fu">## Getting the speedups</span></span>
+<span id="cb36-225"><a href="#cb36-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-228"><a href="#cb36-228" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-229"><a href="#cb36-229" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb36-230"><a href="#cb36-230" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb36-231"><a href="#cb36-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-232"><a href="#cb36-232" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> weak_scaling_run(compute_func,ncores_range,N,verbose<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb36-233"><a href="#cb36-233" aria-hidden="true" tabindex="-1"></a>    cluster_times <span class="op">=</span> []</span>
+<span id="cb36-234"><a href="#cb36-234" aria-hidden="true" tabindex="-1"></a>    speedups <span class="op">=</span> []</span>
+<span id="cb36-235"><a href="#cb36-235" aria-hidden="true" tabindex="-1"></a>    img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-236"><a href="#cb36-236" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> nbr_parallel_blocks <span class="kw">in</span> ncores_range:</span>
+<span id="cb36-237"><a href="#cb36-237" aria-hidden="true" tabindex="-1"></a>        imgs <span class="op">=</span> [img]<span class="op">*</span>nbr_parallel_blocks</span>
+<span id="cb36-238"><a href="#cb36-238" aria-hidden="true" tabindex="-1"></a>        t1 <span class="op">=</span> time.time()</span>
+<span id="cb36-239"><a href="#cb36-239" aria-hidden="true" tabindex="-1"></a>        compute_func(imgs,nbr_parallel_blocks)</span>
+<span id="cb36-240"><a href="#cb36-240" aria-hidden="true" tabindex="-1"></a>        total_time <span class="op">=</span> time.time() <span class="op">-</span> t1</span>
+<span id="cb36-241"><a href="#cb36-241" aria-hidden="true" tabindex="-1"></a>        t2 <span class="op">=</span> time.time()</span>
+<span id="cb36-242"><a href="#cb36-242" aria-hidden="true" tabindex="-1"></a>        compute_func(imgs,<span class="dv">1</span>)</span>
+<span id="cb36-243"><a href="#cb36-243" aria-hidden="true" tabindex="-1"></a>        total_time_seq <span class="op">=</span> time.time() <span class="op">-</span> t2</span>
+<span id="cb36-244"><a href="#cb36-244" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose:</span>
+<span id="cb36-245"><a href="#cb36-245" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"With </span><span class="sc">{</span>nbr_parallel_blocks<span class="sc">}</span><span class="ss"> node(s): "</span>)</span>
+<span id="cb36-246"><a href="#cb36-246" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t</span><span class="st">Time : </span><span class="sc">{:.2f}</span><span class="st">s"</span>.<span class="bu">format</span>(total_time))</span>
+<span id="cb36-247"><a href="#cb36-247" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t</span><span class="st">Time seq : </span><span class="sc">{:.2f}</span><span class="st">s"</span>.<span class="bu">format</span>(total_time_seq))</span>
+<span id="cb36-248"><a href="#cb36-248" aria-hidden="true" tabindex="-1"></a>        cluster_times.append(total_time)</span>
+<span id="cb36-249"><a href="#cb36-249" aria-hidden="true" tabindex="-1"></a>        speedups.append(total_time_seq<span class="op">/</span>total_time)</span>
+<span id="cb36-250"><a href="#cb36-250" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({<span class="st">'time'</span>:cluster_times,<span class="st">'speedup'</span>:speedups},index<span class="op">=</span>ncores_range)</span>
+<span id="cb36-251"><a href="#cb36-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-252"><a href="#cb36-252" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> strong_scaling_run(compute_func,ncores_range,N,verbose<span class="op">=</span><span class="va">True</span>):</span>
+<span id="cb36-253"><a href="#cb36-253" aria-hidden="true" tabindex="-1"></a>    cluster_times <span class="op">=</span> []</span>
+<span id="cb36-254"><a href="#cb36-254" aria-hidden="true" tabindex="-1"></a>    speedups <span class="op">=</span> []</span>
+<span id="cb36-255"><a href="#cb36-255" aria-hidden="true" tabindex="-1"></a>    img<span class="op">=</span>np.arange(N<span class="op">*</span>N).reshape(N,N)</span>
+<span id="cb36-256"><a href="#cb36-256" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> nbr_parallel_blocks <span class="kw">in</span> ncores_range:</span>
+<span id="cb36-257"><a href="#cb36-257" aria-hidden="true" tabindex="-1"></a>        t1 <span class="op">=</span> time.time()</span>
+<span id="cb36-258"><a href="#cb36-258" aria-hidden="true" tabindex="-1"></a>        compute_func(img,nbr_parallel_blocks)</span>
+<span id="cb36-259"><a href="#cb36-259" aria-hidden="true" tabindex="-1"></a>        total_time <span class="op">=</span> time.time() <span class="op">-</span> t1</span>
+<span id="cb36-260"><a href="#cb36-260" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> verbose:</span>
+<span id="cb36-261"><a href="#cb36-261" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="ss">f"With </span><span class="sc">{</span>nbr_parallel_blocks<span class="sc">}</span><span class="ss"> node(s): "</span>)</span>
+<span id="cb36-262"><a href="#cb36-262" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"</span><span class="ch">\t</span><span class="st">Time : </span><span class="sc">{:.2f}</span><span class="st">s"</span>.<span class="bu">format</span>(total_time))</span>
+<span id="cb36-263"><a href="#cb36-263" aria-hidden="true" tabindex="-1"></a>        cluster_times.append(total_time)</span>
+<span id="cb36-264"><a href="#cb36-264" aria-hidden="true" tabindex="-1"></a>        speedups.append(cluster_times[<span class="dv">0</span>]<span class="op">/</span>total_time)</span>
+<span id="cb36-265"><a href="#cb36-265" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame({<span class="st">'time'</span>:cluster_times,<span class="st">'speedup'</span>:speedups},index<span class="op">=</span>ncores_range)</span>
+<span id="cb36-266"><a href="#cb36-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-267"><a href="#cb36-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-270"><a href="#cb36-270" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-271"><a href="#cb36-271" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb36-272"><a href="#cb36-272" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
+<span id="cb36-273"><a href="#cb36-273" aria-hidden="true" tabindex="-1"></a><span class="co"># Function that takes as an argument the result of a run, a "law" function,</span></span>
+<span id="cb36-274"><a href="#cb36-274" aria-hidden="true" tabindex="-1"></a><span class="co"># its parameter s, which corresponds to the estimated "sequential" proportion of the run,</span></span>
+<span id="cb36-275"><a href="#cb36-275" aria-hidden="true" tabindex="-1"></a><span class="co"># the run description, the law description</span></span>
+<span id="cb36-276"><a href="#cb36-276" aria-hidden="true" tabindex="-1"></a><span class="co"># Displays the comparative view of the run with the law prediction</span></span>
+<span id="cb36-277"><a href="#cb36-277" aria-hidden="true" tabindex="-1"></a><span class="co"># displays the root-mean-square error between the two</span></span>
+<span id="cb36-278"><a href="#cb36-278" aria-hidden="true" tabindex="-1"></a><span class="co"># returns previous numerical data</span></span>
+<span id="cb36-279"><a href="#cb36-279" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compare_law_and_run(run,law,ncores_range,s,run_description,law_description):</span>
+<span id="cb36-280"><a href="#cb36-280" aria-hidden="true" tabindex="-1"></a>    law_pred <span class="op">=</span> [law(N,s) <span class="cf">for</span> N <span class="kw">in</span> ncores_range]</span>
+<span id="cb36-281"><a href="#cb36-281" aria-hidden="true" tabindex="-1"></a>    law_df <span class="op">=</span> pd.DataFrame({law_description:law_pred},index<span class="op">=</span>ncores_range)</span>
+<span id="cb36-282"><a href="#cb36-282" aria-hidden="true" tabindex="-1"></a>    MSE <span class="op">=</span> mean_squared_error(run[<span class="st">'speedup'</span>][<span class="dv">1</span>:],law_pred[<span class="dv">1</span>:])</span>
+<span id="cb36-283"><a href="#cb36-283" aria-hidden="true" tabindex="-1"></a>    title <span class="op">=</span> <span class="st">"</span><span class="sc">{}</span><span class="st"> vs </span><span class="sc">{}</span><span class="st"> s=</span><span class="sc">{:2f}</span><span class="st">"</span>.<span class="bu">format</span>(law_description,run_description,s)</span>
+<span id="cb36-284"><a href="#cb36-284" aria-hidden="true" tabindex="-1"></a>    px.line(pd.concat([run.rename(columns<span class="op">=</span>{<span class="st">'speedup'</span>:run_description}),law_df],axis<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb36-285"><a href="#cb36-285" aria-hidden="true" tabindex="-1"></a>            y<span class="op">=</span>[run_description,law_description],</span>
+<span id="cb36-286"><a href="#cb36-286" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span>title,</span>
+<span id="cb36-287"><a href="#cb36-287" aria-hidden="true" tabindex="-1"></a>            labels<span class="op">=</span>{<span class="st">"index"</span>:<span class="st">"Number of cores"</span>,</span>
+<span id="cb36-288"><a href="#cb36-288" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"value"</span>:<span class="st">"Speedup over 1 core"</span>,</span>
+<span id="cb36-289"><a href="#cb36-289" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"variable"</span>:<span class="st">"Law or Run"</span>},</span>
+<span id="cb36-290"><a href="#cb36-290" aria-hidden="true" tabindex="-1"></a>                width<span class="op">=</span><span class="dv">600</span></span>
+<span id="cb36-291"><a href="#cb36-291" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb36-292"><a href="#cb36-292" aria-hidden="true" tabindex="-1"></a>        ).show()</span>
+<span id="cb36-293"><a href="#cb36-293" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"MSE :</span><span class="sc">{:.2e}</span><span class="st">"</span>.<span class="bu">format</span>(MSE))</span>
+<span id="cb36-294"><a href="#cb36-294" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.Series({<span class="st">'run'</span>:run_description,<span class="st">'law'</span>:law_description,<span class="st">'s'</span>:s,<span class="st">'MSE'</span>:MSE}).to_frame().T</span>
+<span id="cb36-295"><a href="#cb36-295" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-296"><a href="#cb36-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-297"><a href="#cb36-297" aria-hidden="true" tabindex="-1"></a><span class="fu">## Amdahl’s law</span></span>
+<span id="cb36-298"><a href="#cb36-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-299"><a href="#cb36-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-300"><a href="#cb36-300" aria-hidden="true" tabindex="-1"></a>Implement Amdahl’s law in a function <span class="in">`amdahl_func`</span> that takes the number of cores and the proportion of the code that can be parallelized as arguments. The speedup is given by:</span>
+<span id="cb36-301"><a href="#cb36-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-302"><a href="#cb36-302" aria-hidden="true" tabindex="-1"></a>$$S_{up}=\frac{1}{s+\frac{1-s}{N}}$$</span>
+<span id="cb36-303"><a href="#cb36-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-306"><a href="#cb36-306" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-307"><a href="#cb36-307" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb36-308"><a href="#cb36-308" aria-hidden="true" tabindex="-1"></a><span class="co"># N = workers number</span></span>
+<span id="cb36-309"><a href="#cb36-309" aria-hidden="true" tabindex="-1"></a><span class="co"># S = "sequential part" of the code (proportion)</span></span>
+<span id="cb36-310"><a href="#cb36-310" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> amdahl_func(N,S):</span>
+<span id="cb36-311"><a href="#cb36-311" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ... <span class="co"># speedup </span></span>
+<span id="cb36-312"><a href="#cb36-312" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-313"><a href="#cb36-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-316"><a href="#cb36-316" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-317"><a href="#cb36-317" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-318"><a href="#cb36-318" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> amdahl_func(N,s):</span>
+<span id="cb36-319"><a href="#cb36-319" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span>(s <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>s)<span class="op">/</span>N)</span>
+<span id="cb36-320"><a href="#cb36-320" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-321"><a href="#cb36-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-322"><a href="#cb36-322" aria-hidden="true" tabindex="-1"></a><span class="fu">## Make the scaling runs</span></span>
+<span id="cb36-323"><a href="#cb36-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-326"><a href="#cb36-326" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-327"><a href="#cb36-327" aria-hidden="true" tabindex="-1"></a>strong_run <span class="op">=</span> strong_scaling_run(strong_scaling_main,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">10000</span>)</span>
+<span id="cb36-328"><a href="#cb36-328" aria-hidden="true" tabindex="-1"></a>weak_run <span class="op">=</span> weak_scaling_run(weak_scaling_main,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">10000</span>)</span>
+<span id="cb36-329"><a href="#cb36-329" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-330"><a href="#cb36-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-331"><a href="#cb36-331" aria-hidden="true" tabindex="-1"></a><span class="fu">## Plot the results for strong scaling</span></span>
+<span id="cb36-332"><a href="#cb36-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-335"><a href="#cb36-335" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-336"><a href="#cb36-336" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(strong_run,amdahl_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),<span class="dv">0</span>,<span class="st">"Strong run"</span>,<span class="st">"Amdahl"</span>)</span>
+<span id="cb36-337"><a href="#cb36-337" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-338"><a href="#cb36-338" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-339"><a href="#cb36-339" aria-hidden="true" tabindex="-1"></a><span class="fu">## Finding the real "S" part</span></span>
+<span id="cb36-340"><a href="#cb36-340" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-343"><a href="#cb36-343" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-344"><a href="#cb36-344" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
+<span id="cb36-345"><a href="#cb36-345" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_s_amdahl(strong_run):</span>
+<span id="cb36-346"><a href="#cb36-346" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ... <span class="co"># s</span></span>
+<span id="cb36-347"><a href="#cb36-347" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-348"><a href="#cb36-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-351"><a href="#cb36-351" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-352"><a href="#cb36-352" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-353"><a href="#cb36-353" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_s_amdahl(strong_run):</span>
+<span id="cb36-354"><a href="#cb36-354" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(strong_run)</span>
+<span id="cb36-355"><a href="#cb36-355" aria-hidden="true" tabindex="-1"></a>    Sup <span class="op">=</span> strong_run[<span class="st">'speedup'</span>][N]</span>
+<span id="cb36-356"><a href="#cb36-356" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (N<span class="op">/</span>Sup <span class="op">-</span> <span class="dv">1</span>)<span class="op">/</span>(N<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb36-357"><a href="#cb36-357" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-358"><a href="#cb36-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-359"><a href="#cb36-359" aria-hidden="true" tabindex="-1"></a><span class="fu">## Now compare the law and the run with the real "s" part</span></span>
+<span id="cb36-360"><a href="#cb36-360" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-363"><a href="#cb36-363" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-364"><a href="#cb36-364" aria-hidden="true" tabindex="-1"></a>s_strong <span class="op">=</span> find_s_amdahl(strong_run)</span>
+<span id="cb36-365"><a href="#cb36-365" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(strong_run,amdahl_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),s_strong,<span class="st">"Strong run"</span>,<span class="st">"Amdahl"</span>)</span>
+<span id="cb36-366"><a href="#cb36-366" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-367"><a href="#cb36-367" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-368"><a href="#cb36-368" aria-hidden="true" tabindex="-1"></a><span class="fu">## Apply it to weak scaling and gustafson’s law</span></span>
+<span id="cb36-369"><a href="#cb36-369" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-372"><a href="#cb36-372" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-373"><a href="#cb36-373" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-374"><a href="#cb36-374" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gustafson_func(N,s):</span>
+<span id="cb36-375"><a href="#cb36-375" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> N <span class="op">-</span> s<span class="op">*</span>(N<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb36-376"><a href="#cb36-376" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-377"><a href="#cb36-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-380"><a href="#cb36-380" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-381"><a href="#cb36-381" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-382"><a href="#cb36-382" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(weak_run,gustafson_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),s_strong,<span class="st">"Weak run"</span>,<span class="st">"Gustafson"</span>)</span>
+<span id="cb36-383"><a href="#cb36-383" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-384"><a href="#cb36-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-385"><a href="#cb36-385" aria-hidden="true" tabindex="-1"></a>Recalculate real s for weak scaling</span>
+<span id="cb36-386"><a href="#cb36-386" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-389"><a href="#cb36-389" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-390"><a href="#cb36-390" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-391"><a href="#cb36-391" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_s_gustafson(weak_run):</span>
+<span id="cb36-392"><a href="#cb36-392" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(weak_run)</span>
+<span id="cb36-393"><a href="#cb36-393" aria-hidden="true" tabindex="-1"></a>    Sup <span class="op">=</span> weak_run[<span class="st">'speedup'</span>][N]</span>
+<span id="cb36-394"><a href="#cb36-394" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (N<span class="op">-</span>Sup)<span class="op">/</span>(N<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb36-395"><a href="#cb36-395" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-396"><a href="#cb36-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-399"><a href="#cb36-399" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-400"><a href="#cb36-400" aria-hidden="true" tabindex="-1"></a><span class="co">#| tags: [solution]</span></span>
+<span id="cb36-401"><a href="#cb36-401" aria-hidden="true" tabindex="-1"></a>s_weak <span class="op">=</span> find_s_gustafson(weak_run)</span>
+<span id="cb36-402"><a href="#cb36-402" aria-hidden="true" tabindex="-1"></a>compare_law_and_run(weak_run,gustafson_func,<span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">9</span>),s_weak,<span class="st">"Weak run"</span>,<span class="st">"Gustafson"</span>)</span>
+<span id="cb36-403"><a href="#cb36-403" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-404"><a href="#cb36-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-405"><a href="#cb36-405" aria-hidden="true" tabindex="-1"></a><span class="fu">## Discussion</span></span>
+<span id="cb36-406"><a href="#cb36-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-407"><a href="#cb36-407" aria-hidden="true" tabindex="-1"></a>Why the Sequential part is not the same for strong and weak scaling?</span>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

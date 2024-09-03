@@ -1,0 +1,71 @@
+grid-rows: 7
+grid-columns: 3
+horizontal-gap: 0
+vertical-gap: 10
+
+style: {
+    fill: transparent
+}
+
+start1 : ""
+Concurrency.class: [title; none]
+end1 : ""
+start2 : ""
+middle2 : ""
+end2 : ""
+start2 -> end2 : { class: time }
+CPU1 : "CPU"
+bakerlist: "" {
+    grid-gap: 0
+    grid-columns: 5
+    task1: "Run\napplication\n#1"
+    task2: "Run\napplication\n#2"
+    task3: "Run\napplication\n#1"
+    task4: "Run\napplication\n#2"
+    task5: "Run\napplication\n#1"
+}
+end3 : ""
+start4 : ""
+Parellelism.class: [title; none]
+end4 : ""
+start5 : ""
+middle5 : ""
+end5 : ""
+start5 -> end5 : { class: time }
+CPU2 : "CPU"
+bakerlist2: "Run application #1" 
+end6: ""
+CPU3 : "CPU"
+bakerlist3: "Run application #2" 
+end7 : ""
+
+classes: {
+    none: {
+        style: {
+            fill: transparent
+            stroke: transparent
+        }
+    }
+    title: {
+        style: {
+            font-size: 30
+        }
+    }
+    time: {
+        label: "Time"
+        style: {
+            font-size: 24
+            animated: true
+        }
+    }
+}
+end* : {
+    width: 0
+    class: none
+}
+middle*.class: none
+start* : {
+    width: 0
+    class: none
+}   
+CPU*.class: none

@@ -1,0 +1,54 @@
+grid-columns: 4
+grid-gap: 0
+
+arrows1: "" {
+    start1: "" 
+    middle1: "" { width: 200 }
+    presocket1: ""
+    start1 -> presocket1: "1. Write bytes"
+    start2: ""
+    middle2: "" { width: 200 }
+    presocket2: ""
+    start2 <- presocket2: "2. Read bytes"
+}
+Socket.shape: queue
+arrows2: "" {
+    start1: ""
+    middle1: "" { width: 200 }
+    presocket1: ""
+    start1 -> presocket1: "2. Send bytes"
+    start2: ""
+    middle2: "" { width: 200 }
+    presocket2: ""
+    start2 <- presocket2: "1. Reply bytes"
+}
+Server
+arrows* : {
+    grid-rows: 2
+    grid-gap: 0
+    start*.width: 1
+    presocket*.width: 1
+    *: {
+        class: none
+    }
+    (** -> **)[*]: {
+        style: {
+            animated: true
+        }
+    }
+    (** <- **)[*]: {
+        style: {
+            animated: true
+        }
+    }
+    class: none
+}
+
+classes: {
+    none: {
+        style: {
+            fill: transparent
+            stroke: transparent
+        }
+    }
+}

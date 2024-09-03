@@ -71,7 +71,7 @@ From @fowler2022python
 
 ## Concurrency vs. Parallelism (3)
 
-![With concurrency, we switch between running two applications. With parallelism, we actively run two applications simultaneously.](figs/concurrency.png)
+![With concurrency, we switch between running two applications. With parallelism, we actively run two applications simultaneously.](d2-figures/concurrency.svg)
 
 :::{.attribution}
 From @fowler2022python

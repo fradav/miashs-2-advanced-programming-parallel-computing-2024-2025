@@ -488,7 +488,7 @@ window.Quarto = {
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figs/bakers.png" class="img-fluid figure-img"></p>
+<p><img src="d2-figures/bakers.svg" class="img-fluid figure-img"></p>
 <figcaption>With concurrency, we have multiple tasks happening at the same time, but only one we’re actively doing at a given point in time. With parallelism, we have multiple tasks happening and are actively doing more than one simultaneously.</figcaption>
 </figure>
 </div>
@@ -497,7 +497,7 @@ window.Quarto = {
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="figs/concurrency.png" class="img-fluid figure-img"></p>
+<p><img src="d2-figures/concurrency.svg" class="img-fluid figure-img"></p>
 <figcaption>With concurrency, we switch between running two applications. With parallelism, we actively run two applications simultaneously.</figcaption>
 </figure>
 </div>
@@ -599,7 +599,7 @@ window.Quarto = {
 </section>
 <section id="processes-and-threads" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="processes-and-threads"><span class="header-section-number">7.2</span> Processes and threads</h2>
-<div id="c5a1a7ea" class="cell" data-output-location="fragment" data-execution_count="1">
+<div id="c5a1a7ea" class="cell" data-output-location="fragment" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3" data-lst-cap="Processes and threads in a simple Python application"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> threading</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -618,7 +618,7 @@ The current thread is MainThread</code></pre>
 </section>
 <section id="creating-processes" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="creating-processes"><span class="header-section-number">7.3</span> Creating processes</h2>
-<div id="245a2049" class="cell" data-output-location="fragment" data-execution_count="2">
+<div id="245a2049" class="cell" data-output-location="fragment" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5" data-lst-cap="Creating processes in Python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> multiprocessing</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -640,7 +640,7 @@ Hello from parent process 119943</code></pre>
 </section>
 <section id="creating-threads" class="level2" data-number="7.4">
 <h2 data-number="7.4" class="anchored" data-anchor-id="creating-threads"><span class="header-section-number">7.4</span> Creating threads</h2>
-<div id="6ba8679a" class="cell" data-output-location="fragment" data-execution_count="3">
+<div id="6ba8679a" class="cell" data-output-location="fragment" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb7" data-lst-cap="Creating threads in Python"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> threading</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -808,7 +808,7 @@ The current thread is MainThread</code></pre>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'Hello world!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="what-is-it" class="level2" data-number="10.1">
 <h2 data-number="10.1" class="anchored" data-anchor-id="what-is-it"><span class="header-section-number">10.1</span> What is it?</h2>
-<div id="3530c921" class="cell" data-output-location="column-fragment" data-execution_count="4">
+<div id="3530c921" class="cell" data-output-location="column-fragment" data-execution_count="5">
 <div class="sourceCode cell-code" id="annotated-cell-7"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-7-1"><a href="#annotated-cell-7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> coroutine_add_one(number: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
 <span id="annotated-cell-7-2"><a href="#annotated-cell-7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> number <span class="op">+</span> <span class="dv">1</span></span>
 <span id="annotated-cell-7-3"><a href="#annotated-cell-7-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -879,7 +879,7 @@ Warning
 </section>
 <section id="await-keyword" class="level2" data-number="10.3">
 <h2 data-number="10.3" class="anchored" data-anchor-id="await-keyword"><span class="header-section-number">10.3</span> <code>await</code> keyword</h2>
-<div id="80bb6852" class="cell" data-output-location="column-fragment" data-execution_count="5">
+<div id="80bb6852" class="cell" data-output-location="column-fragment" data-execution_count="6">
 <div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="annotated-cell-9-2"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="annotated-cell-9-3"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> add_one(number: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
@@ -921,7 +921,7 @@ Warning
 </section>
 <section id="simulating-the-real-thing-with-asyncio.sleep" class="level2" data-number="10.4">
 <h2 data-number="10.4" class="anchored" data-anchor-id="simulating-the-real-thing-with-asyncio.sleep"><span class="header-section-number">10.4</span> Simulating the real thing with <code>asyncio.sleep</code></h2>
-<div id="568f73f1" class="cell" data-output-location="fragment" data-execution_count="6">
+<div id="568f73f1" class="cell" data-output-location="fragment" data-execution_count="7">
 <div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="annotated-cell-10-2"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="annotated-cell-10-3"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> hello_world_message() <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
@@ -952,7 +952,7 @@ Warning
 </section>
 <section id="utility-function-delayseconds" class="level2" data-number="10.5">
 <h2 data-number="10.5" class="anchored" data-anchor-id="utility-function-delayseconds"><span class="header-section-number">10.5</span> Utility function <code>delay(seconds)</code></h2>
-<div id="02bcb2e6" class="cell" data-execution_count="7">
+<div id="02bcb2e6" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="annotated-cell-11"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="annotated-cell-11-2"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="annotated-cell-11-3"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -981,7 +981,7 @@ Warning
 </section>
 <section id="running-two-coroutines" class="level2" data-number="10.6">
 <h2 data-number="10.6" class="anchored" data-anchor-id="running-two-coroutines"><span class="header-section-number">10.6</span> Running two coroutines</h2>
-<div id="5809ab9f" class="cell" data-output-location="fragment" data-execution_count="8">
+<div id="5809ab9f" class="cell" data-output-location="fragment" data-execution_count="9">
 <div class="sourceCode cell-code" id="annotated-cell-12"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-12-1"><a href="#annotated-cell-12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="annotated-cell-12-2"><a href="#annotated-cell-12-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="annotated-cell-12-3"><a href="#annotated-cell-12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> add_one(number: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
@@ -1035,7 +1035,7 @@ Hello World!</code></pre>
 <p><span class="math inline">\Rightarrow</span> Tasks are wrapped coroutines which are scheduled to run in the event loop as soon as possible.</p>
 <section id="creating-tasks" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="creating-tasks"><span class="header-section-number">11.1</span> Creating tasks</h2>
-<div id="ec4546f9" class="cell" data-output-location="fragment" data-execution_count="9">
+<div id="ec4546f9" class="cell" data-output-location="fragment" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> main():</span>
@@ -1059,7 +1059,7 @@ finished sleeping for 3 second(s)
 </section>
 <section id="running-tasks-concurrently" class="level2" data-number="11.2">
 <h2 data-number="11.2" class="anchored" data-anchor-id="running-tasks-concurrently"><span class="header-section-number">11.2</span> Running tasks concurrently</h2>
-<div id="6f94b8a3" class="cell" data-output-location="fragment" data-execution_count="10">
+<div id="6f94b8a3" class="cell" data-output-location="fragment" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> main():</span>
@@ -1088,7 +1088,7 @@ finished sleeping for 3 second(s)</code></pre>
 <div class="attribution">
 <p>From <span class="citation" data-cites="fowler2022python">Fowler (<a href="../references.html#ref-fowler2022python" role="doc-biblioref">2022</a>)</span></p>
 </div>
-<div id="dd61994b" class="cell" data-output-location="fragment" data-execution_count="11">
+<div id="dd61994b" class="cell" data-output-location="fragment" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> hello_every_second():</span>
@@ -1120,7 +1120,7 @@ finished sleeping for 3 second(s)</code></pre>
 </section>
 <section id="canceling-tasks" class="level2" data-number="11.3">
 <h2 data-number="11.3" class="anchored" data-anchor-id="canceling-tasks"><span class="header-section-number">11.3</span> Canceling tasks</h2>
-<div id="35eab67e" class="cell" data-output-location="fragment" data-execution_count="12">
+<div id="35eab67e" class="cell" data-output-location="fragment" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> asyncio <span class="im">import</span> CancelledError</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1156,7 +1156,7 @@ Our task was cancelled</code></pre>
 </section>
 <section id="setting-a-timeout" class="level2" data-number="11.4">
 <h2 data-number="11.4" class="anchored" data-anchor-id="setting-a-timeout"><span class="header-section-number">11.4</span> Setting a timeout</h2>
-<div id="41478b55" class="cell" data-output-location="fragment" data-execution_count="13">
+<div id="41478b55" class="cell" data-output-location="fragment" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">async</span> <span class="kw">def</span> main():</span>
@@ -1181,7 +1181,7 @@ Was the task cancelled? True</code></pre>
 <h1 data-number="12"><span class="header-section-number">12</span> Tasks, coroutines, futures, and awaitables</h1>
 <section id="introducing-futures" class="level2" data-number="12.1">
 <h2 data-number="12.1" class="anchored" data-anchor-id="introducing-futures"><span class="header-section-number">12.1</span> Introducing futures</h2>
-<div id="bc487b2f" class="cell" data-output-location="fragment" data-execution_count="14">
+<div id="bc487b2f" class="cell" data-output-location="fragment" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> asyncio <span class="im">import</span> Future</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>my_future <span class="op">=</span> Future()</span>
@@ -1201,7 +1201,7 @@ What is the result of my_future? 42</code></pre>
 </section>
 <section id="awaiting-futures" class="level2" data-number="12.2">
 <h2 data-number="12.2" class="anchored" data-anchor-id="awaiting-futures"><span class="header-section-number">12.2</span> Awaiting futures</h2>
-<div id="da83b95a" class="cell" data-output-location="column-fragment" data-execution_count="15">
+<div id="da83b95a" class="cell" data-output-location="column-fragment" data-execution_count="16">
 <div class="sourceCode cell-code" id="annotated-cell-19"><pre class="sourceCode python code-annotation-code code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-19-1"><a href="#annotated-cell-19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> asyncio <span class="im">import</span> Future</span>
 <span id="annotated-cell-19-2"><a href="#annotated-cell-19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="annotated-cell-19-3"><a href="#annotated-cell-19-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -1293,7 +1293,7 @@ Schedule and run coroutines concurrently, and can be used to cancel or check the
 <h2 data-number="13.1" class="anchored" data-anchor-id="with-a-decorator"><span class="header-section-number">13.1</span> With a decorator</h2>
 <div class="columns">
 <div class="column" style="width:60%;">
-<div id="250c548f" class="cell" data-execution_count="16">
+<div id="250c548f" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Callable, Any</span>
@@ -1327,7 +1327,7 @@ Schedule and run coroutines concurrently, and can be used to cancel or check the
 </section>
 <section id="using-it" class="level2" data-number="13.2">
 <h2 data-number="13.2" class="anchored" data-anchor-id="using-it"><span class="header-section-number">13.2</span> Using it</h2>
-<div id="65e0a1ca" class="cell" data-output-location="column-fragment" data-execution_count="17">
+<div id="65e0a1ca" class="cell" data-output-location="column-fragment" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="at">@async_timed</span>()</span>
@@ -1364,7 +1364,7 @@ finished &lt;function main at 0x7f0b593465c0&gt; in 3.0013 second(s)</code></pre
 <section id="asyncio.gather" class="level2" data-number="13.3">
 <h2 data-number="13.3" class="anchored" data-anchor-id="asyncio.gather"><span class="header-section-number">13.3</span> <code>asyncio.gather</code></h2>
 <p>asyncio.gather() runs multiple asynchronous operations, wraps a coroutine as a task, and returns a list of results in the same order of awaitables.</p>
-<div id="ec37f683" class="cell" data-output-location="column-fragment" data-execution_count="18">
+<div id="ec37f683" class="cell" data-output-location="column-fragment" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1409,7 +1409,7 @@ Caution
 <h1 data-number="14"><span class="header-section-number">14</span> Pitfalls of asynchronous programming</h1>
 <section id="running-cpu-bound-code" class="level2" data-number="14.1">
 <h2 data-number="14.1" class="anchored" data-anchor-id="running-cpu-bound-code"><span class="header-section-number">14.1</span> Running CPU-bound code</h2>
-<div id="a2323a09" class="cell" data-output-location="column-fragment" data-execution_count="19">
+<div id="a2323a09" class="cell" data-output-location="column-fragment" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="at">@async_timed</span>()</span>
@@ -1440,7 +1440,7 @@ finished &lt;function main at 0x7f0b59346ac0&gt; in 8.3767 second(s)</code></pre
 </section>
 <section id="running-blocking-apis" class="level2" data-number="14.2">
 <h2 data-number="14.2" class="anchored" data-anchor-id="running-blocking-apis"><span class="header-section-number">14.2</span> Running blocking APIs</h2>
-<div id="0be21322" class="cell" data-output-location="column-fragment" data-execution_count="20">
+<div id="0be21322" class="cell" data-output-location="column-fragment" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -1476,7 +1476,7 @@ finished &lt;function main at 0x7f0b586cafc0&gt; in 0.6803 second(s)</code></pre
 <h1 data-number="15"><span class="header-section-number">15</span> Asynchronous threading</h1>
 <section id="example-of-blocking-code" class="level2" data-number="15.1">
 <h2 data-number="15.1" class="anchored" data-anchor-id="example-of-blocking-code"><span class="header-section-number">15.1</span> Example of blocking code</h2>
-<div id="e31b8a0a" class="cell" data-output-location="column-fragment" data-execution_count="21">
+<div id="e31b8a0a" class="cell" data-output-location="column-fragment" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a> </span>
@@ -1496,7 +1496,7 @@ finished &lt;function main at 0x7f0b586cafc0&gt; in 0.6803 second(s)</code></pre
 </section>
 <section id="thread-pool" class="level2" data-number="15.2">
 <h2 data-number="15.2" class="anchored" data-anchor-id="thread-pool"><span class="header-section-number">15.2</span> Thread Pool</h2>
-<div id="e0e80006" class="cell" data-output-location="fragment" data-execution_count="22">
+<div id="e0e80006" class="cell" data-output-location="fragment" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures <span class="im">import</span> ThreadPoolExecutor</span>
@@ -1527,7 +1527,7 @@ finished &lt;function main at 0x7f0b586cafc0&gt; in 0.6803 second(s)</code></pre
 </section>
 <section id="compare-with-sequential-code" class="level2" data-number="15.3">
 <h2 data-number="15.3" class="anchored" data-anchor-id="compare-with-sequential-code"><span class="header-section-number">15.3</span> Compare with sequential code</h2>
-<div id="653bef6b" class="cell" data-output-location="fragment" data-execution_count="23">
+<div id="653bef6b" class="cell" data-output-location="fragment" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>start <span class="op">=</span> time.time()</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>urls <span class="op">=</span> [<span class="st">'https://www.example.com'</span> <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span>
@@ -1546,7 +1546,7 @@ finished &lt;function main at 0x7f0b586cafc0&gt; in 0.6803 second(s)</code></pre
 </section>
 <section id="thread-pool-with-asyncio" class="level2" data-number="15.4">
 <h2 data-number="15.4" class="anchored" data-anchor-id="thread-pool-with-asyncio"><span class="header-section-number">15.4</span> Thread pool with <code>asyncio</code></h2>
-<div id="d92e0f5f" class="cell" data-output-location="fragment" data-execution_count="24">
+<div id="d92e0f5f" class="cell" data-output-location="fragment" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
 <span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>
@@ -1578,7 +1578,7 @@ finished &lt;function main at 0x7f0b5871bd80&gt; in 0.3865 second(s)</code></pre
 <h2 data-number="15.5" class="anchored" data-anchor-id="multithreading-with-numpy"><span class="header-section-number">15.5</span> Multithreading with numpy</h2>
 <p>Let’s define a big matrix on which we will compute the mean of each row.</p>
 <p>Now process the matrix sequentially.</p>
-<div id="7e365ab2" class="cell" data-output-location="fragment" data-execution_count="26">
+<div id="7e365ab2" class="cell" data-output-location="fragment" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> time.time()</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>res_seq <span class="op">=</span> np.mean(matrix, axis<span class="op">=</span><span class="dv">1</span>)</span>
@@ -1590,7 +1590,7 @@ finished &lt;function main at 0x7f0b5871bd80&gt; in 0.3865 second(s)</code></pre
 </div>
 </div>
 <p>And then the same with multithreading (we check that the results are <em>exactly</em> the same).</p>
-<div id="2d6b7471" class="cell" data-output-location="fragment" data-execution_count="27">
+<div id="2d6b7471" class="cell" data-output-location="fragment" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> functools</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> concurrent.futures.thread <span class="im">import</span> ThreadPoolExecutor</span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> asyncio</span>

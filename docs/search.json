@@ -144,7 +144,7 @@
     "href": "Courses/1_Intro.html#illustration-parallel-computing-simple-case",
     "title": "2  Introduction to parallel computing",
     "section": "3.7 Illustration: parallel computing (simple case)",
-    "text": "3.7 Illustration: parallel computing (simple case)\n\n\n\na task = “wait 1 \\mus”\nObjective: run 100 tasks\nNumber of workers: 1, 2, 4, 6, 8\n\nWhy is the time gain not linear?\n\n\n\n\n10 repetitions in each configurations",
+    "text": "3.7 Illustration: parallel computing (simple case)\n\n\n\na task = “wait 1 \\mus”\nObjective: run 100 tasks\nNumber of workers: 1, 2, 4, 6, 8\n\nWhy is the time gain not linear?\n\n\n\n10 repetitions in each configurations",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -184,7 +184,7 @@
     "href": "Courses/1_Intro.html#illustration-overhead-for-resource-access",
     "title": "2  Introduction to parallel computing",
     "section": "3.11 Illustration: overhead for resource access",
-    "text": "3.11 Illustration: overhead for resource access\n\n\n\na task = “wait 1 \\mus”\nObjective: run 100 tasks\n8 computing units\nNumber of workers: 1, 2, 4, 8, 16, 32\n\n\n\n\n\n10 repetitions in each configurations",
+    "text": "3.11 Illustration: overhead for resource access\n\n\n\na task = “wait 1 \\mus”\nObjective: run 100 tasks\n8 computing units\nNumber of workers: 1, 2, 4, 8, 16, 32\n\n\n\n\n10 repetitions in each configurations",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -234,7 +234,7 @@
     "href": "Courses/1_Intro.html#illustration-1-overhead-for-io-access",
     "title": "2  Introduction to parallel computing",
     "section": "3.16 Illustration 1: overhead for I/O access",
-    "text": "3.16 Illustration 1: overhead for I/O access\n\n\n\na task\n\nsimulate a vector of 10 values\ncompute the mean\n\nObjective: run 10000 tasks\nResources: 8 computing units\nNumber of workers: 1, 2, 4, 6, 8\n\n\n\n\n\n10 repetitions in each configurations",
+    "text": "3.16 Illustration 1: overhead for I/O access\n\n\n\na task\n\nsimulate a vector of 10 values\ncompute the mean\n\nObjective: run 10000 tasks\nResources: 8 computing units\nNumber of workers: 1, 2, 4, 6, 8\n\n\n\n\n10 repetitions in each configurations",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -244,7 +244,7 @@
     "href": "Courses/1_Intro.html#illustration-2-overhead-for-io-access",
     "title": "2  Introduction to parallel computing",
     "section": "3.17 Illustration 2: overhead for I/O access",
-    "text": "3.17 Illustration 2: overhead for I/O access\n\n\n\na task = “compute the sum of a given row in a matrix”\nObjective: compute all row-wise sums for a 10000 \\times 1000 matrix (i.e. 10000 tasks)\nResources: 8 computing units\nNumber of workers: 1, 2, 4, 6, 8\n\n\n\n\n\n20 repetitions in each configurations",
+    "text": "3.17 Illustration 2: overhead for I/O access\n\n\n\na task = “compute the sum of a given row in a matrix”\nObjective: compute all row-wise sums for a 10000 \\times 1000 matrix (i.e. 10000 tasks)\nResources: 8 computing units\nNumber of workers: 1, 2, 4, 6, 8\n\n\n\n\n20 repetitions in each configurations",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -294,7 +294,7 @@
     "href": "Courses/1_Intro.html#gpu-graphical-processing-units",
     "title": "2  Introduction to parallel computing",
     "section": "4.3 GPU (graphical processing units)",
-    "text": "4.3 GPU (graphical processing units)\n\n\n\n“many-core” computing card\nlocal memory\nslower connection to shared memory than CPUs\nto run a computation: transfer data from host shared memory to local memory (and vice-versa for results)\n\n\\rightarrow potential bottleneck\n\n         ┌───────────────────────────────────────────┐\n         │                                           │\n         │ ┌─────────────────┐                       │\n         │ │                 │                       │\n┌────────┴─┴──┐     ┌─────── │ ────────┐    ┌─────── │ ─────────┐\n│ MEMORY      │     │ CPU1   │         │    │ GPU    │          │\n│             │     │ ┌──────┴───────┐ │    │ ┌──────┴───────┐  │\n│             │     │ │ Local Memory │ │    │ │ Local Memory │  │\n│             │     │ └──────┬───────┘ │    │ └──────┬───────┘  │\n│             │     │        │         │    │        │          │\n│             │     │ ┌───┐  │  ┌───┐  │    │  ┌─┬─┬─┼─┬─┬─┬─┐  │\n│             │     │ │ C ├──┼──┤ C │  │    │  │C│C│C│C│C│C│C│  │\n│             │     │ └───┘  │  └───┘  │    │  ├─┼─┼─┼─┼─┼─┼─┤  │\n└─────────────┘     │        │         │    │  │C│C│C│C│C│C│C│  │\n                    │ ┌───┐  │  ┌───┐  │    │  ├─┼─┼─┼─┼─┼─┼─┤  │\n                    │ │ C ├──┴──┤ C │  │    │  │C│C│C│C│C│C│C│  │\n                    │ └───┘     └───┘  │    │  └─┴─┴─┴─┴─┴─┴─┘  │\n                    │                  │    │                   │\n                    └──────────────────┘    └───────────────────┘\n\n\n\n\n\nSource: wikimedia.org\n\n\n\n\n\nCPU\nGPU\n\n\n\n\ntens (10x) of computing units (“cores”)\nthousand (1000x) of computing units (“cores”)\n\n\ncomputing units capable of more complex operations\ncomputing units only capable of more simple operations\n\n\nlarger cache memory per computing unit\nvery small cache memory per computing unit\n\n\nfaster access to RAM\nslower access to RAM\n\n\n\\rightarrow efficient for general purpose parallel programming (e.g. check conditions)\n\\rightarrow fast for massively parallel computations based on simple elementary operations (e.g. linear algebra)",
+    "text": "4.3 GPU (graphical processing units)\n\n\n\n“many-core” computing card\nlocal memory\nslower connection to shared memory than CPUs\nto run a computation: transfer data from host shared memory to local memory (and vice-versa for results)\n\n\\rightarrow potential bottleneck\n\n         ┌───────────────────────────────────────────┐\n         │                                           │\n         │ ┌─────────────────┐                       │\n         │ │                 │                       │\n┌────────┴─┴──┐     ┌─────── │ ────────┐    ┌─────── │ ─────────┐\n│ MEMORY      │     │ CPU1   │         │    │ GPU    │          │\n│             │     │ ┌──────┴───────┐ │    │ ┌──────┴───────┐  │\n│             │     │ │ Local Memory │ │    │ │ Local Memory │  │\n│             │     │ └──────┬───────┘ │    │ └──────┬───────┘  │\n│             │     │        │         │    │        │          │\n│             │     │ ┌───┐  │  ┌───┐  │    │  ┌─┬─┬─┼─┬─┬─┬─┐  │\n│             │     │ │ C ├──┼──┤ C │  │    │  │C│C│C│C│C│C│C│  │\n│             │     │ └───┘  │  └───┘  │    │  ├─┼─┼─┼─┼─┼─┼─┤  │\n└─────────────┘     │        │         │    │  │C│C│C│C│C│C│C│  │\n                    │ ┌───┐  │  ┌───┐  │    │  ├─┼─┼─┼─┼─┼─┼─┤  │\n                    │ │ C ├──┴──┤ C │  │    │  │C│C│C│C│C│C│C│  │\n                    │ └───┘     └───┘  │    │  └─┴─┴─┴─┴─┴─┴─┘  │\n                    │                  │    │                   │\n                    └──────────────────┘    └───────────────────┘\n\n\n\n\nSource: wikimedia.org\n\n\n\n\n\n\nCPU\nGPU\n\n\n\n\ntens (10x) of computing units (“cores”)\nthousand (1000x) of computing units (“cores”)\n\n\ncomputing units capable of more complex operations\ncomputing units only capable of more simple operations\n\n\nlarger cache memory per computing unit\nvery small cache memory per computing unit\n\n\nfaster access to RAM\nslower access to RAM\n\n\n\\rightarrow efficient for general purpose parallel programming (e.g. check conditions)\n\\rightarrow fast for massively parallel computations based on simple elementary operations (e.g. linear algebra)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -374,7 +374,7 @@
     "href": "Courses/1_Intro.html#illustration-columnrow-wise-matrix-sum-algorithm",
     "title": "2  Introduction to parallel computing",
     "section": "5.8 Illustration: column/row-wise matrix sum algorithm",
-    "text": "5.8 Illustration: column/row-wise matrix sum algorithm\nParallel column-wise vs parallel row-wise matrix sum algorithms\n\n\n\nMatrix 10000 \\times 10000\nObjective: run 10000 tasks\nResources: 64 computing units\nNumber of workers: 1, 2, 4, 8, 16, 32\n\nExercise 1: why the performance degradation?\n\n{\\rightarrow overhead for memory access}\n\nExercise 2: why the performance difference?\n\n{\\rightarrow impact of array storage order}\n\n\n\n\n\n20 repetitions in each configurations",
+    "text": "5.8 Illustration: column/row-wise matrix sum algorithm\nParallel column-wise vs parallel row-wise matrix sum algorithms\n\n\n\nMatrix 10000 \\times 10000\nObjective: run 10000 tasks\nResources: 64 computing units\nNumber of workers: 1, 2, 4, 8, 16, 32\n\nExercise 1: why the performance degradation?\n\n{\\rightarrow overhead for memory access}\n\nExercise 2: why the performance difference?\n\n{\\rightarrow impact of array storage order}\n\n\n\n\n20 repetitions in each configurations",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -384,7 +384,7 @@
     "href": "Courses/1_Intro.html#array-storage-order",
     "title": "2  Introduction to parallel computing",
     "section": "5.9 Array storage order",
-    "text": "5.9 Array storage order\nMatrix in memory = a big array of contiguous rows or columns\n\n\n\n5.9.1 Row-major\nMemory: \n\\begin{array}{|c|c|c|}\n\\hline\na_{11} & a_{12} & a_{13} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{21} & a_{22} & a_{23} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{31} & a_{32} & a_{33} \\\\\n\\hline\n\\end{array}\n\n\n\n5.9.2 Column-major\nMemory: \n\\begin{array}{|c|c|c|}\n\\hline\na_{11} & a_{21} & a_{31} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{12} & a_{22} & a_{32} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{13} & a_{23} & a_{33} \\\\\n\\hline\n\\end{array}\n\n\n\n\n\n\nSource: wikimedia.org",
+    "text": "5.9 Array storage order\nMatrix in memory = a big array of contiguous rows or columns\n\n\n\n5.9.1 Row-major\nMemory: \n\\begin{array}{|c|c|c|}\n\\hline\na_{11} & a_{12} & a_{13} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{21} & a_{22} & a_{23} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{31} & a_{32} & a_{33} \\\\\n\\hline\n\\end{array}\n\n\n\n5.9.2 Column-major\nMemory: \n\\begin{array}{|c|c|c|}\n\\hline\na_{11} & a_{21} & a_{31} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{12} & a_{22} & a_{32} \\\\\n\\hline\n\\end{array}\\\n\\begin{array}{|c|c|c|}\n\\hline\na_{13} & a_{23} & a_{33} \\\\\n\\hline\n\\end{array}\n\n\n\n\n\nSource: wikimedia.org",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -394,7 +394,7 @@
     "href": "Courses/1_Intro.html#accessing-array-elements-in-memory",
     "title": "2  Introduction to parallel computing",
     "section": "5.10 Accessing array elements in memory",
-    "text": "5.10 Accessing array elements in memory\nMemory access: read data from memory by block\n\n\nTo access a_{11}: load \\begin{array}{|c|c|c|} \\hline a_{11} & a_{12} & a_{13} \\\\ \\hline \\end{array} into cache\nTo access a_{11}: load \\begin{array}{|c|c|c|} \\hline a_{11} & a_{21} & a_{31} \\\\ \\hline \\end{array} into cache\n\n\n\n\nSource: wikimedia.org",
+    "text": "5.10 Accessing array elements in memory\nMemory access: read data from memory by block\n\n\nTo access a_{11}: load \\begin{array}{|c|c|c|} \\hline a_{11} & a_{12} & a_{13} \\\\ \\hline \\end{array} into cache\nTo access a_{11}: load \\begin{array}{|c|c|c|} \\hline a_{11} & a_{21} & a_{31} \\\\ \\hline \\end{array} into cache\n\n\n\nSource: wikimedia.org",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -404,7 +404,7 @@
     "href": "Courses/1_Intro.html#row-major-order-and-row-wise-sum",
     "title": "2  Introduction to parallel computing",
     "section": "5.11 Row-major order and row-wise sum",
-    "text": "5.11 Row-major order and row-wise sum\nTo compute a_{11} + a_{12} + a_{13} ?\n\n\n\n\ninit res =0\nload \\begin{array}{|c|c|c|} \\hline a_{11} & a_{12} & a_{13} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{11}\ncompute res = res + a_{12}\ncompute res = res + a_{13}\n\n\n\n\n\n\nSource: wikimedia.org",
+    "text": "5.11 Row-major order and row-wise sum\nTo compute a_{11} + a_{12} + a_{13} ?\n\n\n\n\ninit res =0\nload \\begin{array}{|c|c|c|} \\hline a_{11} & a_{12} & a_{13} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{11}\ncompute res = res + a_{12}\ncompute res = res + a_{13}\n\n\n\n\n\nSource: wikimedia.org",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -414,7 +414,7 @@
     "href": "Courses/1_Intro.html#column-major-order-and-row-wise-sum",
     "title": "2  Introduction to parallel computing",
     "section": "5.12 Column-major order and row-wise sum",
-    "text": "5.12 Column-major order and row-wise sum\nTo compute a_{11} + a_{12} + a_{13} ?\n\n\n\n\ninit res =0\nload \\begin{array}{|c|c|c|} \\hline a_{11} & a_{21} & a_{31} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{11}\nload \\begin{array}{|c|c|c|} \\hline a_{12} & a_{22} & a_{32} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{12}\nload \\begin{array}{|c|c|c|} \\hline a_{13} & a_{23} & a_{33} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{13} More memory accesses \\rightarrow time consuming\n\n\n\n\n\n\nSource: wikimedia.org",
+    "text": "5.12 Column-major order and row-wise sum\nTo compute a_{11} + a_{12} + a_{13} ?\n\n\n\n\ninit res =0\nload \\begin{array}{|c|c|c|} \\hline a_{11} & a_{21} & a_{31} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{11}\nload \\begin{array}{|c|c|c|} \\hline a_{12} & a_{22} & a_{32} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{12}\nload \\begin{array}{|c|c|c|} \\hline a_{13} & a_{23} & a_{33} \\\\ \\hline \\end{array} into cache\ncompute res = res + a_{13} More memory accesses \\rightarrow time consuming\n\n\n\n\n\nSource: wikimedia.org",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -454,7 +454,7 @@
     "href": "Courses/1_Intro.html#matrix-product",
     "title": "2  Introduction to parallel computing",
     "section": "5.16 Matrix product",
-    "text": "5.16 Matrix product\n\n\n\nMatrix A = [a_{ij}]_{i=1:N}^{j=1:P} of dimension N\\times{}P\nMatrix B = [b_{jk}]_{j=1:P}^{k=1:Q} of dimension N\\times{}P\nMatrix product: C = A \\times B = [c_{ik}]_{i=1:N}^{k=1:Q} of dimension N\\times{}Q where\n\nc_{ik} = \\sum_{j=1}^P a_{ij} \\times b_{jk}\n\n\n\n\nSource: wikimedia.org",
+    "text": "5.16 Matrix product\n\n\n\nMatrix A = [a_{ij}]_{i=1:N}^{j=1:P} of dimension N\\times{}P\nMatrix B = [b_{jk}]_{j=1:P}^{k=1:Q} of dimension N\\times{}P\nMatrix product: C = A \\times B = [c_{ik}]_{i=1:N}^{k=1:Q} of dimension N\\times{}Q where\n\nc_{ik} = \\sum_{j=1}^P a_{ij} \\times b_{jk}\n\n\n\nSource: wikimedia.org",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -554,7 +554,7 @@
     "href": "Courses/2_Concepts.html#trend-over-50years",
     "title": "3  Advanced concepts in parallel programming",
     "section": "4.1 Trend over ~50years",
-    "text": "4.1 Trend over ~50years\n\n\nMoore’s Law (doubling the transistor counts every two years) is live\nSingle thread performance hit a wall in 2000s\nAlong with typical power usage and frequency\nNumber of logical cores is doubling every ~3 years since mid-2000\n\n\n\n\n\nOriginal data up to the year 2010 collected and plotted by M. Horowitz, F. Labonte, O. Shacham, K. Olukotun, L. Hammond, and C. Batten New plot and data collected for 2010-2021 by K. Rupp\n\n\n\nGithub repo for data",
+    "text": "4.1 Trend over ~50years\n\n\nMoore’s Law (doubling the transistor counts every two years) is live\nSingle thread performance hit a wall in 2000s\nAlong with typical power usage and frequency\nNumber of logical cores is doubling every ~3 years since mid-2000\n\n\n\n\nOriginal data up to the year 2010 collected and plotted by M. Horowitz, F. Labonte, O. Shacham, K. Olukotun, L. Hammond, and C. Batten New plot and data collected for 2010-2021 by K. Rupp\n\n\n\n\nGithub repo for data",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -574,7 +574,7 @@
     "href": "Courses/2_Concepts.html#the-reality",
     "title": "3  Advanced concepts in parallel programming",
     "section": "4.3 The reality",
-    "text": "4.3 The reality\n\n\n\nA serial application only accesses 0.8% of the processing power of a 16-core CPU.\n\n\n0.08\\% = \\frac{1}{16 * 2 (cores + hyperthreading) * \\frac{256 (bitwide vector unit}{64(bit double)} = 128}",
+    "text": "4.3 The reality\n\n\nA serial application only accesses 0.8% of the processing power of a 16-core CPU.\n\n\n\n0.08\\% = \\frac{1}{16 * 2 (cores + hyperthreading) * \\frac{256 (bitwide vector unit}{64(bit double)} = 128}",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -654,7 +654,7 @@
     "href": "Courses/2_Concepts.html#asymptote-of-parallel-computing-amdahls-law-graphic",
     "title": "3  Advanced concepts in parallel programming",
     "section": "6.3 Asymptote of parallel computing : Amdahl’s Law, Graphic",
-    "text": "6.3 Asymptote of parallel computing : Amdahl’s Law, Graphic\n\n\n\nIdeal speedup : 100% of the code parallelized; 90%, 75%, and 50% : limited by the fractions of code that remain serial. (Robey and Zamora 2021)",
+    "text": "6.3 Asymptote of parallel computing : Amdahl’s Law, Graphic\n\n\nIdeal speedup : 100% of the code parallelized; 90%, 75%, and 50% : limited by the fractions of code that remain serial. (Robey and Zamora 2021)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -674,7 +674,7 @@
     "href": "Courses/2_Concepts.html#more-with-almost-less-graphic",
     "title": "3  Advanced concepts in parallel programming",
     "section": "6.5 More with (almost) less : graphic",
-    "text": "6.5 More with (almost) less : graphic\n\n\n\nLinear growth with the number of processor (and data size too)",
+    "text": "6.5 More with (almost) less : graphic\n\n\nLinear growth with the number of processor (and data size too)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -724,7 +724,7 @@
     "href": "Courses/2_Concepts.html#multi-processing-vs-multi-threading",
     "title": "3  Advanced concepts in parallel programming",
     "section": "7.3 Multi-processing vs Multi-threading",
-    "text": "7.3 Multi-processing vs Multi-threading\n\n\n\n\n\n\n\n\n\nMulti-Processing\n\n\n\n\n\n\n\nMulti-Threading\n\n\n\n\n\n\n\n\n\nMulti-processing\nMulti-threading\n\n\n\n\nMemory\nExclusive\nShared\n\n\nCommunication\nInter-process\nAt caller site\n\n\nCreation overhead\nHeavy\nMinimal\n\n\nConcurrency\nAt OS level\nLibrary/language",
+    "text": "7.3 Multi-processing vs Multi-threading\n\n\n\n\n\n\n\n\nMulti-Processing\n\n\n\n\n\n\n\nMulti-Threading\n\n\n\n\n\n\n\n\n\n\nMulti-processing\nMulti-threading\n\n\n\n\nMemory\nExclusive\nShared\n\n\nCommunication\nInter-process\nAt caller site\n\n\nCreation overhead\nHeavy\nMinimal\n\n\nConcurrency\nAt OS level\nLibrary/language",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -764,7 +764,7 @@
     "href": "Courses/3_Asynchronous.html#concurrency-vs.-parallelism",
     "title": "4  Asynchronous Programming with Python",
     "section": "6.1 Concurrency vs. Parallelism",
-    "text": "6.1 Concurrency vs. Parallelism\n\n\nOne baker and two cakes to prepare.\n\nCan preheat the oven while preparing the first cake.\nCan start the second cake while the first one is in the oven.\n\n\\Rightarrow Switching between tasks is concurrency (or concurrent behavior).\n\nTwo bakers and two cakes to prepare.\n\nCan prepare both cakes at the same time.\n\n\\Rightarrow Doing multiple tasks in parallel is parallelism (or parallel behavior).\n\n\n\n\n\nWith concurrency, we have multiple tasks happening at the same time, but only one we’re actively doing at a given point in time. With parallelism, we have multiple tasks happening and are actively doing more than one simultaneously.\n\n\n\nFrom Fowler (2022)\n\n\n\n\nWith concurrency, we switch between running two applications. With parallelism, we actively run two applications simultaneously.\n\n\n\nFrom Fowler (2022)\n\n\nConcurrency is about multiple independent tasks that can happen.\nParallelism is concurrency AND simultaneous execution.\n\nWhile parallelism implies concurrency, concurrency does not always imply parallelism.\n\\Rightarrow Concurrency is a broader concept than parallelism.",
+    "text": "6.1 Concurrency vs. Parallelism\n\n\nOne baker and two cakes to prepare.\n\nCan preheat the oven while preparing the first cake.\nCan start the second cake while the first one is in the oven.\n\n\\Rightarrow Switching between tasks is concurrency (or concurrent behavior).\n\nTwo bakers and two cakes to prepare.\n\nCan prepare both cakes at the same time.\n\n\\Rightarrow Doing multiple tasks in parallel is parallelism (or parallel behavior).\n\n\n\n\nWith concurrency, we have multiple tasks happening at the same time, but only one we’re actively doing at a given point in time. With parallelism, we have multiple tasks happening and are actively doing more than one simultaneously.\n\n\n\n\nFrom Fowler (2022)\n\n\n\nWith concurrency, we switch between running two applications. With parallelism, we actively run two applications simultaneously.\n\n\n\n\nFrom Fowler (2022)\n\n\nConcurrency is about multiple independent tasks that can happen.\nParallelism is concurrency AND simultaneous execution.\n\nWhile parallelism implies concurrency, concurrency does not always imply parallelism.\n\\Rightarrow Concurrency is a broader concept than parallelism.",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
     ]
@@ -794,7 +794,7 @@
     "href": "Courses/3_Asynchronous.html#multi-processing-vs-multi-threading",
     "title": "4  Asynchronous Programming with Python",
     "section": "7.1 Multi-processing vs Multi-threading",
-    "text": "7.1 Multi-processing vs Multi-threading\n\n\n                   Main Process\n                 ┌─────────────┐\n                 │             │\n                 │   CPU       │\n                 ├─────────────┤\n                 │             │\n                 │   Memory    │\n                 └─┬────┬────┬─┘\n                   │    │    │\n                   │    │    │\n       ┌───────────┘    │    └───────────┐\n       │                │                │\n┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐\n│             │  │             │  │             │\n│   CPU       │  │   CPU       │  │   CPU       │\n├─────────────┤  ├─────────────┤  ├─────────────┤\n│             │  │             │  │             │\n│   Memory    │  │   Memory    │  │   Memory    │\n└─────────────┘  └─────────────┘  └─────────────┘\n\n   Process 1        Process 1        Process 1\n\n┌──────────────────────────────────────┐\n│            MAIN PROCESS              │\n│                                      │\n│                                      │\n│     ┌──────────┐                     │\n│     │          │                     │\n│     │   CPU    │   ┌───────────┐     │\n│     │          │   │           │     │\n│     └──────────┘   │   Memory  │     │\n│                    │           │     │\n│                    └───────────┘     │\n│                                      │\n│                                      │\n│                                      │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│   Thread 1    Thread 2    Thread 3   │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│                                      │\n└──────────────────────────────────────┘",
+    "text": "7.1 Multi-processing vs Multi-threading\n\n\n\n\n\n\n\n\nMulti-Processing\n\n\n\n\n\n\n\nMulti-Threading",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
     ]
@@ -874,7 +874,7 @@
     "href": "Courses/3_Asynchronous.html#socket",
     "title": "4  Asynchronous Programming with Python",
     "section": "9.1 Socket",
-    "text": "9.1 Socket\n\n\n\nWriting bytes to a socket and reading bytes from a socket\n\n\n\nFrom Fowler (2022)\n\n\nThis a mailbox metaphor\nBy default, the socket is blocking, i.e. the program will wait until the socket is ready to be read or written.\nWe can make the socket non-blocking, i.e. the program will not wait for the socket to be ready to be read or written. \\Rightarrow Later on, the OS will tell us we received byte and we deal with it.\n\n\n\n\n\n\n\nMaking a non-blocking I/O request returns immediately\ntells the O/S to watch sockets for data \\Rightarrow This allows execute_other_code() to run right away instead of waiting for the I/O requests to finish\nLater, we can be alerted when I/O is complete and process the response.\n\n\n\n\n\nFrom Fowler (2022)",
+    "text": "9.1 Socket\n\n\nWriting bytes to a socket and reading bytes from a socket\n\n\n\n\nFrom Fowler (2022)\n\n\nThis a mailbox metaphor\nBy default, the socket is blocking, i.e. the program will wait until the socket is ready to be read or written.\nWe can make the socket non-blocking, i.e. the program will not wait for the socket to be ready to be read or written. \\Rightarrow Later on, the OS will tell us we received byte and we deal with it.\n\n\n\n\n\n\n\nMaking a non-blocking I/O request returns immediately\ntells the O/S to watch sockets for data \\Rightarrow This allows execute_other_code() to run right away instead of waiting for the I/O requests to finish\nLater, we can be alerted when I/O is complete and process the response.\n\n\n\n\n\nFrom Fowler (2022)",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
     ]
@@ -1144,7 +1144,7 @@
     "href": "Courses/4_IPC_and_Locking.html#remainder-on-process-level-parallelization",
     "title": "5  IPC and locking",
     "section": "6.1 Remainder on Process-level parallelization",
-    "text": "6.1 Remainder on Process-level parallelization\n\n\n\n\n\n\n\n\n\nMulti-Processing\n\n\n\n\n\n\n\nMulti-Threading",
+    "text": "6.1 Remainder on Process-level parallelization\n\n\n\n\n\n\n\n\nMulti-Processing\n\n\n\n\n\n\n\nMulti-Threading",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]
@@ -1174,7 +1174,7 @@
     "href": "Courses/4_IPC_and_Locking.html#aside-memory-models",
     "title": "5  IPC and locking",
     "section": "6.4 Aside : memory models",
-    "text": "6.4 Aside : memory models\n\n\n\n\n\n\n\n\n\nUMA\n\n\n\n\n \n\n\n\n\n\nNUMA\n\n\n\n\n\n\nThere are differents models",
+    "text": "6.4 Aside : memory models\n\n\n\n\n\n\n\n\nUMA\n\n\n\n\n\n \n\n\n\n\nNUMA\n\n\n\n\n\n\n\nThere are differents models",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]
@@ -1244,7 +1244,7 @@
     "href": "Courses/4_IPC_and_Locking.html#critical-section-workflow",
     "title": "5  IPC and locking",
     "section": "8.1 Critical section workflow",
-    "text": "8.1 Critical section workflow\n\n\n\nThree processes with critical section",
+    "text": "8.1 Critical section workflow\n\n\nThree processes with critical section",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]
@@ -1264,7 +1264,7 @@
     "href": "Courses/4_IPC_and_Locking.html#consistency-problems-with-fifo-example-i",
     "title": "5  IPC and locking",
     "section": "9.1 Consistency problems with FIFO example I",
-    "text": "9.1 Consistency problems with FIFO example I\nProcess A (resp. B) wants to push x (resp. y) on the list.\n\n\n\n\\Longrightarrow Consistency problem if they both create a new linked node to node 3.",
+    "text": "9.1 Consistency problems with FIFO example I\nProcess A (resp. B) wants to push x (resp. y) on the list.\n\n\n\\Longrightarrow Consistency problem if they both create a new linked node to node 3.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]
@@ -1274,7 +1274,7 @@
     "href": "Courses/4_IPC_and_Locking.html#consistency-problems-with-fifo-example-2",
     "title": "5  IPC and locking",
     "section": "9.2 Consistency problems with FIFO example 2",
-    "text": "9.2 Consistency problems with FIFO example 2\nProcess A and B both want to pop the list.\n\n\n\n\\Longrightarrow Consistency problem if they both pop the same node.",
+    "text": "9.2 Consistency problems with FIFO example 2\nProcess A and B both want to pop the list.\n\n\n\\Longrightarrow Consistency problem if they both pop the same node.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]
@@ -1284,7 +1284,7 @@
     "href": "Courses/4_IPC_and_Locking.html#no-consistency-problems-with-fifo-example-3",
     "title": "5  IPC and locking",
     "section": "9.3 (No) Consistency problems with FIFO example 3",
-    "text": "9.3 (No) Consistency problems with FIFO example 3\n\n\n\nNo problem there.\n\n\n. . .\n\n\n\n\n\n\nWarning\n\n\n\n⚠ ⚠ As long the list is not empty ⚠ ⚠",
+    "text": "9.3 (No) Consistency problems with FIFO example 3\n\n\nNo problem there.\n\n\n\n. . .\n\n\n\n\n\n\nWarning\n\n\n\n⚠ ⚠ As long the list is not empty ⚠ ⚠",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]
@@ -1304,7 +1304,7 @@
     "href": "Courses/4_IPC_and_Locking.html#deadlock-serious-example",
     "title": "5  IPC and locking",
     "section": "10.2 Deadlock (serious) example",
-    "text": "10.2 Deadlock (serious) example\n\n\n\nDeadlock illustration\n\n\n\nProcess A acquires lock L1. Process B acquires lock L2. Process A tries to acquire lock L2, but it is already held by B. Process B tries to acquire lock L1, but it is already held by A. Both processes are blocked.",
+    "text": "10.2 Deadlock (serious) example\n\n\nDeadlock illustration\n\n\n\n\nProcess A acquires lock L1. Process B acquires lock L2. Process A tries to acquire lock L2, but it is already held by B. Process B tries to acquire lock L1, but it is already held by A. Both processes are blocked.",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]

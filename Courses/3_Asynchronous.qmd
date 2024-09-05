@@ -115,62 +115,13 @@ $\Rightarrow$ Concurrency is a **broader** concept than parallelism.
 
 ## Multi-processing vs Multi-threading 
 
-:::::::::::::: {.columns}
-::: {.column width="50%"}
-```{ style="font-size: 0.6em;" }
-                   Main Process
-                 ┌─────────────┐
-                 │             │
-                 │   CPU       │
-                 ├─────────────┤
-                 │             │
-                 │   Memory    │
-                 └─┬────┬────┬─┘
-                   │    │    │
-                   │    │    │
-       ┌───────────┘    │    └───────────┐
-       │                │                │
-┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐
-│             │  │             │  │             │
-│   CPU       │  │   CPU       │  │   CPU       │
-├─────────────┤  ├─────────────┤  ├─────────────┤
-│             │  │             │  │             │
-│   Memory    │  │   Memory    │  │   Memory    │
-└─────────────┘  └─────────────┘  └─────────────┘
+:::{layout-ncol="2"}
 
-   Process 1        Process 1        Process 1
-```
+![Multi-Processing](tikz-figures/multiprocessing_model.svg)
+
+![Multi-Threading](tikz-figures/multithreading_model.svg)
+
 :::
-::: {.column width="50%"}
-```{ style="font-size: 0.6em;" }
-┌──────────────────────────────────────┐
-│            MAIN PROCESS              │
-│                                      │
-│                                      │
-│     ┌──────────┐                     │
-│     │          │                     │
-│     │   CPU    │   ┌───────────┐     │
-│     │          │   │           │     │
-│     └──────────┘   │   Memory  │     │
-│                    │           │     │
-│                    └───────────┘     │
-│                                      │
-│                                      │
-│                                      │
-│      ┌─┐         ┌─┐         ┌─┐     │
-│      │┼│         │┼│         │┼│     │
-│      │┴│         │┴│         │┴│     │
-│      ▼▼▼         ▼▼▼         ▼▼▼     │
-│   Thread 1    Thread 2    Thread 3   │
-│      ┌─┐         ┌─┐         ┌─┐     │
-│      │┼│         │┼│         │┼│     │
-│      │┴│         │┴│         │┴│     │
-│      ▼▼▼         ▼▼▼         ▼▼▼     │
-│                                      │
-└──────────────────────────────────────┘
-```
-:::
-::::::::::::::
 
 ## Processes and threads
 

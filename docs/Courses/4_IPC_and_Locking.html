@@ -386,55 +386,27 @@ window.Quarto = {
 <h1 data-number="6"><span class="header-section-number">6</span> Inter-Process Communication</h1>
 <section id="remainder-on-process-level-parallelization" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="remainder-on-process-level-parallelization"><span class="header-section-number">6.1</span> Remainder on Process-level parallelization</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<pre style="font-size: 0.5em"><code>                   Main Process
-                 ┌─────────────┐
-                 │             │
-                 │   CPU       │
-                 ├─────────────┤
-                 │             │
-                 │   Memory    │
-                 └─┬────┬────┬─┘
-                   │    │    │
-                   │    │    │
-       ┌───────────┘    │    └───────────┐
-       │                │                │
-┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐
-│             │  │             │  │             │
-│   CPU       │  │   CPU       │  │   CPU       │
-├─────────────┤  ├─────────────┤  ├─────────────┤
-│             │  │             │  │             │
-│   Memory    │  │   Memory    │  │   Memory    │
-└─────────────┘  └─────────────┘  └─────────────┘
+<div>
 
-   Process 1        Process 1        Process 1</code></pre>
-</div><div class="column" style="width:50%;">
-<pre style="font-size: 0.5em"><code>┌──────────────────────────────────────┐
-│            MAIN PROCESS              │
-│                                      │
-│                                      │
-│     ┌──────────┐                     │
-│     │          │                     │
-│     │   CPU    │   ┌───────────┐     │
-│     │          │   │           │     │
-│     └──────────┘   │   Memory  │     │
-│                    │           │     │
-│                    └───────────┘     │
-│                                      │
-│                                      │
-│                                      │
-│      ┌─┐         ┌─┐         ┌─┐     │
-│      │┼│         │┼│         │┼│     │
-│      │┴│         │┴│         │┴│     │
-│      ▼▼▼         ▼▼▼         ▼▼▼     │
-│   Thread 1    Thread 2    Thread 3   │
-│      ┌─┐         ┌─┐         ┌─┐     │
-│      │┼│         │┼│         │┼│     │
-│      │┴│         │┴│         │┴│     │
-│      ▼▼▼         ▼▼▼         ▼▼▼     │
-│                                      │
-└──────────────────────────────────────┘</code></pre>
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tikz-figures/multiprocessing_model.svg" class="img-fluid figure-img"></p>
+<figcaption>Multi-Processing</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="tikz-figures/multithreading_model.svg" class="img-fluid figure-img"></p>
+<figcaption>Multi-Threading</figcaption>
+</figure>
+</div>
+</div>
 </div>
 </div>
 </section>
@@ -601,13 +573,13 @@ window.Quarto = {
 <p>Printing from several processes a string with 10 times the same char.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> repeat</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print "AAAAAAAAA", "BBBBBBBBBBB" etc.</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> repeat10Cap(c): </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">""</span>.join(repeat(<span class="bu">chr</span>(c<span class="op">+</span><span class="dv">65</span>),<span class="dv">10</span>))) </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">8</span>) <span class="im">as</span> pool:</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    pool.<span class="bu">map</span>(repeat10Cap, <span class="bu">range</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> repeat</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># print "AAAAAAAAA", "BBBBBBBBBBB" etc.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> repeat10Cap(c): </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">""</span>.join(repeat(<span class="bu">chr</span>(c<span class="op">+</span><span class="dv">65</span>),<span class="dv">10</span>))) </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">8</span>) <span class="im">as</span> pool:</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    pool.<span class="bu">map</span>(repeat10Cap, <span class="bu">range</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:50%;">
 <div class="fragment">
 <p>Output:</p>
@@ -670,17 +642,17 @@ JJJJJJJJJJ
 <h2 class="smaller anchored" data-number="8.2" data-anchor-id="a-simple-implementation-in-python-lock"><span class="header-section-number">8.2</span> A simple implementation in Python : Lock</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Lock</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> repeat</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>lock <span class="op">=</span> Lock()</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> safe_repeat10Cap(c):</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> lock: </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Beginning of critical section</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">""</span>.join(repeat(<span class="bu">chr</span>(c<span class="op">+</span><span class="dv">65</span>),<span class="dv">10</span>)))</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># End of critical section</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">8</span>) <span class="im">as</span> pool:</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    pool.<span class="bu">map</span>(safe_repeat10Cap, <span class="bu">range</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing.pool <span class="im">import</span> Pool</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> multiprocessing <span class="im">import</span> Lock</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> itertools <span class="im">import</span> repeat</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>lock <span class="op">=</span> Lock()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> safe_repeat10Cap(c):</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> lock: </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Beginning of critical section</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">""</span>.join(repeat(<span class="bu">chr</span>(c<span class="op">+</span><span class="dv">65</span>),<span class="dv">10</span>)))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># End of critical section</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> Pool(<span class="dv">8</span>) <span class="im">as</span> pool:</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    pool.<span class="bu">map</span>(safe_repeat10Cap, <span class="bu">range</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column" style="width:50%;">
 <div class="fragment">
 <p>Output:</p>

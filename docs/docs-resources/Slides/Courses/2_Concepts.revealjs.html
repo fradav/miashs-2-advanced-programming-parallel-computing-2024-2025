@@ -717,56 +717,29 @@ Ghislain Durif
 </section>
 <section id="multi-processing-vs-multi-threading" class="slide level2 center">
 <h2>Multi-processing vs Multi-threading</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<pre style="font-size: 0.6em;"><code>                   Main Process
-                 ┌─────────────┐
-                 │             │
-                 │   CPU       │
-                 ├─────────────┤
-                 │             │
-                 │   Memory    │
-                 └─┬────┬────┬─┘
-                   │    │    │
-                   │    │    │
-       ┌───────────┘    │    └───────────┐
-       │                │                │
-┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐
-│             │  │             │  │             │
-│   CPU       │  │   CPU       │  │   CPU       │
-├─────────────┤  ├─────────────┤  ├─────────────┤
-│             │  │             │  │             │
-│   Memory    │  │   Memory    │  │   Memory    │
-└─────────────┘  └─────────────┘  └─────────────┘
+<div>
 
-   Process 1        Process 1        Process 1</code></pre>
-</div><div class="column" style="width:50%;">
-<pre style="font-size: 0.6em;"><code>┌──────────────────────────────────────┐
-│            MAIN PROCESS              │
-│                                      │
-│                                      │
-│     ┌──────────┐                     │
-│     │          │                     │
-│     │   CPU    │   ┌───────────┐     │
-│     │          │   │           │     │
-│     └──────────┘   │   Memory  │     │
-│                    │           │     │
-│                    └───────────┘     │
-│                                      │
-│                                      │
-│                                      │
-│      ┌─┐         ┌─┐         ┌─┐     │
-│      │┼│         │┼│         │┼│     │
-│      │┴│         │┴│         │┴│     │
-│      ▼▼▼         ▼▼▼         ▼▼▼     │
-│   Thread 1    Thread 2    Thread 3   │
-│      ┌─┐         ┌─┐         ┌─┐     │
-│      │┼│         │┼│         │┼│     │
-│      │┴│         │┴│         │┴│     │
-│      ▼▼▼         ▼▼▼         ▼▼▼     │
-│                                      │
-└──────────────────────────────────────┘</code></pre>
-</div></div>
+</div>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="tikz-figures/multiprocessing_model.svg"></p>
+<figcaption>Multi-Processing</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="tikz-figures/multithreading_model.svg"></p>
+<figcaption>Multi-Threading</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="multi-processing-vs-multi-threading-cont." class="slide level2 center">
 <h2>Multi-processing vs Multi-threading, cont.</h2>

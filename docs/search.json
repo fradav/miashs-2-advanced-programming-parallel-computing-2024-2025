@@ -84,7 +84,7 @@
     "href": "Courses/1_Intro.html#computing",
     "title": "2  Introduction to parallel computing",
     "section": "3.1 Computing ?",
-    "text": "3.1 Computing ?\n\na computation = a succession of tasks to complete\na task \\approx a single command/action or a group of commands/actions\n\n\n\nExample 1:\n# task i:\n# sum of elements at index i\n# from two vectors\nfor i in range(10):\n    res[i] = a[i] + b[i]\n\nExample 2:\n# task 1: matrix product\nC = A @ B\n# task 2: colwise sum over matrix C\nnp.sum(C,axis=0)",
+    "text": "3.1 Computing ?\n\na computation = a succession of tasks to complete\na task \\approx a single command/action or a group of commands/actions\n\n\n\n\n\n\n\nExample 1:\n\n\nExample 2:\n\n\n\n\n# task i:\n# sum of elements at index i\n# from two vectors\nfor i in range(10):\n    res[i] = a[i] + b[i]\n\n\n# task 1: matrix product\nC = A @ B\n# task 2: colwise sum over matrix C\nnp.sum(C,axis=0)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -114,7 +114,7 @@
     "href": "Courses/1_Intro.html#sequential-computing",
     "title": "2  Introduction to parallel computing",
     "section": "3.4 Sequential computing",
-    "text": "3.4 Sequential computing\n\n\n\nn tasks to complete (n&gt;1)\n1 worker\n\nTotal time =\n\n\n(exercise)\n\\sum_{i=1}^n t_i \\sim O(n)\\ with t_i time to complete task i}\n\n\n\n      ┌────────┐\n      │worker 1│\n      └────────┘\n  ┌─\n  │     task 1\n  │       │\n  │       ▼\n  │     task 2\n  │       │\n  │       ▼\n  │     task 3\n  │       .\n  │       .\n  ▼       .\n\nTime",
+    "text": "3.4 Sequential computing\n\n\n\n\n\n\n\nn tasks to complete (n&gt;1)\n1 worker\n\nTotal time (exercise)\n\n\\sum_{i=1}^n t_i \\sim O(n)\\ with t_i time to complete task i}",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -124,7 +124,7 @@
     "href": "Courses/1_Intro.html#parallel-computing-the-most-simple-case",
     "title": "2  Introduction to parallel computing",
     "section": "3.5 Parallel computing (the most simple case)",
-    "text": "3.5 Parallel computing (the most simple case)\n      ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐\n      │worker 1│  │worker 2│  │worker 3│  │worker 4│  ...\n      └────────┘  └────────┘  └────────┘  └────────┘\n  ┌─\n  │     task 1      task 2      task 3      task 4    ...\n  ▼\n\nTime\n\nn tasks to complete (n&gt;1)\np workers (p&gt;=n)\n\n\n\nTotal time (exercise)\n\n\\underset{i=1,\\dots,n}{\\text{max}}\\{t_i\\}\\sim O(1)\\ with t_i time to complete task i\n\n\nPotential bottleneck? (exercise)\n\nnot enough workers to complete all tasks",
+    "text": "3.5 Parallel computing (the most simple case)\n\n\n\n\n\n\nn tasks to complete (n&gt;1)\np workers (p&gt;=n)\n\n\n\n\n\n\n\nTotal time (exercise)\n\n\\underset{i=1,\\dots,n}{\\text{max}}\\{t_i\\}\\sim O(1)\\ with t_i time to complete task i\n\n\n\nPotential bottleneck? (exercise)\n\nnot enough workers to complete all tasks",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Introduction to parallel computing</span>"
     ]
@@ -724,7 +724,7 @@
     "href": "Courses/2_Concepts.html#multi-processing-vs-multi-threading",
     "title": "3  Advanced concepts in parallel programming",
     "section": "7.3 Multi-processing vs Multi-threading",
-    "text": "7.3 Multi-processing vs Multi-threading\n\n\n                   Main Process\n                 ┌─────────────┐\n                 │             │\n                 │   CPU       │\n                 ├─────────────┤\n                 │             │\n                 │   Memory    │\n                 └─┬────┬────┬─┘\n                   │    │    │\n                   │    │    │\n       ┌───────────┘    │    └───────────┐\n       │                │                │\n┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐\n│             │  │             │  │             │\n│   CPU       │  │   CPU       │  │   CPU       │\n├─────────────┤  ├─────────────┤  ├─────────────┤\n│             │  │             │  │             │\n│   Memory    │  │   Memory    │  │   Memory    │\n└─────────────┘  └─────────────┘  └─────────────┘\n\n   Process 1        Process 1        Process 1\n\n┌──────────────────────────────────────┐\n│            MAIN PROCESS              │\n│                                      │\n│                                      │\n│     ┌──────────┐                     │\n│     │          │                     │\n│     │   CPU    │   ┌───────────┐     │\n│     │          │   │           │     │\n│     └──────────┘   │   Memory  │     │\n│                    │           │     │\n│                    └───────────┘     │\n│                                      │\n│                                      │\n│                                      │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│   Thread 1    Thread 2    Thread 3   │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│                                      │\n└──────────────────────────────────────┘\n\n\n\n\n\n\nMulti-processing\nMulti-threading\n\n\n\n\nMemory\nExclusive\nShared\n\n\nCommunication\nInter-process\nAt caller site\n\n\nCreation overhead\nHeavy\nMinimal\n\n\nConcurrency\nAt OS level\nLibrary/language",
+    "text": "7.3 Multi-processing vs Multi-threading\n\n\n\n\n\n\n\n\n\nMulti-Processing\n\n\n\n\n\n\n\nMulti-Threading\n\n\n\n\n\n\n\n\n\nMulti-processing\nMulti-threading\n\n\n\n\nMemory\nExclusive\nShared\n\n\nCommunication\nInter-process\nAt caller site\n\n\nCreation overhead\nHeavy\nMinimal\n\n\nConcurrency\nAt OS level\nLibrary/language",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Advanced concepts in parallel programming</span>"
     ]
@@ -1144,7 +1144,7 @@
     "href": "Courses/4_IPC_and_Locking.html#remainder-on-process-level-parallelization",
     "title": "5  IPC and locking",
     "section": "6.1 Remainder on Process-level parallelization",
-    "text": "6.1 Remainder on Process-level parallelization\n\n\n                   Main Process\n                 ┌─────────────┐\n                 │             │\n                 │   CPU       │\n                 ├─────────────┤\n                 │             │\n                 │   Memory    │\n                 └─┬────┬────┬─┘\n                   │    │    │\n                   │    │    │\n       ┌───────────┘    │    └───────────┐\n       │                │                │\n┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐\n│             │  │             │  │             │\n│   CPU       │  │   CPU       │  │   CPU       │\n├─────────────┤  ├─────────────┤  ├─────────────┤\n│             │  │             │  │             │\n│   Memory    │  │   Memory    │  │   Memory    │\n└─────────────┘  └─────────────┘  └─────────────┘\n\n   Process 1        Process 1        Process 1\n\n┌──────────────────────────────────────┐\n│            MAIN PROCESS              │\n│                                      │\n│                                      │\n│     ┌──────────┐                     │\n│     │          │                     │\n│     │   CPU    │   ┌───────────┐     │\n│     │          │   │           │     │\n│     └──────────┘   │   Memory  │     │\n│                    │           │     │\n│                    └───────────┘     │\n│                                      │\n│                                      │\n│                                      │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│   Thread 1    Thread 2    Thread 3   │\n│      ┌─┐         ┌─┐         ┌─┐     │\n│      │┼│         │┼│         │┼│     │\n│      │┴│         │┴│         │┴│     │\n│      ▼▼▼         ▼▼▼         ▼▼▼     │\n│                                      │\n└──────────────────────────────────────┘",
+    "text": "6.1 Remainder on Process-level parallelization\n\n\n\n\n\n\n\n\n\nMulti-Processing\n\n\n\n\n\n\n\nMulti-Threading",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>IPC and locking</span>"
     ]

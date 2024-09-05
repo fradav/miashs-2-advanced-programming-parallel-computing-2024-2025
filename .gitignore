@@ -11,3 +11,6 @@ Courses/Applications/*
 /_*.local
 quarto.err
 quarto.out
+Courses/tikz-figures/*
+!Courses/tikz-figures/*.svg
+!Courses/tikz-figures/*.tex

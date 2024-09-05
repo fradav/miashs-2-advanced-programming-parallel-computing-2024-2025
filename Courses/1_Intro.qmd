@@ -12,9 +12,12 @@ nocite: |
 - a **computation** = a succession of **tasks** to complete
 - a **task** $\approx$ a single command/action or a group of commands/actions  
 
-:::: {.columns}
-::: {.column width="50%"}
+::: {layout-ncol=2}
+
 Example 1:
+
+Example 2:
+
 ```python
 # task i:
 # sum of elements at index i
@@ -22,17 +25,16 @@ Example 1:
 for i in range(10):
     res[i] = a[i] + b[i]
 ```
-:::
-::: {.column width="50%"}
-Example 2:
+
 ```python
 # task 1: matrix product
 C = A @ B
 # task 2: colwise sum over matrix C
 np.sum(C,axis=0)
 ```
+
 :::
-::::
+
 
 ## Why parallel computing?
 
@@ -48,66 +50,37 @@ np.sum(C,axis=0)
 
 ## Sequential computing
 
-:::: {.columns align=center}
-::: {.column width="70%"}
+:::{layout="[70,30]"}
 
+::::{}
 - $n$ tasks to complete ($n>1$) 
-
 - 1 worker 
 
-**Total time** $=$
+**Total time**
+(exercise)
 
-::::::: incremental
+::::::: {.fragment}
 
-- (exercise)
-- $\sum_{i=1}^n t_i \sim O(n)$\\  with $t_i$ time to complete task $i$}
+$\sum_{i=1}^n t_i \sim O(n)$\\  with $t_i$ time to complete task $i$}
 
 :::::::
-
-:::
-::: {.column width="30%"}
-```{ style="font-size: 0.6em;" }
-      ┌────────┐
-      │worker 1│
-      └────────┘
-  ┌─
-  │     task 1
-  │       │
-  │       ▼
-  │     task 2
-  │       │
-  │       ▼
-  │     task 3
-  │       .
-  │       .
-  ▼       .
-
-Time
-```
-:::
 ::::
 
+![](d2-figures/sequential-computing.svg)
 
-## Parallel computing (the most simple case) 
+:::
 
+## Parallel computing (the most simple case) {.nostretch}
 
-```{ style="font-size: 0.6em;" }
-      ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐
-      │worker 1│  │worker 2│  │worker 3│  │worker 4│  ...
-      └────────┘  └────────┘  └────────┘  └────────┘
-  ┌─
-  │     task 1      task 2      task 3      task 4    ...
-  ▼
-
-Time
-```
+![](d2-figures/parallel-computing-simple.svg){ fig-align="center" width="50%" }
 
 - $n$ tasks to complete ($n>1$) 
-
 - $p$ workers ($p>=n$) 
 
-:::: {.columns align=center}
-::: {.column width="50%"}
+:::{layout-ncol="2"}
+
+::::{}
+
 **Total time** 
 (exercise)
 
@@ -116,8 +89,9 @@ Time
 $\underset{i=1,\dots,n}{\text{max}}\{t_i\}\sim O(1)$\\  with $t_i$ time to complete task $i$
 
 :::::::
-:::
-::: {.column width="50%"}
+::::
+
+::::{}
 **Potential bottleneck?** 
 (exercise)
 
@@ -126,8 +100,9 @@ $\underset{i=1,\dots,n}{\text{max}}\{t_i\}\sim O(1)$\\  with $t_i$ time to compl
 not enough workers to complete all tasks
 
 :::::::
+
+::::
 :::
-:::: 
 
 ## Task scheduling 
 

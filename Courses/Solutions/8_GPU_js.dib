@@ -1,0 +1,28 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"name":"csharp"}]}}
+
+#!html
+
+<svg id="d3_target"></svg>
+
+#!javascript
+
+d3 = await import("https://cdn.jsdelivr.net/npm/d3@7/+esm");
+
+const width = 400;
+const height = 400;
+const svg = d3.select("#d3_target");
+
+svg
+  .attr("width", width)
+  .attr("height", 400)
+  .attr("viewBox", [0, 0, width, height])
+  .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+
+svg
+  .append("circle")
+  .attr("fill", "red")
+  .attr("cx", width/2)
+  .attr("cy", height/2)
+  .attr("r", "100");

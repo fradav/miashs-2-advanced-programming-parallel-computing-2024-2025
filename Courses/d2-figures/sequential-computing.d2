@@ -1,0 +1,75 @@
+grid-columns: 2
+grid-rows: 5
+horizontal-gap: 0
+
+style: {
+        fill: transparent
+        stroke: transparent
+    }
+
+*: {
+    style: {
+        font-size: 30
+    }
+}
+(** -> **)[*] : {
+    style: {
+        stroke-width: 5
+    }
+}
+
+classes : {
+    empty: {
+        style: {
+            fill: transparent
+            stroke: transparent
+        }
+    }
+}
+
+empty1
+empty2
+empty3
+empty4
+empty* : "" {
+    class: empty
+    height: 1
+    width: 1
+}
+# empty*.label: ""
+
+time: "Time" {
+    class: empty
+}
+
+worker1: {
+    shape: rectangle
+    label: "worker 1"
+}
+
+task1: "task 1" 
+task2: "task 2"
+task3: "task 3"
+
+task*: {
+class: empty
+}
+
+ellipsis: "⋮" {
+    class: empty
+    style: {
+        font-size: 50
+    }
+}
+
+empty1 -> time : {
+    style: {
+        animated: true
+    }
+}
+
+task1 -> task2
+task2 -> task3
+task3 -> ellipsis
+
+  

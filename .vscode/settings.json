@@ -62,7 +62,7 @@
             "env": {}
         }
     ],
-    "svg.preview.background": "custom",
+    "svg.preview.background": "white",
     "pasteImage.path": "${projectRoot}/Courses/figs",
     "pasteImage.showFilePathConfirmInputBox": true,
     "pasteImage.insertPattern": "![](${imageOriginalFilePath})",
@@ -80,5 +80,15 @@
     "cmake.ignoreCMakeListsMissing": true,
     "livePreview.autoRefreshPreview": "Never",
     "livePreview.defaultPreviewPath": "docs/index.html",
-    "python.defaultInterpreterPath": ".micromamba/envs/miashs-hpc/bin/python"
+    "python.defaultInterpreterPath": ".micromamba/envs/miashs-hpc/bin/python",
+    "python.analysis.exclude": [
+        "_extensions",
+        "_freeze",
+        "_micromamba",
+        ".quarto",
+        ".vscode",
+        "docs",
+        "docs-resources",
+        "**/*_files "
+    ],
 }

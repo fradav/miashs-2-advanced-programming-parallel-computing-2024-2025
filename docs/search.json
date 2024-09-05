@@ -854,7 +854,7 @@
     "href": "Courses/3_Asynchronous.html#multi-threaded-parallel-execution",
     "title": "4  Asynchronous Programming with Python",
     "section": "8.3 Multi-threaded != Parallel execution",
-    "text": "8.3 Multi-threaded != Parallel execution\nMulti-threading doesn’t guarantee parallel executien…\n\n\n\n\n\n\\Longrightarrow Python seems to have started off with the wrong foot by a long way…",
+    "text": "8.3 Multi-threaded != Parallel execution\nMulti-threading doesn’t guarantee parallel execution…\n\n\n\n\n\n\\Longrightarrow Python seems to have started off with the wrong foot by a long way…",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Asynchronous Programming with Python</span>"
     ]

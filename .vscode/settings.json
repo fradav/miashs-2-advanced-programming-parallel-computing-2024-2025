@@ -80,7 +80,6 @@
     "cmake.ignoreCMakeListsMissing": true,
     "livePreview.autoRefreshPreview": "Never",
     "livePreview.defaultPreviewPath": "docs/index.html",
-    "python.defaultInterpreterPath": ".micromamba/envs/miashs-hpc/bin/python",
     "python.analysis.exclude": [
         "_extensions",
         "_freeze",

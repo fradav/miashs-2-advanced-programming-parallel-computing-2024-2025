@@ -152,7 +152,7 @@ def consume():
         # wait for an item from the producer
         item = queue.get()
         # Handle the end of the production
-        if item is None :
+        if item is None:
             break
         # process the item
         print("consuming {}".format(item))
@@ -167,6 +167,58 @@ with ThreadPoolExecutor() as pool:
 
 
 res
+#%%
+import functools
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+from queue import Queue
+
+queue = Queue()
+loop = asyncio.get_running_loop()
+
+def produce(n):
+    print("producing {} items".format(n))
+    for x in range(1, n + 1):
+        # simulate i/o operation using sleep
+        future = asyncio.run_coroutine_threadsafe(asyncio.sleep(1), loop)
+        future.result()
+        # produce an item
+        print("producing {}/{}".format(x, n))
+        item = str(x)
+        # put the item in the queue
+        queue.put(item)
+
+    # indicate the producer is done
+    queue.put(None)
+    return n
+
+def consume():
+    consumed = 0
+    print("consuming items")
+    while True:
+        # wait for an item from the producer
+        item = queue.get()
+        if item is None:
+            # the producer emits None to indicate that it is done
+            break
+
+        # process the item
+        print("consuming {}".format(item))
+        consumed += 1
+    return consumed
+
+with ThreadPoolExecutor() as pool:
+    res = await asyncio.gather(
+        loop.run_in_executor(pool, functools.partial(produce, 10)),
+        loop.run_in_executor(pool, functools.partial(consume))
+    )
+res
+
+#%% 
+# make a decorator to transform function to run in threadpoolexecutor 
+
+def thread2async(func):
+    def
 
 # %% [markdown]
 """
@@ -233,7 +285,59 @@ def consume(queue):
 with ProcessPoolExecutor() as pool:
     res = . . .
 res
+#%%
+import functools
+from concurrent.futures import ProcessPoolExecutor
+import asyncio
+from multiprocessing import Manager, Lock
+from time import sleep
 
+manager = Manager()
+queue = manager.Queue()
+loop = asyncio.get_running_loop()
+lock = Lock()
+
+def produce(queue, n):
+    with lock:
+        print("producing {} items".format(n))
+    for x in range(1, n + 1):
+        # simulate i/o operation using sleep
+        sleep(1)
+        # produce an item
+        with lock:
+            print("producing {}/{}".format(x, n))
+        item = str(x)
+        # put the item in the queue
+        queue.put(item)
+
+    # indicate the producer is done
+    queue.put(None)
+    return n
+
+
+def consume(queue):
+    consumed = 0
+    with lock:
+        print("consuming items")
+    while True:
+        # wait for an item from the producer
+        item = queue.get()
+        if item is None:
+            # the producer emits None to indicate that it is done
+            break
+
+        # process the item
+        with lock:
+            print("consuming {}".format(item))
+        consumed += 1
+    return consumed
+
+with ProcessPoolExecutor() as pool:
+    res = await asyncio.gather(
+        loop.run_in_executor(pool, functools.partial(produce, queue, 10)),
+        loop.run_in_executor(pool, functools.partial(consume, queue))
+    )
+res
 # %% [markdown]
 """
 ## Exception Handling
@@ -343,7 +447,7 @@ def wait_for_change(widget, value):
 
 # %%
 from ipywidgets import IntSlider
-
+import asyncio
 
 slider = IntSlider()
 
@@ -358,3 +462,5 @@ async def f():
 asyncio.create_task(f())
 
 slider
+
+# %%

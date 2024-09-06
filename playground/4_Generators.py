@@ -88,7 +88,8 @@ def nsquared(n):
         if n == 0:
             return  # correct way to terminate a generator
 
-
+#%%
+sum(nsquared(10))
 # %%
 gen2 = nsquared(10)
 

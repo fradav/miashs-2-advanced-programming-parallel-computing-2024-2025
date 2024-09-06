@@ -239,6 +239,120 @@ with ThreadPoolExecutor() as pool:
 res
 ```
 
+## Aside, with decorators
+
+We can (slighty) simplify the code by using decorators. Beware that the `pool` object is closed by the `shutdown` method at the end, so the decorator, which uses the pool as argument to the `run_in_executor`, is no longer valid and the decorated functions are not usable anymore.
+
+```{python}
+#| eval: false
+#| tags: [solution]
+
+import functools
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+from queue import Queue
+
+queue = Queue()
+loop = asyncio.get_running_loop()
+
+pool = ThreadPoolExecutor(8)
+def run_in_thread(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return loop.run_in_executor(pool, functools.partial(func, *args, **kwargs))
+    return wrapper
+
+@run_in_thread
+def produce(n):
+    print("producing {} items".format(n))
+    for x in range(1, n + 1):
+        # simulate i/o operation using sleep
+        future = asyncio.run_coroutine_threadsafe(asyncio.sleep(1), loop)
+        future.result()
+        # produce an item
+        print("producing {}/{}".format(x, n))
+        item = str(x)
+        # put the item in the queue
+        queue.put(item)
+
+    # indicate the producer is done
+    queue.put(None)
+    return n
+
+@run_in_thread
+def consume():
+    consumed = 0
+    print("consuming items")
+    while True:
+        # wait for an item from the producer
+        item = queue.get()
+        if item is None:
+            # the producer emits None to indicate that it is done
+            break
+
+        # process the item
+        print("consuming {}".format(item))
+        consumed += 1
+    return consumed
+
+res = await asyncio.gather(
+    produce(10),
+    consume()
+)
+pool.shutdown()
+res
+```
+
+
+
+```{python}
+#| eval: false
+#| tags: [solution]
+
+import asyncio
+from queue import Queue
+
+queue = Queue()
+loop = asyncio.get_running_loop()
+
+def produce(n):
+    print("producing {} items".format(n))
+    for x in range(1, n + 1):
+        # simulate i/o operation using sleep
+        future = asyncio.run_coroutine_threadsafe(asyncio.sleep(1), loop)
+        future.result()
+        # produce an item
+        print("producing {}/{}".format(x, n))
+        item = str(x)
+        # put the item in the queue
+        queue.put(item)
+
+    # indicate the producer is done
+    queue.put(None)
+    return n
+
+def consume():
+    consumed = 0
+    print("consuming items")
+    while True:
+        # wait for an item from the producer
+        item = queue.get()
+        if item is None:
+            # the producer emits None to indicate that it is done
+            break
+
+        # process the item
+        print("consuming {}".format(item))
+        consumed += 1
+    return consumed
+
+res = await asyncio.gather(
+    asyncio.to_thread(produce,10),
+    asyncio.to_thread(consume)
+)
+res
+```
+
 ## The same with processes
 
 The queue is now a `multiprocessing.Queue`.

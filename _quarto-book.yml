@@ -7,6 +7,7 @@ project:
     - "docs-resources/Notebooks/**/Applications/*"
     - "docs-resources/Notebooks/**/Solutions/*-sol.*"
     - "docs-resources/Notebooks/Courses/tikz-figures/*.svg"
+    - "docs-resources/Notebooks/Courses/figs/*.png"
     - "docs-resources/Notebooks/**/Solutions/*-sol_files/**/*"
     - "docs-resources/Notebooks/**/Applications/*_files/**/*"
     - "!docs-resources/Notebooks/docs/"

@@ -12,7 +12,8 @@ project:
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py
   resources:
-    - "Courses/tikz-figures/*.svg" 
+    - "Courses/tikz-figures/*.svg"
+    - "Courses/figs/*.png"
     - "!/docs"
     - "!/docs-resources"
 

@@ -30,6 +30,7 @@ from ipyparallel import Client
 
 ### Force the 8 nodes/1 core layout
 rc = Client()
+rc.stop_distributed()
 client = rc.become_dask()
 client
 ```
@@ -557,4 +558,3 @@ Before moving on to the next exercise, make sure to close your client or stop th
 ```{python}
 client.close()
 ```
-

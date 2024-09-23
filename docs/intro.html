@@ -211,9 +211,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#how-to-use-the-jupyterlab-instance-in-vscode" id="toc-how-to-use-the-jupyterlab-instance-in-vscode" class="nav-link" data-scroll-target="#how-to-use-the-jupyterlab-instance-in-vscode"><span class="header-section-number">1.3</span> How to use the JupyterLab instance in VSCode</a>
   <ul>
   <li><a href="#prerequisite-get-your-own-jupyterlab-instance-url" id="toc-prerequisite-get-your-own-jupyterlab-instance-url" class="nav-link" data-scroll-target="#prerequisite-get-your-own-jupyterlab-instance-url"><span class="header-section-number">1.3.1</span> Prerequisite: get your own JupyterLab instance url</a></li>
-  <li><a href="#connect-to-the-jupyterlab-instance-with-vscode" id="toc-connect-to-the-jupyterlab-instance-with-vscode" class="nav-link" data-scroll-target="#connect-to-the-jupyterlab-instance-with-vscode"><span class="header-section-number">1.3.2</span> Connect to the JupyterLab instance with VSCode</a></li>
+  <li><a href="#connect-to-the-jupyterlab-instance-with-vscode" id="toc-connect-to-the-jupyterlab-instance-with-vscode" class="nav-link" data-scroll-target="#connect-to-the-jupyterlab-instance-with-vscode"><span class="header-section-number">1.3.2</span> Connect to the JupyterLab instance with VSCode</a>
+  <ul class="collapse">
+  <li><a href="#alternative-way-to-connect-to-the-jupyterlab-instance" id="toc-alternative-way-to-connect-to-the-jupyterlab-instance" class="nav-link" data-scroll-target="#alternative-way-to-connect-to-the-jupyterlab-instance">Alternative way to connect to the JupyterLab instance</a></li>
   </ul></li>
-  <li><a href="#collaborative-editing" id="toc-collaborative-editing" class="nav-link" data-scroll-target="#collaborative-editing"><span class="header-section-number">1.4</span> Collaborative editing</a></li>
+  </ul></li>
+  <li><a href="#connected" id="toc-connected" class="nav-link" data-scroll-target="#connected"><span class="header-section-number">1.4</span> Connected !</a></li>
+  <li><a href="#collaborative-editing" id="toc-collaborative-editing" class="nav-link" data-scroll-target="#collaborative-editing"><span class="header-section-number">1.5</span> Collaborative editing</a></li>
   </ul>
 </nav>
     </div>
@@ -319,6 +323,18 @@ Warning
 </section>
 <section id="connect-to-the-jupyterlab-instance-with-vscode" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="connect-to-the-jupyterlab-instance-with-vscode"><span class="header-section-number">1.3.2</span> Connect to the JupyterLab instance with VSCode</h3>
+<ul>
+<li>First, bring down the command palette with <code>Ctrl+Shift+P</code> (or <code>Cmd+Shift+P</code> on macOS). Then, choose “Jupyter: Launch Interactive Window”. <img src="images/launch-interactive.png" class="img-fluid"></li>
+<li>It will open a new tab in vscode, click on “Select kernel” like this: <img src="images/interactive-window.png" class="img-fluid"></li>
+<li>Choose “Existing Jupyter Server” : <img src="images/existing-server.png" class="img-fluid"></li>
+<li>Then it will ask you for the URL of the JupyterLab instance, which is <code>https://jupyterhub.imag.umontpellier.fr</code> : <img src="images/enter-jupyter-url.png" class="img-fluid"></li>
+<li>Enter the login name, which is <code>e_miashs-XX</code> : <img src="images/enter-username.png" class="img-fluid"></li>
+<li>Paste the token you got from the onesecret link, and then press enter: <img src="images/enter-token.png" class="img-fluid"></li>
+<li>Then it will ask you for a display name for the instance, you can put whatever you want, and press enter: <img src="images/enter-jupyterhub-name.png" class="img-fluid"></li>
+<li>And finally, you have to choose for the kernel, choose “Python 3” and voilà <img src="images/choose-kernel.png" class="img-fluid"></li>
+</ul>
+<section id="alternative-way-to-connect-to-the-jupyterlab-instance" class="level4">
+<h4 class="anchored" data-anchor-id="alternative-way-to-connect-to-the-jupyterlab-instance">Alternative way to connect to the JupyterLab instance</h4>
 <div class="callout callout-style-default callout-warning callout-titled" title="Don’t use JupyterHub">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -329,7 +345,8 @@ Don’t use JupyterHub
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>As today (09/23/2024), the jupyterhub extension in VSCode is not working properly, so don’t use it.</p>
+<p>As today (09/23/2024), the jupyterhub extension in VSCode could be not working properly, as indicated in <a href="https://github.com/microsoft/vscode-jupyter-hub/issues/68">this issue</a>.</p>
+<p>If this is the case for you, you could use the old way to connect to the JupyterLab instance, by using the token you got from the onesecret link, as explained in the following steps.</p>
 </div>
 </div>
 <ul>
@@ -340,6 +357,11 @@ Don’t use JupyterHub
 <li>Then it will ask you for a display name for the instance, you can put whatever you want, and press enter: <img src="images/instance-name.png" class="img-fluid"></li>
 <li>And finally, you have to choose for the kernel, choose “Python 3” and voilà <img src="images/choose-kernel.png" class="img-fluid"></li>
 </ul>
+</section>
+</section>
+</section>
+<section id="connected" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="connected"><span class="header-section-number">1.4</span> Connected !</h2>
 <p><img src="images/kernel-connected.png" class="img-fluid"></p>
 <div class="callout callout-style-default callout-note callout-titled" title="First cell is slow">
 <div class="callout-header d-flex align-content-center">
@@ -413,9 +435,8 @@ Losing connection
 </div>
 </div>
 </section>
-</section>
-<section id="collaborative-editing" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="collaborative-editing"><span class="header-section-number">1.4</span> Collaborative editing</h2>
+<section id="collaborative-editing" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="collaborative-editing"><span class="header-section-number">1.5</span> Collaborative editing</h2>
 <ul>
 <li>In the discord channel, I’ll provide you a link to join a collaborative editing session. Don’t click on it, just copy it: <img src="images/liveshare-link.png" class="img-fluid"></li>
 <li>Then open a new “blank” window in VSCode, which will be exclusively for collaborative session. <img src="images/blank-vsode.png" class="img-fluid"></li>

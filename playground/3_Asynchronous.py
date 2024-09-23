@@ -119,54 +119,6 @@ res
 For thread-safe queues, we can use the `queue` module from the standard
 library (not `asyncio.Queue`).
 """
-
-# %%
-import functools
-from concurrent.futures import ThreadPoolExecutor
-import asyncio
-from queue import Queue
-
-queue = Queue()
-loop = asyncio.get_running_loop()
-
-def produce(n):
-    print("producing {} items".format(n))
-    for x in range(1, n + 1):
-        # simulate i/o operation using sleep
-        future = asyncio.run_coroutine_threadsafe(sleep(1), loop)
-        future.result()
-        # produce an item
-        print("producing {}/{}".format(x, n))
-        item = str(x)
-        # put the item in the queue
-        queue.put(item)
-
-    # indicate the producer is done
-    queue.put(None)
-    return n
-
-def consume():
-    consumed = 0
-    print("consuming items")
-    while True:
-        # wait for an item from the producer
-        item = queue.get()
-        # Handle the end of the production
-        if item is None:
-            break
-        # process the item
-        print("consuming {}".format(item))
-        consumed += 1
-    return consumed
-
-with ThreadPoolExecutor() as pool:
-    res = await asyncio.gather(
-        loop.run_in_executor(pool, functools.partial(produce, 10)),
-        loop.run_in_executor(pool, functools.partial(consume))
-    )
-
-
-res
 #%%
 import functools
 from concurrent.futures import ThreadPoolExecutor

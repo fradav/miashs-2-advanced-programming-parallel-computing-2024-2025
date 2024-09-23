@@ -88,6 +88,7 @@
         ".vscode",
         "docs",
         "docs-resources",
-        "**/*_files "
+        "**/*_files",
+        "playground"
     ],
 }

@@ -1,0 +1,56 @@
+```{python}
+from ipyparallel import Client
+
+### Force the 8 nodes/1 core layout
+rc = Client()
+rc.stop_distributed()
+client = rc.become_dask()
+client
+```
+
+```{python}
+#| tags: [solution]
+from dask import delayed, compute
+from dask.distributed import Queue, print
+from time import sleep
+
+queue = Queue()
+
+
+@delayed
+def produce(queue, n):
+    print("producing {} items".format(n))
+    for x in range(1, n + 1):
+        # simulate i/o operation using sleep
+        sleep(1)
+        # produce an item
+        print("producing {}/{}".format(x, n))
+        item = str(x)
+        # put the item in the queue
+        queue.put(item)
+
+    # indicate the producer is done
+    queue.put(None)
+    return n
+
+@delayed
+def consume(queue):
+    consumed = 0
+    print("consuming items")
+    while True:
+        # wait for an item from the producer
+        item = queue.get()
+        if item is None:
+            # the producer emits None to indicate that it is done
+            break
+
+        # process the item
+        print("consuming {}".format(item))
+        consumed += 1
+    return consumed
+
+compute(
+    produce(queue, 5), 
+    consume(queue)
+)
+```

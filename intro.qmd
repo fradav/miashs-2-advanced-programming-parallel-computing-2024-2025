@@ -39,14 +39,18 @@ This works only **once**. If you close the tab or didn’t properly save the lin
 
 ### Connect to the JupyterLab instance with VSCode
 
+:::{.callout-warning title="Don’t use JupyterHub"}
+
+As today (09/23/2024), the jupyterhub extension in VSCode is not working properly, so don’t use it.
+:::
+
 - First, bring down the command palette with `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS). Then, choose “Jupyter: Launch Interactive Window”. ![](images/launch-interactive.png)
 - It will open a new tab in vscode, click on “Select kernel” like this: ![](images/interactive-window.png)
-- Choose “Existing Jupyter Server” : ![](images/existing-server.png)
-- Then it will ask you for the URL of the JupyterLab instance, which is `https://jupyterhub.imag.umontpellier.fr` : ![](images/enter-jupyter-url.png)
-- Enter the login name, which is `e_miashs-XX` : ![](images/enter-username.png)
-- Paste the token you got from the onesecret link, and then press enter: ![](images/enter-token.png)
-- Then it will ask you for a display name for the instance, you can put whatever you want, and press enter: ![](images/enter-jupyterhub-name.png)
+- Choose “Existing Jupyter Server” : ![](images/existing-jupyter-server.png)
+- Then it will ask you for the URL of the Jupyter instance, which is `https://jupyterhub.imag.umontpellier.fr/user/e_miashs-XX/?token=XXXXXXXXXXXXX` : ![](images/enter-jupyter-url.png) where `e_miashs-XX` is your username and `XXXXXXXXXXXXX` is the token you got from the onesecret link.
+- Then it will ask you for a display name for the instance, you can put whatever you want, and press enter: ![](images/instance-name.png)
 - And finally, you have to choose for the kernel, choose “Python 3” and voilà ![](images/choose-kernel.png)
+
 
 ![](images/kernel-connected.png)
 

@@ -229,6 +229,67 @@ sum([inc(1),inc(2),inc(3)]).visualize()
 total.visualize()
 ```
 
+## Putting it all together with a the producer-consumer pattern
+
+## Introduction with a simple producer-consumer example
+
+We’ll try to reproduce the producer/consumer code from asynchronous application with `asyncio` or `threading` but with `dask.delayed` and compute
+
+```python
+from dask import delayed, compute
+from dask.distributed import Queue, print
+from time import sleep
+
+queue = Queue()
+...
+```
+
+```{python}
+#| tags: [solution]
+from dask import delayed, compute
+from dask.distributed import Queue, print
+from time import sleep
+
+queue = Queue()
+
+@delayed
+def produce(queue, n):
+    print("producing {} items".format(n))
+    for x in range(1, n + 1):
+        # simulate i/o operation using sleep
+        sleep(1)
+        # produce an item
+        print("producing {}/{}".format(x, n))
+        item = str(x)
+        # put the item in the queue
+        queue.put(item)
+
+    # indicate the producer is done
+    queue.put(None)
+    return n
+
+@delayed
+def consume(queue):
+    consumed = 0
+    print("consuming items")
+    while True:
+        # wait for an item from the producer
+        item = queue.get()
+        if item is None:
+            # the producer emits None to indicate that it is done
+            break
+
+        # process the item
+        print("consuming {}".format(item))
+        consumed += 1
+    return consumed
+
+compute(
+    produce(queue, 5), 
+    consume(queue)
+)
+```
+
 ## Exercise: Parallelize a for-loop code with control flow
 
 Often we want to delay only *some* functions, running a few of them immediately.  This is especially helpful when those functions are fast and help us to determine what other slower functions we should call.  This decision, to delay or not to delay, is usually where we need to be thoughtful when using `dask.delayed`.

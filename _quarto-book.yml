@@ -25,8 +25,8 @@ book:
     - Courses/2_Concepts.qmd
     - Courses/3_Asynchronous.qmd
     - Courses/4_IPC_and_Locking.qmd
-    # - Courses/5_Distributed.qmd
-    # - Courses/5_1_Dask_delayed.qmd
+    - Courses/5_0_Distributed.qmd
+    - Courses/5_1_Dask_delayed.qmd
     # - Courses/6_GPU_Caching_etc.qmd
     # - Courses/7_SIMD.qmd
     - summary.qmd

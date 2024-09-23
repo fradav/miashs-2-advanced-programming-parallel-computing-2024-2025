@@ -1,7 +1,5 @@
 ---
 title: "Distributed models with dask"
-execute: 
-  eval: false
 ---
 
 # Initialization 

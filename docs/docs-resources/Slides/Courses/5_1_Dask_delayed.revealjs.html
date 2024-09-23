@@ -11,7 +11,7 @@
 <script src="5_1_Dask_delayed_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.js" defer="true"></script>
 <link href="5_1_Dask_delayed_files/libs/quarto-contrib/reveal-header-1.0.0/add_header.css" rel="stylesheet">
 <link href="5_1_Dask_delayed_files/libs/quarto-contrib/grid-no-htext-1.0.0/grid_no_htext.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.55">
+  <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="François-David Collin">
   <meta name="author" content="Ghislain Durif">
@@ -578,11 +578,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># This executes immediately</span></span>
 <span id="cb8-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="" aria-hidden="true" tabindex="-1"></a>dask.delayed(f(x, y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></td>
@@ -603,11 +603,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Avoid calling compute repeatedly</span></span>
 <span id="cb10-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
@@ -640,11 +640,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Mutate inputs in functions</span></span>
 <span id="cb12-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">@dask.delayed</span></span>
@@ -675,10 +675,10 @@ The dask Team
 <col style="width: 60%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> []</span>
 <span id="cb15-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># This references global variable L</span></span>
@@ -699,11 +699,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Forget to call compute</span></span>
 <span id="cb16-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="" aria-hidden="true" tabindex="-1"></a>dask.delayed(f)(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
@@ -728,11 +728,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># One giant task</span></span>
 <span id="cb18-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
@@ -799,11 +799,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Too many tasks</span></span>
 <span id="cb20-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
@@ -848,11 +848,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Delayed function calls delayed</span></span>
 <span id="cb23-2"><a href="" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="" aria-hidden="true" tabindex="-1"></a><span class="at">@dask.delayed</span></span>
@@ -886,11 +886,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="co"># Call del</span></span>
 <span id="cb25-2"><a href="" aria-hidden="true" tabindex="-1"></a>ayed functions on Dask collections</span>
 <span id="cb25-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>
@@ -929,11 +929,11 @@ The dask Team
 <col style="width: 46%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arr</span>
 <span id="cb29-2"><a href="" aria-hidden="true" tabindex="-1"></a>ay(...)  <span class="co"># some large array</span></span>
 <span id="cb29-3"><a href="" aria-hidden="true" tabindex="-1"></a></span>

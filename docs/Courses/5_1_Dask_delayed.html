@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.55">
+<meta name="generator" content="quarto-1.5.57">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -474,17 +474,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="call-delayed-on-the-function-not-the-result" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="call-delayed-on-the-function-not-the-result"><span class="header-section-number">9.1</span> Call delayed on the function, not the result</h2>
 <p>Dask delayed operates on functions like <code>dask.delayed(f)(x, y)</code>, not on their results like <code>dask.delayed(f(x, y))</code>. When you do the latter, Python first calculates <code>f(x, y)</code> before Dask has a chance to step in.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 43%">
 <col style="width: 55%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This executes immediately</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>dask.delayed(f(x, y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></td>
@@ -499,17 +499,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="compute-on-lots-of-computation-at-once" class="level2 smaller" data-number="9.2">
 <h2 class="smaller anchored" data-number="9.2" data-anchor-id="compute-on-lots-of-computation-at-once"><span class="header-section-number">9.2</span> Compute on lots of computation at once</h2>
 <p>To improve parallelism, you want to include lots of computation in each compute call. Ideally, you want to make many <code>dask.delayed</code> calls to define your computation and then call <code>dask.compute</code> only at the end. It is ok to call <code>dask.compute</code> in the middle of your computation as well, but everything will stop there as Dask computes those results before moving forward with your code.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 55%">
 <col style="width: 43%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Avoid calling compute repeatedly</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
@@ -536,17 +536,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="dont-mutate-inputs" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="dont-mutate-inputs"><span class="header-section-number">9.3</span> Don't mutate inputs</h2>
 <p>Your functions should not change the inputs directly.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 51%">
 <col style="width: 47%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mutate inputs in functions</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dask.delayed</span></span>
@@ -572,15 +572,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="avoid-global-state" class="level2" data-number="9.4">
 <h2 data-number="9.4" class="anchored" data-anchor-id="avoid-global-state"><span class="header-section-number">9.4</span> Avoid global state</h2>
 <p>Ideally, your operations shouldn't rely on global state. Using global state <em>might</em> work if you only use threads, but when you move to multiprocessing or distributed computing then you will likely encounter confusing errors.</p>
-<table class="caption-top" style="width:61%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 61%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> []</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># This references global variable L</span></span>
@@ -595,17 +595,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="dont-rely-on-side-effects" class="level2" data-number="9.5">
 <h2 data-number="9.5" class="anchored" data-anchor-id="dont-rely-on-side-effects"><span class="header-section-number">9.5</span> Don't rely on side effects</h2>
 <p>Delayed functions only do something if they are computed. You will always need to pass the output to something that eventually calls compute.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 43%">
 <col style="width: 55%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forget to call compute</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>dask.delayed(f)(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
@@ -624,17 +624,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="break-up-computations-into-many-pieces" class="level2 smaller scrollable" data-number="9.6">
 <h2 class="smaller scrollable anchored" data-number="9.6" data-anchor-id="break-up-computations-into-many-pieces"><span class="header-section-number">9.6</span> Break up computations into many pieces</h2>
 <p>Every <code>dask.delayed</code> function call is a single operation from Dask's perspective. You achieve parallelism by having many delayed calls, not by using only a single one: Dask will not look inside a function decorated with <code>@dask.delayed</code> and parallelize that code internally. To accomplish that, it needs your help to find good places to break up a computation.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 48%">
 <col style="width: 50%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One giant task</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -695,17 +695,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="avoid-too-many-tasks" class="level2" data-number="9.7">
 <h2 data-number="9.7" class="anchored" data-anchor-id="avoid-too-many-tasks"><span class="header-section-number">9.7</span> Avoid too many tasks</h2>
 <p>Every delayed task has an overhead of a few hundred microseconds. Usually this is ok, but it can become a problem if you apply <code>dask.delayed</code> too finely. In this case, it's often best to break up your many tasks into batches or use one of the Dask collections to help you.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 36%">
 <col style="width: 62%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Too many tasks</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> []</span>
@@ -744,17 +744,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="smaller anchored" data-number="9.8" data-anchor-id="avoid-calling-delayed-within-delayed-functions"><span class="header-section-number">9.8</span> Avoid calling delayed within delayed functions</h2>
 <p>Often, if you are new to using Dask delayed, you place <code>dask.delayed</code> calls everywhere and hope for the best. While this may actually work, it's usually slow and results in hard-to-understand solutions.</p>
 <p>Usually you never call <code>dask.delayed</code> within <code>dask.delayed</code> functions.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
 <col style="width: 48%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Delayed function calls delayed</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="at">@dask.delayed</span></span>
@@ -782,17 +782,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="smaller anchored" data-number="9.9" data-anchor-id="dont-call-dask.delayed-on-other-dask-collections"><span class="header-section-number">9.9</span> Don't call dask.delayed on other Dask collections</h2>
 <p>When you place a Dask array or Dask DataFrame into a delayed call, that function will receive the NumPy or Pandas equivalent. Beware that if your array is large, then this might crash your workers.</p>
 <p>Instead, it's more common to use methods like <code>da.map_blocks</code></p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 51%">
 <col style="width: 47%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Call del</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ayed functions on Dask collections</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -825,17 +825,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="smaller anchored" data-number="9.10" data-anchor-id="avoid-repeatedly-putting-large-inputs-into-delayed-calls"><span class="header-section-number">9.10</span> Avoid repeatedly putting large inputs into delayed calls</h2>
 <p>Every time you pass a concrete result (anything that isn't delayed) Dask will hash it by default to give it a name. This is fairly fast (around 500 MB/s) but can be slow if you do it over and over again. Instead, it is better to delay your data as well.</p>
 <p>This is especially important when using a distributed cluster to avoid sending your data separately for each function call.</p>
-<table class="caption-top" style="width:99%;">
+<table class="caption-top table">
 <colgroup>
 <col style="width: 41%">
 <col style="width: 56%">
 </colgroup>
 <tbody>
-<tr>
+<tr class="odd">
 <td><strong>Don't</strong></td>
 <td><strong>Do</strong></td>
 </tr>
-<tr>
+<tr class="even">
 <td><div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arr</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>ay(...)  <span class="co"># some large array</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>

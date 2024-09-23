@@ -12,6 +12,7 @@ project:
     - Courses/Solutions/4_2_Generators_tutorial-sol.qmd
     - Courses/Solutions/5_0_Distributed_models.qmd
     - Courses/Solutions/5_1_Dask_delayed.qmd
+    - Courses/Solutions/6_0_Numba_tutorial-sol.qmd
   output-dir: docs-resources/Notebooks
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py

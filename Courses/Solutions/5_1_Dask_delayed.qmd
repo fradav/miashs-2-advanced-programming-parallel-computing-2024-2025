@@ -1,5 +1,7 @@
 ---
 title: "Dask `delayed` App"
+execute: 
+  eval: false
 ---
 
 <img src="https://docs.dask.org/en/latest/_images/dask_horizontal.svg"

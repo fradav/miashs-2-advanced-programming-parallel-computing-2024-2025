@@ -151,8 +151,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./Courses/5_0_Distributed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Distributed Computing models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Courses/5_1_Dask_delayed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Dask <code>delayed</code></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -307,14 +319,25 @@ Warning
 </section>
 <section id="connect-to-the-jupyterlab-instance-with-vscode" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="connect-to-the-jupyterlab-instance-with-vscode"><span class="header-section-number">1.3.2</span> Connect to the JupyterLab instance with VSCode</h3>
+<div class="callout callout-style-default callout-warning callout-titled" title="Don’t use JupyterHub">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Don’t use JupyterHub
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As today (09/23/2024), the jupyterhub extension in VSCode is not working properly, so don’t use it.</p>
+</div>
+</div>
 <ul>
 <li>First, bring down the command palette with <code>Ctrl+Shift+P</code> (or <code>Cmd+Shift+P</code> on macOS). Then, choose “Jupyter: Launch Interactive Window”. <img src="images/launch-interactive.png" class="img-fluid"></li>
 <li>It will open a new tab in vscode, click on “Select kernel” like this: <img src="images/interactive-window.png" class="img-fluid"></li>
-<li>Choose “Existing Jupyter Server” : <img src="images/existing-server.png" class="img-fluid"></li>
-<li>Then it will ask you for the URL of the JupyterLab instance, which is <code>https://jupyterhub.imag.umontpellier.fr</code> : <img src="images/enter-jupyter-url.png" class="img-fluid"></li>
-<li>Enter the login name, which is <code>e_miashs-XX</code> : <img src="images/enter-username.png" class="img-fluid"></li>
-<li>Paste the token you got from the onesecret link, and then press enter: <img src="images/enter-token.png" class="img-fluid"></li>
-<li>Then it will ask you for a display name for the instance, you can put whatever you want, and press enter: <img src="images/enter-jupyterhub-name.png" class="img-fluid"></li>
+<li>Choose “Existing Jupyter Server” : <img src="images/existing-jupyter-server.png" class="img-fluid"></li>
+<li>Then it will ask you for the URL of the Jupyter instance, which is <code>https://jupyterhub.imag.umontpellier.fr/user/e_miashs-XX/?token=XXXXXXXXXXXXX</code> : <img src="images/enter-jupyter-url.png" class="img-fluid"> where <code>e_miashs-XX</code> is your username and <code>XXXXXXXXXXXXX</code> is the token you got from the onesecret link.</li>
+<li>Then it will ask you for a display name for the instance, you can put whatever you want, and press enter: <img src="images/instance-name.png" class="img-fluid"></li>
 <li>And finally, you have to choose for the kernel, choose “Python 3” and voilà <img src="images/choose-kernel.png" class="img-fluid"></li>
 </ul>
 <p><img src="images/kernel-connected.png" class="img-fluid"></p>

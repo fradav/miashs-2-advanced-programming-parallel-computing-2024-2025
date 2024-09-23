@@ -44,7 +44,7 @@
     "href": "intro.html#how-to-use-the-jupyterlab-instance-in-vscode",
     "title": "1  Prerequisites",
     "section": "1.3 How to use the JupyterLab instance in VSCode",
-    "text": "1.3 How to use the JupyterLab instance in VSCode\n\n1.3.1 Prerequisite: get your own JupyterLab instance url\nIn the table I provided you, you should have a line with:\n\nyour name\nyour username (which begin with e_miashs-XX where XX is the number of your account)1\na onesecret link type of link : \nAs the decryption key, simply provide your username: \nAnd then you get the token for your jupyterhub instance: , save it somewhere.\n\n\n\n\n\n\n\nWarning\n\n\n\nThis works only once. If you close the tab or didn’t properly save the link you’ll have to ask me for a new onesecret link.\n\n\n\n\n1.3.2 Connect to the JupyterLab instance with VSCode\n\nFirst, bring down the command palette with Ctrl+Shift+P (or Cmd+Shift+P on macOS). Then, choose “Jupyter: Launch Interactive Window”. \nIt will open a new tab in vscode, click on “Select kernel” like this: \nChoose “Existing Jupyter Server” : \nThen it will ask you for the URL of the JupyterLab instance, which is https://jupyterhub.imag.umontpellier.fr : \nEnter the login name, which is e_miashs-XX : \nPaste the token you got from the onesecret link, and then press enter: \nThen it will ask you for a display name for the instance, you can put whatever you want, and press enter: \nAnd finally, you have to choose for the kernel, choose “Python 3” and voilà \n\n\n\n\n\n\n\n\nFirst cell is slow\n\n\n\nIt could take a few seconds when you enter your first cell of code for the kernel to start.\n\n\n\n\n\n\n\n\n\nAll is remote!\n\n\n\nAs you can see, from now on, every python interactive execution you do in VSCode will be done on your remote JupyterLab instance (the shell hostname returned the name of the cluster node on which the instance is running). Therefore, the code you execute can’t use any local file on your computer, even if your code is in a local file. Generally everything you’ll need as resources and files will be provided by me.\n\n\n\n\n\n\n\n\nIn case you really need to use a local file\n\n\n\nIn the case you need to use a local file, you’ll have to upload it to your JupyterLab instance, by using direct shell commands in the interactive window for example.\n\n\n\n\n\n\n\n\nBrowser vs VSCode\n\n\n\nOf course, you can use the JupyterLab instance directly in your browser, but I strongly recommend you to use VSCode, because:\n\nIt will be much more convenient to work with.\nWe will be able to use collaborative editing in practice sessions.\n\n\n\n\n\n\n\n\n\nLosing connection\n\n\n\nWhen you’ll lose your connection to the JupyterLab instance in VSCode (for example if you close the tab, exit from VSCode, or simply your laptop goes to sleep), you also lose the current state of your session in the stance (you have to reexecute all the cells you executed to restore the state of the session).\nIt also could ask for your username again, just press enter.",
+    "text": "1.3 How to use the JupyterLab instance in VSCode\n\n1.3.1 Prerequisite: get your own JupyterLab instance url\nIn the table I provided you, you should have a line with:\n\nyour name\nyour username (which begin with e_miashs-XX where XX is the number of your account)1\na onesecret link type of link : \nAs the decryption key, simply provide your username: \nAnd then you get the token for your jupyterhub instance: , save it somewhere.\n\n\n\n\n\n\n\nWarning\n\n\n\nThis works only once. If you close the tab or didn’t properly save the link you’ll have to ask me for a new onesecret link.\n\n\n\n\n1.3.2 Connect to the JupyterLab instance with VSCode\n\n\n\n\n\n\nDon’t use JupyterHub\n\n\n\nAs today (09/23/2024), the jupyterhub extension in VSCode is not working properly, so don’t use it.\n\n\n\nFirst, bring down the command palette with Ctrl+Shift+P (or Cmd+Shift+P on macOS). Then, choose “Jupyter: Launch Interactive Window”. \nIt will open a new tab in vscode, click on “Select kernel” like this: \nChoose “Existing Jupyter Server” : \nThen it will ask you for the URL of the Jupyter instance, which is https://jupyterhub.imag.umontpellier.fr/user/e_miashs-XX/?token=XXXXXXXXXXXXX :  where e_miashs-XX is your username and XXXXXXXXXXXXX is the token you got from the onesecret link.\nThen it will ask you for a display name for the instance, you can put whatever you want, and press enter: \nAnd finally, you have to choose for the kernel, choose “Python 3” and voilà \n\n\n\n\n\n\n\n\nFirst cell is slow\n\n\n\nIt could take a few seconds when you enter your first cell of code for the kernel to start.\n\n\n\n\n\n\n\n\n\nAll is remote!\n\n\n\nAs you can see, from now on, every python interactive execution you do in VSCode will be done on your remote JupyterLab instance (the shell hostname returned the name of the cluster node on which the instance is running). Therefore, the code you execute can’t use any local file on your computer, even if your code is in a local file. Generally everything you’ll need as resources and files will be provided by me.\n\n\n\n\n\n\n\n\nIn case you really need to use a local file\n\n\n\nIn the case you need to use a local file, you’ll have to upload it to your JupyterLab instance, by using direct shell commands in the interactive window for example.\n\n\n\n\n\n\n\n\nBrowser vs VSCode\n\n\n\nOf course, you can use the JupyterLab instance directly in your browser, but I strongly recommend you to use VSCode, because:\n\nIt will be much more convenient to work with.\nWe will be able to use collaborative editing in practice sessions.\n\n\n\n\n\n\n\n\n\nLosing connection\n\n\n\nWhen you’ll lose your connection to the JupyterLab instance in VSCode (for example if you close the tab, exit from VSCode, or simply your laptop goes to sleep), you also lose the current state of your session in the stance (you have to reexecute all the cells you executed to restore the state of the session).\nIt also could ask for your username again, just press enter.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Prerequisites</span>"
     ]
@@ -1320,13 +1320,413 @@
     ]
   },
   {
+    "objectID": "Courses/5_0_Distributed.html",
+    "href": "Courses/5_0_Distributed.html",
+    "title": "6  Distributed Computing models",
+    "section": "",
+    "text": "7 Map-Reduce",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#the-real-beating-heart-of-big-data",
+    "href": "Courses/5_0_Distributed.html#the-real-beating-heart-of-big-data",
+    "title": "6  Distributed Computing models",
+    "section": "7.1 The (real) beating Heart of Big Data",
+    "text": "7.1 The (real) beating Heart of Big Data\nMap\\rightarrow{}Reduce patern is the most common pattern to process data in (real) Big Data.\n. . .\nIt is heavily used by Google, Facebook, and IBM.\n. . .\nHadoop from Apache is a popular Map-Reduce framework (also called MapReduce in the Hadoop framework, not to be confused with the more general Map\\rightarrow{}Reduce Pattern).\n. . .\nHadoop is backed by a HDFS (Hadoop Distributed File System) and a YARN (Yet Another Resource Manager)\n\nHDFS is a distributed file system (a file system that is distributed across a cluster of computers)\nYARN is a resource manager (a program that manages the resources of a cluster)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#split-apply-combine-pattern",
+    "href": "Courses/5_0_Distributed.html#split-apply-combine-pattern",
+    "title": "6  Distributed Computing models",
+    "section": "7.2 Split-Apply-Combine pattern",
+    "text": "7.2 Split-Apply-Combine pattern\n\n\n\n\nSplit:\n\nSplit the data into smaller pieces\n\nApply:\n\nProcess the data in the pieces\n\nCombine:\n\nMerge the results",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#map",
+    "href": "Courses/5_0_Distributed.html#map",
+    "title": "6  Distributed Computing models",
+    "section": "7.3 Map",
+    "text": "7.3 Map\nMap takes one pair of data with a type in one data domain, and returns a list of pairs in a different domain:\nMap(k1,v1) → list(k2,v2)\n\\Longrightarrow heavily parallelized",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#reduce",
+    "href": "Courses/5_0_Distributed.html#reduce",
+    "title": "6  Distributed Computing models",
+    "section": "7.4 Reduce",
+    "text": "7.4 Reduce\nThe values associated from the same key are combined.\nThe Reduce function is then applied in parallel to each group, which in turn produces a collection of values in the same domain:\nReduce(k2, list (v2)) → list((k3, v3))",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#schema",
+    "href": "Courses/5_0_Distributed.html#schema",
+    "title": "6  Distributed Computing models",
+    "section": "7.5 Schema",
+    "text": "7.5 Schema",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#canonical-example-word-count-i",
+    "href": "Courses/5_0_Distributed.html#canonical-example-word-count-i",
+    "title": "6  Distributed Computing models",
+    "section": "7.6 Canonical example : Word Count, I",
+    "text": "7.6 Canonical example : Word Count, I\nThe canonical MapReduce example counts the appearance of each word in a set of documents\ndef map(name, document):\n  // name: document name\n  // document: document contents (list of words)\n  for word in document:\n    emit (word, 1)\n\ndef reduce(word, partialCounts):\n  // word: a word\n  // partialCounts: a list of aggregated partial counts\n  sum = 0\n  for pc in partialCounts:\n    sum += pc\n  emit (word, sum)",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#canonical-example-word-count-ii",
+    "href": "Courses/5_0_Distributed.html#canonical-example-word-count-ii",
+    "title": "6  Distributed Computing models",
+    "section": "7.7 Canonical example : Word Count, II",
+    "text": "7.7 Canonical example : Word Count, II",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#spark-spiritual-son-of-mapreduce",
+    "href": "Courses/5_0_Distributed.html#spark-spiritual-son-of-mapreduce",
+    "title": "6  Distributed Computing models",
+    "section": "7.8 Spark, spiritual son of MapReduce",
+    "text": "7.8 Spark, spiritual son of MapReduce\nSpark is widely used for machine learning on scalable data sets (faster than MapReduce by an order of magnitude).\n. . .\nSpark is largely inspired by the MapReduce pattern but extends it by using a distributed graph rather than a “linear” data flow like Map\\rightarrow{}Reduce.\n\\Longrightarrow Complex disbributed computing.\n. . .\nSpark emphasizes ease of use of the cluster ressources in a simple and functional way",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#spark-code-example-word-count",
+    "href": "Courses/5_0_Distributed.html#spark-code-example-word-count",
+    "title": "6  Distributed Computing models",
+    "section": "7.9 Spark, code example : Word Count",
+    "text": "7.9 Spark, code example : Word Count\ntext_file = sc.textFile(\"hdfs://...\")\ncounts = text_file.flatMap(lambda line: line.split(\" \")) \\\n             .map(lambda word: (word, 1)) \\\n             .reduceByKey(lambda a, b: a + b)\ncounts.saveAsTextFile(\"hdfs://...\")",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#spark-another-example-machine-learning",
+    "href": "Courses/5_0_Distributed.html#spark-another-example-machine-learning",
+    "title": "6  Distributed Computing models",
+    "section": "7.10 Spark, another example : machine learning",
+    "text": "7.10 Spark, another example : machine learning\n# Every record of this DataFrame contains the label and\n# features represented by a vector.\ndf = sqlContext.createDataFrame(data, [\"label\", \"features\"])\n\n# Set parameters for the algorithm.\n# Here, we limit the number of iterations to 10.\nlr = LogisticRegression(maxIter=10)\n\n# Fit the model to the data.\nmodel = lr.fit(df)\n\n# Given a dataset, predict each point's label, \n# and show the results.\nmodel.transform(df).show()",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#schema-1",
+    "href": "Courses/5_0_Distributed.html#schema-1",
+    "title": "6  Distributed Computing models",
+    "section": "8.1 Schema",
+    "text": "8.1 Schema",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_0_Distributed.html#main-message-passing-functions",
+    "href": "Courses/5_0_Distributed.html#main-message-passing-functions",
+    "title": "6  Distributed Computing models",
+    "section": "8.2 Main message-passing functions",
+    "text": "8.2 Main message-passing functions\n\n\nScatter\n\npartition the data into smaller pieces and send them to the different processes\n\nGather\n\ncollect the data from the different processes and merge them.\n\nBroadcast\n\nSend the same data to all the processes.\n\nReduce\n\nMerge the data from all the processes and produce a single result.",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Distributed Computing models</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html",
+    "href": "Courses/5_1_Dask_delayed.html",
+    "title": "7  Dask delayed",
+    "section": "",
+    "text": "8 Dask Delayed\nSometimes problems don't fit into one of the collections like dask.array or dask.dataframe. In these cases, users can parallelize custom algorithms using the simpler dask.delayed interface. This allows you to create graphs directly with a light annotation of normal python code:",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#dask-delayed-1",
+    "href": "Courses/5_1_Dask_delayed.html#dask-delayed-1",
+    "title": "7  Dask delayed",
+    "section": "Dask Delayed",
+    "text": "Dask Delayed\n\n\nA Dask Delayed task graph with two \"inc\" functions combined using an \"add\" function resulting in an output node.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#example",
+    "href": "Courses/5_1_Dask_delayed.html#example",
+    "title": "7  Dask delayed",
+    "section": "8.1 Example",
+    "text": "8.1 Example\nVisit https://examples.dask.org/delayed.html to see and run examples using Dask Delayed.\nSometimes we face problems that are parallelizable, but don't fit into high-level abstractions like Dask Array or Dask DataFrame. Consider the following example:\ndef inc(x):\n    return x + 1\n\ndef double(x):\n    return x * 2\n\ndef add(x, y):\n    return x + y\n\ndata = [1, 2, 3, 4, 5]\n\noutput = []\nfor x in data:\n    a = inc(x)\n    b = double(x)\n    c = add(a, b)\n    output.append(c)\n\ntotal = sum(output)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#example-1",
+    "href": "Courses/5_1_Dask_delayed.html#example-1",
+    "title": "7  Dask delayed",
+    "section": "Example",
+    "text": "Example\nThere is clearly parallelism in this problem (many of the inc, double, and add functions can be evaluated independently), but it's not clear how to convert this to an array or DataFrame computation. As written, this code runs sequentially in a single thread. However, we see that a lot of this could be executed in parallel.\nThe Dask delayed function decorates your functions so that they operate lazily. Rather than executing your function immediately, it will defer execution, placing the function and its arguments into a task graph.\n\ndask.delayed\n\n\ndelayed",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#example-2",
+    "href": "Courses/5_1_Dask_delayed.html#example-2",
+    "title": "7  Dask delayed",
+    "section": "Example",
+    "text": "Example\nWe slightly modify our code by wrapping functions in delayed. This delays the execution of the function and generates a Dask graph instead:\nimport dask\n\noutput = []\nfor x in data:\n    a = dask.delayed(inc)(x)\n    b = dask.delayed(double)(x)\n    c = dask.delayed(add)(a, b)\n    output.append(c)\n\ntotal = dask.delayed(sum)(output)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#example-3",
+    "href": "Courses/5_1_Dask_delayed.html#example-3",
+    "title": "7  Dask delayed",
+    "section": "Example",
+    "text": "Example\nWe used the dask.delayed function to wrap the function calls that we want to turn into tasks. None of the inc, double, add, or sum calls have happened yet. Instead, the object total is a Delayed result that contains a task graph of the entire computation. Looking at the graph we see clear opportunities for parallel execution. The Dask schedulers &lt;scheduling&gt; will exploit this parallelism, generally improving performance (although not in this example, because these functions are already very small and fast.)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#example-4",
+    "href": "Courses/5_1_Dask_delayed.html#example-4",
+    "title": "7  Dask delayed",
+    "section": "Example",
+    "text": "Example\ntotal.visualize()  # see image to the right\n\n\nA task graph with many nodes for \"inc\" and \"double\" that combine with \"add\" nodes. The output of the \"add\" nodes finally aggregate with a \"sum\" node.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#example-5",
+    "href": "Courses/5_1_Dask_delayed.html#example-5",
+    "title": "7  Dask delayed",
+    "section": "Example",
+    "text": "Example\nWe can now compute this lazy result to execute the graph in parallel:\n&gt;&gt;&gt; total.compute()\n45",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#decorator",
+    "href": "Courses/5_1_Dask_delayed.html#decorator",
+    "title": "7  Dask delayed",
+    "section": "8.2 Decorator",
+    "text": "8.2 Decorator\nIt is also common to see the delayed function used as a decorator. Here is a reproduction of our original problem as a parallel code:\nimport dask\n\n@dask.delayed\ndef inc(x):\n    return x + 1\n\n@dask.delayed\ndef double(x):\n    return x * 2\n\n@dask.delayed\ndef add(x, y):\n    return x + y\n\ndata = [1, 2, 3, 4, 5]\n\noutput = []\nfor x in data:\n    a = inc(x)\n    b = double(x)\n    c = add(a, b)\n    output.append(c)\n\ntotal = dask.delayed(sum)(output)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#real-time",
+    "href": "Courses/5_1_Dask_delayed.html#real-time",
+    "title": "7  Dask delayed",
+    "section": "8.3 Real time",
+    "text": "8.3 Real time\nSometimes you want to create and destroy work during execution, launch tasks from other tasks, etc. For this, see the Futures &lt;futures&gt; interface.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#best-practices",
+    "href": "Courses/5_1_Dask_delayed.html#best-practices",
+    "title": "7  Dask delayed",
+    "section": "8.4 Best Practices",
+    "text": "8.4 Best Practices\nFor a list of common problems and recommendations see Delayed Best Practices &lt;delayed-best-practices&gt;.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#indirect-dependencies",
+    "href": "Courses/5_1_Dask_delayed.html#indirect-dependencies",
+    "title": "7  Dask delayed",
+    "section": "8.5 Indirect Dependencies",
+    "text": "8.5 Indirect Dependencies\nSometimes you might find yourself wanting to add a dependency to a task that does not take the result of that dependency as an input. For example when a task depends on the side-effect of another task. In these cases you can use dask.graph_manipulation.bind.\nimport dask\nfrom dask.graph_manipulation import bind\n\nDATA = []\n\n@dask.delayed\ndef inc(x):\n    return x + 1\n\n@dask.delayed\ndef add_data(x):\n    DATA.append(x)\n\n@dask.delayed\ndef sum_data(x):\n    return sum(DATA) + x\n\na = inc(1)\nb = add_data(a)\nc = inc(3)\nd = add_data(c)\ne = inc(5)\nf = bind(sum_data, [b, d])(e)\nf.compute()\nsum_data will operate on DATA only after both the expected items have been appended to it. bind can also be used along with direct dependencies passed through the function arguments.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#call-delayed-on-the-function-not-the-result",
+    "href": "Courses/5_1_Dask_delayed.html#call-delayed-on-the-function-not-the-result",
+    "title": "7  Dask delayed",
+    "section": "9.1 Call delayed on the function, not the result",
+    "text": "9.1 Call delayed on the function, not the result\nDask delayed operates on functions like dask.delayed(f)(x, y), not on their results like dask.delayed(f(x, y)). When you do the latter, Python first calculates f(x, y) before Dask has a chance to step in.\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# This executes immediately\n\ndask.delayed(f(x, y))\n# This ma\nkes a delayed function, acting lazily\n\ndask.delayed(f)(x, y)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#compute-on-lots-of-computation-at-once",
+    "href": "Courses/5_1_Dask_delayed.html#compute-on-lots-of-computation-at-once",
+    "title": "7  Dask delayed",
+    "section": "9.2 Compute on lots of computation at once",
+    "text": "9.2 Compute on lots of computation at once\nTo improve parallelism, you want to include lots of computation in each compute call. Ideally, you want to make many dask.delayed calls to define your computation and then call dask.compute only at the end. It is ok to call dask.compute in the middle of your computation as well, but everything will stop there as Dask computes those results before moving forward with your code.\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# Avoid calling compute repeatedly\n\nresults = []\nfor x in L:\n    y = dask.delayed(f)(x)\n    results.append(y.compute())\n\nresults\n# Collec\nt many calls for one compute\n\nresults = []\nfor x in L:\n    y = dask.delayed(f)(x)\n    results.append(y)\n\nresu\nlts = dask.compute(*results)\n\n\n\nCalling y.compute() within the loop would await the result of the computation every time, and so inhibit parallelism.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#dont-mutate-inputs",
+    "href": "Courses/5_1_Dask_delayed.html#dont-mutate-inputs",
+    "title": "7  Dask delayed",
+    "section": "9.3 Don't mutate inputs",
+    "text": "9.3 Don't mutate inputs\nYour functions should not change the inputs directly.\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# Mutate inputs in functions\n\n@dask.delayed\ndef f(x):\n    x += 1\n    return x\n# Return new values or copies\n\n@dask.delayed\ndef f(x):\n    x = x + 1\n    return x\n\n\n\nIf you need to use a mutable operation, then make a copy within your function first:\n@dask.delayed\ndef f(x):\n    x = copy(x)\n    x += 1\n    return x",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#avoid-global-state",
+    "href": "Courses/5_1_Dask_delayed.html#avoid-global-state",
+    "title": "7  Dask delayed",
+    "section": "9.4 Avoid global state",
+    "text": "9.4 Avoid global state\nIdeally, your operations shouldn't rely on global state. Using global state might work if you only use threads, but when you move to multiprocessing or distributed computing then you will likely encounter confusing errors.\n\n\n\n\n\n\nDon't\n\n\nL = []\n\n# This references global variable L\n\n@dask.delayed\ndef f(x):\n    L.append(x)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#dont-rely-on-side-effects",
+    "href": "Courses/5_1_Dask_delayed.html#dont-rely-on-side-effects",
+    "title": "7  Dask delayed",
+    "section": "9.5 Don't rely on side effects",
+    "text": "9.5 Don't rely on side effects\nDelayed functions only do something if they are computed. You will always need to pass the output to something that eventually calls compute.\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# Forget to call compute\n\ndask.delayed(f)(1, 2, 3)\n\n...\n# Ensure delayed tasks are computed\n\nx = dask.delayed(f)(1, 2, 3)\n...\ndask.compute(x, ...)\n\n\n\nIn the first case here, nothing happens, because compute() is never called.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#break-up-computations-into-many-pieces",
+    "href": "Courses/5_1_Dask_delayed.html#break-up-computations-into-many-pieces",
+    "title": "7  Dask delayed",
+    "section": "9.6 Break up computations into many pieces",
+    "text": "9.6 Break up computations into many pieces\nEvery dask.delayed function call is a single operation from Dask's perspective. You achieve parallelism by having many delayed calls, not by using only a single one: Dask will not look inside a function decorated with @dask.delayed and parallelize that code internally. To accomplish that, it needs your help to find good places to break up a computation.\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# One giant task\n\n\ndef load(filename):\n    ...\n\n\ndef process(data):\n    ...\n\n\ndef save(data):\n    ...\n\n@dask.delayed\ndef f(filenames):\n    results = []\n    for filename in filenames:\n        data = load(filename)\n        data = process(data)\n        result = save(data)\n        results.append(result)\n\n    return results\n\ndask.compute(f(filenames))\n# Break up into many tasks\n\n@dask.delayed\ndef load(filename):\n    ...\n\n@dask.delayed\ndef process(data):\n    ...\n\n@dask.delayed\ndef save(data):\n    ...\n\n\ndef f(filenames):\n    results = []\n    for filename in filenames:\n        data = load(filename)\n        data = process(data)\n        result = save(data)\n        results.append(result)\n\n    return results\n\ndask.compute(f(filenames))\n\n\n\nThe first version only has one delayed task, and so cannot parallelize.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#avoid-too-many-tasks",
+    "href": "Courses/5_1_Dask_delayed.html#avoid-too-many-tasks",
+    "title": "7  Dask delayed",
+    "section": "9.7 Avoid too many tasks",
+    "text": "9.7 Avoid too many tasks\nEvery delayed task has an overhead of a few hundred microseconds. Usually this is ok, but it can become a problem if you apply dask.delayed too finely. In this case, it's often best to break up your many tasks into batches or use one of the Dask collections to help you.\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# Too many tasks\n\nresults = []\nfo\nr x in range(10000000):\n\n y = dask.delayed(f)(x)\n    results.append(y)\n# Use collections\n\nimport dask.bag as db\nb = db.from_s\nequence(range(10000000), npartitions=1000)\nb = b.map(f)\n...",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#avoid-too-many-tasks-1",
+    "href": "Courses/5_1_Dask_delayed.html#avoid-too-many-tasks-1",
+    "title": "7  Dask delayed",
+    "section": "Avoid too many tasks",
+    "text": "Avoid too many tasks\nHere we use dask.bag to automatically batch applying our function. We could also have constructed our own batching as follows\ndef batch(seq):\n    sub_results = []\n    for x in seq:\n        sub_results.append(f(x))\n    return sub_results\n\n batches = []\n for i in range(0, 10000000, 10000):\n     result_batch = dask.delayed(batch)(range(i, i + 10000))\n     batches.append(result_batch)\nHere we construct batches where each delayed function call computes for many data points from the original input.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#avoid-calling-delayed-within-delayed-functions",
+    "href": "Courses/5_1_Dask_delayed.html#avoid-calling-delayed-within-delayed-functions",
+    "title": "7  Dask delayed",
+    "section": "9.8 Avoid calling delayed within delayed functions",
+    "text": "9.8 Avoid calling delayed within delayed functions\nOften, if you are new to using Dask delayed, you place dask.delayed calls everywhere and hope for the best. While this may actually work, it's usually slow and results in hard-to-understand solutions.\nUsually you never call dask.delayed within dask.delayed functions.\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# Delayed function calls delayed\n\n@dask.delayed\ndef process_all(L):\n    result = []\n    for x in L:\n        y = dask.delayed(f)(x)\n        result.append(y)\n    return result\n# Normal function calls delayed\n\n\ndef process_all(L):\n    result = []\n    for x in L:\n        y = dask.delayed(f)(x)\n        result.append(y)\n    return result\n\n\n\nBecause the normal function only does delayed work it is very fast and so there is no reason to delay it.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#dont-call-dask.delayed-on-other-dask-collections",
+    "href": "Courses/5_1_Dask_delayed.html#dont-call-dask.delayed-on-other-dask-collections",
+    "title": "7  Dask delayed",
+    "section": "9.9 Don't call dask.delayed on other Dask collections",
+    "text": "9.9 Don't call dask.delayed on other Dask collections\nWhen you place a Dask array or Dask DataFrame into a delayed call, that function will receive the NumPy or Pandas equivalent. Beware that if your array is large, then this might crash your workers.\nInstead, it's more common to use methods like da.map_blocks\n\n\n\n\n\n\n\nDon't\nDo\n\n\n# Call del\nayed functions on Dask collections\n\nimport dask.dataframe as dd\ndf = dd.read_csv('/path/to/*.csv')\n\ndask.delayed(train)(df)\n# Us\ne mapping methods if applicable\n\nimport dask.dataframe as dd\ndf\n= dd.read_csv('/path/to/*.csv')\n\ndf.map_partitions(train)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#dont-call-dask.delayed-on-other-dask-collections-1",
+    "href": "Courses/5_1_Dask_delayed.html#dont-call-dask.delayed-on-other-dask-collections-1",
+    "title": "7  Dask delayed",
+    "section": "Don't call dask.delayed on other Dask collections",
+    "text": "Don't call dask.delayed on other Dask collections\nAlternatively, if the procedure doesn't fit into a mapping, you can always turn your arrays or dataframes into many delayed objects, for example\npartitions = df.to_delayed()\ndelayed_values = [dask.delayed(train)(part)\n                  for part in partitions]\nHowever, if you don't mind turning your Dask array/DataFrame into a single chunk, then this is ok.\ndask.delayed(train)(..., y=df.sum())",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#avoid-repeatedly-putting-large-inputs-into-delayed-calls",
+    "href": "Courses/5_1_Dask_delayed.html#avoid-repeatedly-putting-large-inputs-into-delayed-calls",
+    "title": "7  Dask delayed",
+    "section": "9.10 Avoid repeatedly putting large inputs into delayed calls",
+    "text": "9.10 Avoid repeatedly putting large inputs into delayed calls\nEvery time you pass a concrete result (anything that isn't delayed) Dask will hash it by default to give it a name. This is fairly fast (around 500 MB/s) but can be slow if you do it over and over again. Instead, it is better to delay your data as well.\nThis is especially important when using a distributed cluster to avoid sending your data separately for each function call.\n\n\n\n\n\n\n\nDon't\nDo\n\n\nx = np.arr\nay(...)  # some large array\n\nresults =\n [dask.delayed(train)(x, i)\n\n      for i in range(1000)]\nx\n = np.array(...)    # some large array\nx =\ndask.delayed(x)  # delay the data once\nresults = [dask.delayed(train)(x, i)\n           for i in range(1000)]\n\n\n\nEvery call to dask.delayed(train)(x, ...) has to hash the NumPy array x, which slows things down.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#working-with-collections-1",
+    "href": "Courses/5_1_Dask_delayed.html#working-with-collections-1",
+    "title": "7  Dask delayed",
+    "section": "Working with Collections",
+    "text": "Working with Collections\nAs an example, consider the case where we store tabular data in a custom format not known by Dask DataFrame. This format is naturally broken apart into pieces and we have a function that reads one piece into a Pandas DataFrame. We use dask.delayed to lazily read these files into Pandas DataFrames, use dd.from_delayed to wrap these pieces up into a single Dask DataFrame, use the complex algorithms within the DataFrame (groupby, join, etc.), and then switch back to dask.delayed to save our results back to the custom format:",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#working-with-collections-2",
+    "href": "Courses/5_1_Dask_delayed.html#working-with-collections-2",
+    "title": "7  Dask delayed",
+    "section": "Working with Collections",
+    "text": "Working with Collections\nimport dask.dataframe as dd\nfrom dask.delayed import delayed\n\nfrom my_custom_library import load, save\n\nfilenames = ...\ndfs = [delayed(load)(fn) for fn in filenames]\n\ndf = dd.from_delayed(dfs)\ndf = ... # do work with dask.dataframe\n\ndfs = df.to_delayed()\nwrites = [delayed(save)(df, fn) for df, fn in zip(dfs, filenames)]\n\ndd.compute(*writes)",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
+    "objectID": "Courses/5_1_Dask_delayed.html#working-with-collections-3",
+    "href": "Courses/5_1_Dask_delayed.html#working-with-collections-3",
+    "title": "7  Dask delayed",
+    "section": "Working with Collections",
+    "text": "Working with Collections\nData science is often complex, and dask.delayed provides a release valve for users to manage this complexity on their own, and solve the last mile problem for custom formats and complex situations.",
+    "crumbs": [
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Dask `delayed`</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "6  Summary",
+    "title": "8  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.",
     "crumbs": [
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {
@@ -1344,7 +1744,7 @@
     "href": "applications.html",
     "title": "Appendix A — Applications",
     "section": "",
-    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\nMultiProcessing, Strong Scaling\nSolution\nNotebook\n\n\nScaling App with multiprocessing\nSolution\nNotebook\n\n\nAn asyncio application\nSolution\nNotebook\n\n\nDecorators Tutorial\nSolution\nNotebook\n\n\n\n\nNo matching items",
+    "text": "Original (In Percent Format)\nOnline Html (Corrected)\nNotebook (Corrected)\n\n\n\n\nNumpy Workout\nSolution\nNotebook\n\n\nMultiprocessing in Python 3\nSolution\nNotebook\n\n\nMultiProcessing, Strong Scaling\nSolution\nNotebook\n\n\nScaling App with multiprocessing\nSolution\nNotebook\n\n\nAn asyncio application\nSolution\nNotebook\n\n\nDecorators Tutorial\nSolution\nNotebook\n\n\nDistributed models with dask\n\n\n\n\nDask delayed App\n\n\n\n\n\n\nNo matching items",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Applications</span>"
@@ -1355,7 +1755,7 @@
     "href": "slides.html",
     "title": "Appendix B — Slides in reveal.js",
     "section": "",
-    "text": "Numpy Workout\nIntroduction to parallel computing\nAdvanced concepts in parallel programming\nAsynchronous Programming with Python\nIPC and locking\n\n\nNo matching items",
+    "text": "Numpy Workout\nIntroduction to parallel computing\nAdvanced concepts in parallel programming\nAsynchronous Programming with Python\nIPC and locking\nDistributed Computing models\nDask delayed\n\n\nNo matching items",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>B</span>  <span class='chapter-title'>Slides in reveal.js</span>"

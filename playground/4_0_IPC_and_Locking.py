@@ -229,6 +229,33 @@ output.put(None)
 from itertools import chain
 list(chain(* list(iter(output.get, None))))
 #%%
+from multiprocessing import Pool
+
+def calculate_primes(ncore,N,chunksize):
+    with Manager() as manager:
+        input = manager.Queue()
+        output = manager.Queue()
+        with Pool(ncore) as p:
+            it = p.starmap_async(find_prime_worker, [(input,output)]*ncore)
+            for chunk in chunks(range(1,N),chunksize):
+                input.put(chunk)
+                for _ in range(ncore):
+                    input.put(None)
+            it.wait()
+            output.put(None)
+
+        res = list(chain(* list(iter(output.get, None))))
+    return res
+
+ #%%
+ N = 50000000
+
+#%%
+%timeit -r 1 -n 1 calculate_primes(4,N,int(N/64))
+# calculate_primes(4,N,int(N/64))
+
+# %%
+"""
 ## Solution for main process function
 
 ### Test of the main function

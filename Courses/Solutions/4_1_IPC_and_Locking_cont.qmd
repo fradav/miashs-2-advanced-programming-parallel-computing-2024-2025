@@ -7,7 +7,7 @@ Take look at [Python Documentation on `multiprocessing.Value`](https://docs.pyth
 Write a simple worker fonction which takes a `multiprocessing.Value` and a `max_count` argument, and increment the value by one `max_count` times:
 
 ```python
-
+import multiprocessing
 
 def work(value, max_count):
     ...
@@ -15,6 +15,8 @@ def work(value, max_count):
 
 ```{python}
 #| tags: [solution]
+import multiprocessing
+
 def work(value, max_count):
     for n in range(max_count):
         value.value += 1
@@ -25,8 +27,6 @@ def work(value, max_count):
 3. Run it on `(8,100000)` (or even bigger). Replace `8` by the actual number of physical cores on the cpu you’re running on.
 
 ```python
-from multiprocessing import Value, Pool
-
 def run_workers(ncores,N):
     total_expected_count = ncores * N
     ...
@@ -34,20 +34,27 @@ def run_workers(ncores,N):
 
 ```{python}
 #| tags: [solution]
-from multiprocessing import Value, Pool
-
 def run_workers(ncores,N):
     total_expected_count = ncores * N
-    value = Value('i', 0)
-    with Pool(ncores) as p:
-        it = p.starmap_async(work, [(value,N)]*ncores)
-        # wait for the processes to finish
-        it.wait()
+    processes = []
+    value = multiprocessing.Value('i', 0)
+    for process_nbr in range(ncores):
+        p = multiprocessing.Process(target=work, args=(value, N))
+        p.start()
+        processes.append(p)
+
+    # wait for the processes to finish
+    for p in processes:
+        p.join()
 
     # print the final value
     print("Expecting to see a count of {}".format(total_expected_count))
     print("We have counted to {}".format(value.value))
 ```
+
+:::{.callout-note}
+We may use a simplified version with `multiprocessing.Pool` and `map` to avoid the manual process management. However, to do so, we have to use the manager version of `multiprocessing.Value` which is (way) slower.
+:::
 
 ```{python}
 #| tags: [solution]
@@ -110,11 +117,16 @@ def work_lock(value, max_count):
 #| tags: [solution]
 def run_workers_locked(ncores,N):
     total_expected_count = ncores * N
+    processes = []
     value = multiprocessing.Value('i', 0)
-    with Pool(ncores) as p:
-        it = p.starmap_async(work, [(value,N)]*ncores)
-        # wait for the processes to finish
-        it.wait()
+    for process_nbr in range(ncores):
+        p = multiprocessing.Process(target=work_lock, args=(value, N))
+        p.start()
+        processes.append(p)
+
+    # wait for the processes to finish
+    for p in processes:
+        p.join()
 
     # print the final value
     print("Expecting to see a count of {}".format(total_expected_count))

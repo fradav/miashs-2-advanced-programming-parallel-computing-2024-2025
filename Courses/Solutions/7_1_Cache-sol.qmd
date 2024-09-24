@@ -1,0 +1,150 @@
+---
+title: CPU Cache and its impact on computations
+---
+
+## Toy example: list sum
+
+### Setup environment
+
+```{python}
+# requirements
+import random
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.io as pio
+pio.renderers.default = "notebook+plotly_mimetype+svg"
+```
+
+### Construct a list of integers
+
+```{python}
+# a list of integers from 1 to 10000 with random order
+items = list(range(10000))
+random.shuffle(items)
+```
+
+### Sum of the list elements
+
+```{python}
+# vanilla Python
+t1 = %timeit -r 5 -n 50 -q -o sum(items)
+```
+
+```{python}
+# Numpy version
+array = np.array(items)
+t2 = %timeit -r 5 -n 50 -q -o array.sum()
+```
+
+### Which one is faster ?
+
+```{python}
+# vanilla Python time
+t1
+```
+
+```{python}
+# Numpy version time
+t2
+```
+
+## WHY ?
+
+- **List** elements **not contiguous** in memory: loading elements from memory to CPU cache individually
+- **Numpy array** elements **contiguous** in memory: loading elements from memory to CPU cache by batch
+
+![](figs/array_vs_list.png)
+Credit: [Jake VanderPlas](https://jakevdp.github.io/PythonDataScienceHandbook/02.01-understanding-data-types.html)
+
+## Benchmark list sum vs numpy array sum
+
+```{python}
+def benchmark1(N):
+    print(f"sum of {N} elements")
+    items = list(range(N))
+    random.shuffle(items)
+    # vanilla Python
+    t1 = %timeit -r 5 -n 20 -q -o sum(items)
+    # Numpy version
+    array = np.array(items)
+    t2 = %timeit -r 5 -n 20 -q -o array.sum()
+    # output
+    return t1.average, t2.average
+```
+
+### Checking increasing list size
+
+```{python}
+list_size = np.trunc(10**np.arange(2, 7, 0.2)).astype(int)
+```
+
+```{python}
+# check the list size candidates
+fig = px.scatter(y=list_size, log_y=True, width=600)
+fig.show()
+```
+
+### Run the benchmark
+
+```{python}
+# run the benchmark
+res = []
+
+for N in list_size:
+    
+    time_res = benchmark1(N)
+    
+    res.append({
+        'N': N,
+        'vanilla': time_res[0],
+        'numpy': time_res[1]
+    })
+```
+
+### Results
+
+```{python}
+df_res = pd.DataFrame(res)
+px.line(df_res, x='N', y=['vanilla', 'numpy'], log_y=True, log_x=True, width=600)
+```
+
+## Benchmark cache effect on numpy array sum
+
+```{python}
+def benchmark2(N):
+    print(f"sum of {N} elements")
+    items = list(range(N))
+    random.shuffle(items)
+    # Numpy version
+    array = np.array(items)
+    t1 = %timeit -r 5 -n 10 -q -o array.sum()
+    # output
+    return t1.average
+```
+
+### Checking increasing list size
+
+### Run the benchmark
+
+```{python}
+# run the benchmark
+res = []
+
+for N in list_size:
+    
+    time_res = benchmark2(N)
+    
+    res.append({
+        'N': N,
+        'numpy': time_res
+    })
+```
+
+### Results
+
+```{python}
+df_res2 = pd.DataFrame(res)
+px.line(df_res2, x='N', y='numpy', log_y=True, log_x=True, width=600)
+```
+

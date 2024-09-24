@@ -13,7 +13,10 @@ project:
     - Courses/Solutions/5_0_Distributed_models.qmd
     - Courses/Solutions/5_1_Dask_delayed.qmd
     - Courses/Solutions/6_0_Numba_tutorial-sol.qmd
-    - Courses/Solutions/7_GPU-sol.qmd
+    - Courses/Solutions/6_2_SIMD_tutorial-sol.qmd
+    - Courses/Solutions/7_0_GPU-sol.qmd
+    - Courses/Solutions/7_1_Cache-sol.qmd
+
   output-dir: docs-resources/Notebooks
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py

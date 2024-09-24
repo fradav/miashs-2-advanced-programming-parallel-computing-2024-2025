@@ -443,7 +443,7 @@ def cuda_matmul(A, B, C):
         C[row, col] = tmp
 ```
 
-![](matmul.png) [Credit](https://nyu-cds.github.io/python-numba/05-cuda/)
+![](../figs/matmul.png) [Credit](https://nyu-cds.github.io/python-numba/05-cuda/)
 
 #### Run
 

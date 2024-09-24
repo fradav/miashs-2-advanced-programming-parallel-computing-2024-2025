@@ -13,6 +13,7 @@ project:
     - Courses/Solutions/5_0_Distributed_models.qmd
     - Courses/Solutions/5_1_Dask_delayed.qmd
     - Courses/Solutions/6_0_Numba_tutorial-sol.qmd
+    - Courses/Solutions/7_GPU-sol.qmd
   output-dir: docs-resources/Notebooks
   pre-render: project-scripts/prepare-notebooks.py
   post-render: project-scripts/convert.py
@@ -42,6 +43,8 @@ format:
 execute: 
   eval: true
   output: true
+  cache: true
+
 
 filters:
   - filters/unclutter-slides.lua

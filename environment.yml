@@ -14,5 +14,7 @@ dependencies:
   - scikit-learn
   - dask
   - jupytext 
+  - tqdm
+  - python-kaleido
   - black
 

@@ -54,7 +54,7 @@ t2
 - **List** elements **not contiguous** in memory: loading elements from memory to CPU cache individually
 - **Numpy array** elements **contiguous** in memory: loading elements from memory to CPU cache by batch
 
-![](figs/array_vs_list.png)
+![](../figs/array_vs_list.png)
 Credit: [Jake VanderPlas](https://jakevdp.github.io/PythonDataScienceHandbook/02.01-understanding-data-types.html)
 
 ## Benchmark list sum vs numpy array sum

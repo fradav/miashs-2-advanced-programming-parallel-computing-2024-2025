@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.56">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="François-David Collin">
+<meta name="author" content="Ghislain Durif">
+
+<title>9&nbsp; GPU computing, CPU cache, Computing cluster – Advanced programming and parallel computing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../summary.html" rel="next">
+<link href="../Courses/6_SIMD.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Courses/7_GPU_Caching_etc.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">GPU computing, CPU cache, Computing cluster</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Advanced programming and parallel computing</a> 
+        <div class="sidebar-tools-main">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Prerequisites</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/1_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to parallel computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/2_Concepts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Advanced concepts in parallel programming</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/3_Asynchronous.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Asynchronous Programming with Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/4_IPC_and_Locking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">IPC and locking</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/5_0_Distributed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Distributed Computing models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/5_1_Dask_delayed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Dask <code>delayed</code></span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/6_SIMD.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hardware Vectorization with SIMD</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Courses/7_GPU_Caching_etc.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">GPU computing, CPU cache, Computing cluster</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../summary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../applications.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Applications</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Slides in reveal.js</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#gpu-computing" id="toc-gpu-computing" class="nav-link active" data-scroll-target="#gpu-computing"><span class="header-section-number">10</span> GPU Computing</a>
+  <ul>
+  <li><a href="#gpu" id="toc-gpu" class="nav-link" data-scroll-target="#gpu"><span class="header-section-number">10.1</span> GPU ?</a></li>
+  <li><a href="#gpu-for-computing" id="toc-gpu-for-computing" class="nav-link" data-scroll-target="#gpu-for-computing"><span class="header-section-number">10.2</span> GPU for computing ?</a></li>
+  <li><a href="#von-neumann-architecture" id="toc-von-neumann-architecture" class="nav-link" data-scroll-target="#von-neumann-architecture"><span class="header-section-number">10.3</span> Von Neumann architecture</a></li>
+  <li><a href="#von-neumann-architecture-schema" id="toc-von-neumann-architecture-schema" class="nav-link" data-scroll-target="#von-neumann-architecture-schema"><span class="header-section-number">10.4</span> Von Neumann architecture, schema</a></li>
+  <li><a href="#gpu-architecture" id="toc-gpu-architecture" class="nav-link" data-scroll-target="#gpu-architecture"><span class="header-section-number">10.5</span> GPU architecture</a></li>
+  <li><a href="#gpu-trades-control-for-arithmetic-power" id="toc-gpu-trades-control-for-arithmetic-power" class="nav-link" data-scroll-target="#gpu-trades-control-for-arithmetic-power"><span class="header-section-number">10.6</span> GPU trades “control” for “arithmetic power”</a></li>
+  <li><a href="#latency-vs-throughput" id="toc-latency-vs-throughput" class="nav-link" data-scroll-target="#latency-vs-throughput"><span class="header-section-number">10.7</span> Latency vs Throughput</a></li>
+  <li><a href="#latency-vs-throughput-an-analogy-i" id="toc-latency-vs-throughput-an-analogy-i" class="nav-link" data-scroll-target="#latency-vs-throughput-an-analogy-i"><span class="header-section-number">10.8</span> Latency vs Throughput: an analogy (I)</a></li>
+  <li><a href="#latency-vs-throughput-an-analogy-ii" id="toc-latency-vs-throughput-an-analogy-ii" class="nav-link" data-scroll-target="#latency-vs-throughput-an-analogy-ii"><span class="header-section-number">10.9</span> Latency vs Throughput: an analogy (II)</a></li>
+  <li><a href="#cpu-vs-gpu-hardware-side" id="toc-cpu-vs-gpu-hardware-side" class="nav-link" data-scroll-target="#cpu-vs-gpu-hardware-side"><span class="header-section-number">10.10</span> CPU vs GPU: hardware side</a></li>
+  <li><a href="#cpu-vs-gpu-concept-side" id="toc-cpu-vs-gpu-concept-side" class="nav-link" data-scroll-target="#cpu-vs-gpu-concept-side"><span class="header-section-number">10.11</span> CPU vs GPU: concept side</a></li>
+  <li><a href="#gpu-dedicated-chip" id="toc-gpu-dedicated-chip" class="nav-link" data-scroll-target="#gpu-dedicated-chip"><span class="header-section-number">10.12</span> GPU = dedicated chip</a></li>
+  <li><a href="#cpu-vs-gpu-comparison-an-example" id="toc-cpu-vs-gpu-comparison-an-example" class="nav-link" data-scroll-target="#cpu-vs-gpu-comparison-an-example"><span class="header-section-number">10.13</span> CPU vs GPU comparison: an example</a></li>
+  <li><a href="#cpu-vs-gpu-comparison-an-example-cpu" id="toc-cpu-vs-gpu-comparison-an-example-cpu" class="nav-link" data-scroll-target="#cpu-vs-gpu-comparison-an-example-cpu"><span class="header-section-number">10.14</span> CPU vs GPU comparison: an example, CPU</a></li>
+  <li><a href="#cpu-vs-gpu-comparison-an-example-gpu" id="toc-cpu-vs-gpu-comparison-an-example-gpu" class="nav-link" data-scroll-target="#cpu-vs-gpu-comparison-an-example-gpu"><span class="header-section-number">10.15</span> CPU vs GPU comparison: an example, GPU</a></li>
+  <li><a href="#performance-illustration" id="toc-performance-illustration" class="nav-link" data-scroll-target="#performance-illustration"><span class="header-section-number">10.16</span> Performance illustration</a></li>
+  <li><a href="#from-3d-image-processing-for-games-to-general-purpose-computing" id="toc-from-3d-image-processing-for-games-to-general-purpose-computing" class="nav-link" data-scroll-target="#from-3d-image-processing-for-games-to-general-purpose-computing"><span class="header-section-number">10.17</span> From 3D image processing (for games) to general-purpose computing</a></li>
+  <li><a href="#hardware" id="toc-hardware" class="nav-link" data-scroll-target="#hardware"><span class="header-section-number">10.18</span> Hardware</a></li>
+  <li><a href="#software-python" id="toc-software-python" class="nav-link" data-scroll-target="#software-python"><span class="header-section-number">10.19</span> Software (Python)</a></li>
+  <li><a href="#software-r" id="toc-software-r" class="nav-link" data-scroll-target="#software-r"><span class="header-section-number">10.20</span> Software (R)</a></li>
+  <li><a href="#in-practice" id="toc-in-practice" class="nav-link" data-scroll-target="#in-practice"><span class="header-section-number">10.21</span> In practice</a></li>
+  </ul></li>
+  <li><a href="#memory-cache" id="toc-memory-cache" class="nav-link" data-scroll-target="#memory-cache"><span class="header-section-number">11</span> Memory Cache</a>
+  <ul>
+  <li><a href="#cpu-cache" id="toc-cpu-cache" class="nav-link" data-scroll-target="#cpu-cache"><span class="header-section-number">11.1</span> CPU cache ?</a></li>
+  <li><a href="#example-of-architecture" id="toc-example-of-architecture" class="nav-link" data-scroll-target="#example-of-architecture"><span class="header-section-number">11.2</span> Example of architecture</a></li>
+  <li><a href="#cache-memory-size" id="toc-cache-memory-size" class="nav-link" data-scroll-target="#cache-memory-size"><span class="header-section-number">11.3</span> Cache memory size</a></li>
+  <li><a href="#cache-access-time-latency" id="toc-cache-access-time-latency" class="nav-link" data-scroll-target="#cache-access-time-latency"><span class="header-section-number">11.4</span> Cache access time (latency)</a></li>
+  <li><a href="#cpu-cache-miss" id="toc-cpu-cache-miss" class="nav-link" data-scroll-target="#cpu-cache-miss"><span class="header-section-number">11.5</span> CPU cache miss</a></li>
+  <li><a href="#in-practice-1" id="toc-in-practice-1" class="nav-link" data-scroll-target="#in-practice-1"><span class="header-section-number">11.6</span> In practice</a></li>
+  </ul></li>
+  <li><a href="#computing-cluster" id="toc-computing-cluster" class="nav-link" data-scroll-target="#computing-cluster"><span class="header-section-number">12</span> Computing cluster</a>
+  <ul>
+  <li><a href="#cluster" id="toc-cluster" class="nav-link" data-scroll-target="#cluster"><span class="header-section-number">12.1</span> Cluster</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage"><span class="header-section-number">12.2</span> Usage</a></li>
+  <li><a href="#illustration" id="toc-illustration" class="nav-link" data-scroll-target="#illustration"><span class="header-section-number">12.3</span> Illustration</a></li>
+  <li><a href="#resource-management" id="toc-resource-management" class="nav-link" data-scroll-target="#resource-management"><span class="header-section-number">12.4</span> Resource management</a></li>
+  <li><a href="#an-example" id="toc-an-example" class="nav-link" data-scroll-target="#an-example"><span class="header-section-number">12.5</span> An example</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">GPU computing, CPU cache, Computing cluster</span></h1>
+<p class="subtitle lead">The World of big clusters and complex message passing</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">François-David Collin <a href="mailto:francois-david.collin@umontpellier.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            CNRS
+          </p>
+        <p class="affiliation">
+            IMAG
+          </p>
+        <p class="affiliation">
+            Paul-Valéry Montpellier 3 University
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Ghislain Durif <a href="mailto:ghislain.durif@ens-lyon.fr" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            CNRS
+          </p>
+        <p class="affiliation">
+            LBMC
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="gpu-computing" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> GPU Computing</h1>
+<section id="gpu" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="gpu"><span class="header-section-number">10.1</span> GPU ?</h2>
+<p>GPU = <strong>graphical process unit</strong></p>
+<blockquote class="blockquote">
+<p>“(…) a <strong>specialized electronic circuit</strong> designed to rapidly manipulate and alter memory to accelerate the <strong>creation of images</strong> in a frame buffer intended for output to a <strong>display device</strong>. GPUs are used in embedded systems, mobile phones, personal computers, workstations, and game consoles.” (<a href="https://en.wikipedia.org/wiki/Graphics_processing_unit">Wikipedia</a>)</p>
+</blockquote>
+<p><strong>Original purpose:</strong> image creation and manipulation for graphical rendering (video games, video edition, 3D conception, etc.)</p>
+</section>
+<section id="gpu-for-computing" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="gpu-for-computing"><span class="header-section-number">10.2</span> GPU for computing ?</h2>
+<blockquote class="blockquote">
+<p>“Modern GPUs are very efficient at manipulating computer graphics and image processing. Their highly parallel structure makes them <strong>more efficient</strong> than general-purpose central processing units (CPUs) for algorithms that <strong>process large blocks of data in parallel</strong>.” (<a href="https://en.wikipedia.org/wiki/Graphics_processing_unit">Wikipedia</a>)</p>
+</blockquote>
+<p><strong>Nowadays usage:</strong> more general massive computations based on matrix operations</p>
+</section>
+<section id="von-neumann-architecture" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="von-neumann-architecture"><span class="header-section-number">10.3</span> Von Neumann architecture</h2>
+<p>Basic principle (present in most modern computing units) with three interconnected parts:</p>
+<ul>
+<li><strong>control unit</strong>: does most of the work, such as deciding what operation to do next, fetching the next instruction from memory, etc.</li>
+<li><strong>arithmetic/logic unit (ALU)</strong>: implements operations such as addition, subtraction, multiplication, etc.</li>
+<li><strong>memory unit</strong>: stores the data processed by the chip, such as its inputs, outputs, and any intermediate data</li>
+</ul>
+</section>
+<section id="von-neumann-architecture-schema" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="von-neumann-architecture-schema"><span class="header-section-number">10.4</span> Von Neumann architecture, schema</h2>
+<p><img src="figs/von_neuman.png" class="img-fluid"></p>
+<div class="attribution">
+<p><a href="https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3">Ygor Serpa (TowardsDataScience)</a></p>
+</div>
+</section>
+<section id="gpu-architecture" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="gpu-architecture"><span class="header-section-number">10.5</span> GPU architecture</h2>
+<p><img src="figs/gpu_scheme.png" class="img-fluid"></p>
+<div class="attribution">
+<p><a href="https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3">Ygor Serpa (TowardsDataScience)</a></p>
+</div>
+<p><strong>Principle:</strong> control units are large and expensive, while arithmetic units are more straightforward and cheaper</p>
+<p><strong>Design:</strong> a sub-processor = one control unity commanding several ALUs (= GPU cores) to operate on larger chunks of data</p>
+<p><strong>Limitation:</strong> all ALUs (connected to the same control unity) must obey the same commands (i.e.&nbsp;do the same thing at the same moment)</p>
+</section>
+<section id="gpu-trades-control-for-arithmetic-power" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="gpu-trades-control-for-arithmetic-power"><span class="header-section-number">10.6</span> GPU trades “control” for “arithmetic power”</h2>
+<ul>
+<li><p>ALU blocks (= gpu sub-processors) <strong>not as versatile</strong> as CPU cores but can operate over large amounts of data in batches</p></li>
+<li><p>Central control unit syncs all the sub-processors (each one can do a different task) but the same set of ALUs cannot do different things in parallel (e.g.&nbsp;<code>if</code> statements costly for GPUs)</p></li>
+</ul>
+<p><strong>Example</strong>: each block of 16 ALUs is limited to processing the same instruction over 16 pairs of operands</p>
+</section>
+<section id="latency-vs-throughput" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="latency-vs-throughput"><span class="header-section-number">10.7</span> Latency vs Throughput</h2>
+<ul>
+<li><strong>Latency:</strong> how long does it take to finish a given task</li>
+<li><strong>Throughput:</strong> how many times can you complete the task within a period</li>
+</ul>
+<p><strong>CPU cores</strong> optimized for <strong>latency</strong>: to finish a task as fast as possible.</p>
+<p><span class="math inline">\rightarrow</span> scales with more complex operations but not with larger data</p>
+<p><strong>GPU cores</strong> optimized for <strong>throughput</strong>: individually slower, but they operate on bulks of data at once.</p>
+<p><span class="math inline">\rightarrow</span> scales with larger data but not with more complex operations</p>
+</section>
+<section id="latency-vs-throughput-an-analogy-i" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="latency-vs-throughput-an-analogy-i"><span class="header-section-number">10.8</span> Latency vs Throughput: an analogy (I)</h2>
+<p>Travelling by road:</p>
+<ul>
+<li><strong>latency</strong>: use a sport car (faster but can only take 2-5 persons)</li>
+<li><strong>throughput</strong>: use a bus (slower but can take up to 80 persons)</li>
+</ul>
+<p>Total time to transport 5 persons over 100km (latency):</p>
+<ul>
+<li>1 trip with a 80-seat bus at 50km/h: 2hours</li>
+<li>1 trip with a 5-seat car at 200km/h: 0.5hours</li>
+</ul>
+<p>Total time to transport 160 persons over 100km (throughput):</p>
+<ul>
+<li>2 round trips with a 80-seat bus at 50km/h: 8hours</li>
+<li>32 round trips with a 5-seat car at 200km/h: 32hours</li>
+</ul>
+</section>
+<section id="latency-vs-throughput-an-analogy-ii" class="level2" data-number="10.9">
+<h2 data-number="10.9" class="anchored" data-anchor-id="latency-vs-throughput-an-analogy-ii"><span class="header-section-number">10.9</span> Latency vs Throughput: an analogy (II)</h2>
+<p>Fastest way to learn?</p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><strong>Latency</strong>: private teacher or small classroom</p>
+<p><strong>Throughput</strong>: big classroom or online course</p>
+</div><div class="column" style="width:60%;">
+<p><img src="figs/parallel_teaching.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="attribution">
+<p><a href="https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3">Ygor Serpa (TowardsDataScience)</a></p>
+</div>
+<p><span class="math inline">\rightarrow</span> <strong>none is arguably better than the others, all work and fill a specific need</strong></p>
+</section>
+<section id="cpu-vs-gpu-hardware-side" class="level2" data-number="10.10">
+<h2 data-number="10.10" class="anchored" data-anchor-id="cpu-vs-gpu-hardware-side"><span class="header-section-number">10.10</span> CPU vs GPU: hardware side</h2>
+<table class="caption-top table">
+<caption>Units: B = Byte (memory), W = Watts (power), Hz = Hertz (frequency)</caption>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Nb of cores</th>
+<th>Memory (cache<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>)</th>
+<th>Memory (device)</th>
+<th>Power per core</th>
+<th>Clock rate<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CPU</td>
+<td><span class="math inline">10\times</span></td>
+<td><span class="math inline">10\times</span> - <span class="math inline">100\times</span> KB</td>
+<td><span class="math inline">10\times</span> - <span class="math inline">100\times</span> GB<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></td>
+<td><span class="math inline">10\times</span> W</td>
+<td><span class="math inline">3</span> - <span class="math inline">5</span> GHz</td>
+</tr>
+<tr class="even">
+<td>GPU</td>
+<td><span class="math inline">1000\times</span></td>
+<td><span class="math inline">100\times</span> B</td>
+<td><span class="math inline">10\times</span> GB<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></td>
+<td><span class="math inline">0.01\times</span> - <span class="math inline">0.1\times</span> W</td>
+<td><span class="math inline">0.5</span> - <span class="math inline">1</span> GHz</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="cpu-vs-gpu-concept-side" class="level2" data-number="10.11">
+<h2 data-number="10.11" class="anchored" data-anchor-id="cpu-vs-gpu-concept-side"><span class="header-section-number">10.11</span> CPU vs GPU: concept side</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>CPU</th>
+<th>GPU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Task parallelism</td>
+<td>Data parallelism</td>
+</tr>
+<tr class="even">
+<td>A few “heavyweight” cores</td>
+<td>Many “ligthweight” cores</td>
+</tr>
+<tr class="odd">
+<td>High memory size</td>
+<td>High memory throughput</td>
+</tr>
+<tr class="even">
+<td>Many diverse instruction sets</td>
+<td>A few highly optimized instruction sets</td>
+</tr>
+<tr class="odd">
+<td>Software thread management</td>
+<td>Hardware thread management</td>
+</tr>
+</tbody>
+</table>
+<div class="attribution">
+<p><a href="https://blog.cherryservers.com/gpu-vs-cpu-what-are-the-key-differences">Mantas Levinas (CherryServers)</a></p>
+</div>
+</section>
+<section id="gpu-dedicated-chip" class="level2" data-number="10.12">
+<h2 data-number="10.12" class="anchored" data-anchor-id="gpu-dedicated-chip"><span class="header-section-number">10.12</span> GPU = dedicated chip</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>CPU</strong> directly mounted on the motherboard</p>
+<p><span class="math inline">&lt;5\times 5</span> cm dimension<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p><img src="figs/Intel_CPU_Core_i7_6700K_Skylake_perspective.jpg" class="noinvert" height="200"> <img src="figs/Intel_CPU_Core_i7_6700K_Skylake_top.jpg" class="noinvert" height="200"></p>
+</div><div class="column" style="width:50%;">
+<p><strong>GPU</strong> is a HUGE chip (<span class="math inline">\sim 30\times 10</span> cm)</p>
+<p>mounted through PCI-express connection</p>
+<p><img src="figs/NVIDIA-GTX-1070.jpg" class="noinvert" height="250"></p>
+</div>
+</div>
+<div class="attribution">
+<p><a href="https://fr.wikipedia.org/wiki/Pascal_(architecture_de_carte_graphique)">Wikipedia</a></p>
+</div>
+</section>
+<section id="cpu-vs-gpu-comparison-an-example" class="level2" data-number="10.13">
+<h2 data-number="10.13" class="anchored" data-anchor-id="cpu-vs-gpu-comparison-an-example"><span class="header-section-number">10.13</span> CPU vs GPU comparison: an example</h2>
+<p><img src="figs/ryzen_vs_2080.png" class="noinvert img-fluid"></p>
+<div class="attribution">
+<p><a href="https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3">Ygor Serpa (TowardsDataScience)</a></p>
+</div>
+</section>
+<section id="cpu-vs-gpu-comparison-an-example-cpu" class="level2" data-number="10.14">
+<h2 data-number="10.14" class="anchored" data-anchor-id="cpu-vs-gpu-comparison-an-example-cpu"><span class="header-section-number">10.14</span> CPU vs GPU comparison: an example, CPU</h2>
+<p><strong>AMD Ryzen Threadripper 2990X processor</strong>: 32cores (each capable of running two independent threads), 3 GHz up to 4.2 GHz (boost) clock rate, 2 instructions per clock cycle, each thread processes 8 floating-point values at the same time</p>
+</section>
+<section id="cpu-vs-gpu-comparison-an-example-gpu" class="level2" data-number="10.15">
+<h2 data-number="10.15" class="anchored" data-anchor-id="cpu-vs-gpu-comparison-an-example-gpu"><span class="header-section-number">10.15</span> CPU vs GPU comparison: an example, GPU</h2>
+<p><strong>Nvidia RTX 2080 TI GPU</strong>: 4352 ALUs, 1.35 GHz up to 1.545 GHz (boost) clock rate, 2 operations per clock cycle, one floating point operation per ALU</p>
+</section>
+<section id="performance-illustration" class="level2" data-number="10.16">
+<h2 data-number="10.16" class="anchored" data-anchor-id="performance-illustration"><span class="header-section-number">10.16</span> Performance illustration</h2>
+<p><strong>Throughput</strong>:</p>
+<p>Maximum theoretical number of floating-point operations they can handle per second (FLOPS)</p>
+<ul>
+<li><strong>CPU</strong> (Ryzen): <span class="math inline">(4.2 \times 10^9) \times 2 \times (8 \times 64) = 4309.8 \times 10^9</span> FLOPS <span class="math inline">\approx 4.3</span> TFLOPS</li>
+<li><strong>GPU</strong> (2080 TI): <span class="math inline">(1.545 \times 10^9) \times 2 \times 4352 = 13447.68 \times 10^9</span> FLOPS <span class="math inline">\approx 13.4</span> TFLOPS</li>
+</ul>
+<p><strong>Latency</strong>: the CPU clocks at 4.2 GHz, while the GPU clocks at <span class="math inline">\sim 1.5</span> GHz, nearly three times slower</p>
+<p><span class="math inline">\rightarrow</span> <strong>one is not better than the other, they serve different purposes</strong></p>
+</section>
+<section id="from-3d-image-processing-for-games-to-general-purpose-computing" class="level2" data-number="10.17">
+<h2 data-number="10.17" class="anchored" data-anchor-id="from-3d-image-processing-for-games-to-general-purpose-computing"><span class="header-section-number">10.17</span> From 3D image processing (for games) to general-purpose computing</h2>
+<p><strong>image processing = large matrix operations</strong></p>
+<p><span class="math inline">\rightarrow</span> why not using GPU for general matrix operations?</p>
+<p><strong>Example</strong>: deep-learning = combination of linear transformation (=matrix product) and simple non-linear operations</p>
+<p><strong>General-Purpose Graphics Processing Units</strong> (GPGPU): computations on GPU not dedicated to image processing</p>
+</section>
+<section id="hardware" class="level2" data-number="10.18">
+<h2 data-number="10.18" class="anchored" data-anchor-id="hardware"><span class="header-section-number">10.18</span> Hardware</h2>
+<ul>
+<li><p>Nvidia (with CUDA drivers) </p></li>
+<li><p>AMD (with AMD drivers or openCL)</p></li>
+</ul>
+</section>
+<section id="software-python" class="level2" data-number="10.19">
+<h2 data-number="10.19" class="anchored" data-anchor-id="software-python"><span class="header-section-number">10.19</span> Software (Python)</h2>
+<ul>
+<li><p>deep learning oriented: <a href="https://www.tensorflow.org/´"><code>tensorflow</code></a>, <a href="https://pytorch.org/"><code>PyTorch</code></a>, <a href="https://keras.io/"><code>keras</code></a> </p></li>
+<li><p>more general purpose computing: see <a href="https://numba.pydata.org/"><code>numba</code></a>, <a href="https://cupy.dev/"><code>cupy</code></a>, <a href="https://docs.rapids.ai/api"><code>RAPIDS</code></a> (cuDF, cuML, etc.), <a href="https://www.kernel-operations.io/keops/index.html"><code>keops</code></a>, and more</p></li>
+</ul>
+</section>
+<section id="software-r" class="level2" data-number="10.20">
+<h2 data-number="10.20" class="anchored" data-anchor-id="software-r"><span class="header-section-number">10.20</span> Software (R)</h2>
+<p>See this <a href="https://www.r-pkg.org/ctv/HighPerformanceComputing">page</a><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>Example with <code>gpuR</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ORDER <span class="ot">=</span> <span class="dv">1024</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>A <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(ORDER<span class="sc">^</span><span class="dv">2</span>), <span class="at">nrow=</span>ORDER)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>B <span class="ot">=</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(ORDER<span class="sc">^</span><span class="dv">2</span>), <span class="at">nrow=</span>ORDER)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>gpuA <span class="ot">=</span> <span class="fu">gpuMatrix</span>(A, <span class="at">type=</span><span class="st">"double"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>gpuB <span class="ot">=</span> <span class="fu">gpuMatrix</span>(B, <span class="at">type=</span><span class="st">"double"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>C <span class="ot">=</span> A <span class="sc">%*%</span> B</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>gpuC <span class="ot">=</span> gpuA <span class="sc">%*%</span> gpuB</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(C <span class="sc">==</span> gpuC[])</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="in-practice" class="level2" data-number="10.21">
+<h2 data-number="10.21" class="anchored" data-anchor-id="in-practice"><span class="header-section-number">10.21</span> In practice</h2>
+<p>See the dedicated notebook “GPU computing with Numba (introduction)” in the <a href="../applications.html">Applications list</a>.</p>
+</section>
+</section>
+<section id="memory-cache" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Memory Cache</h1>
+<section id="cpu-cache" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="cpu-cache"><span class="header-section-number">11.1</span> CPU cache ?</h2>
+<p>Cache = <strong>on-board memory unit</strong> for CPU cores</p>
+<p><img src="figs/cpu_scheme.png" class="img-fluid"></p>
+<div class="attribution">
+<p><a href="https://towardsdatascience.com/the-ai-illustrated-guide-why-are-gpus-so-powerful-99f4ae85a5c3">Ygor Serpa (TowardsDataScience)</a></p>
+</div>
+</section>
+<section id="example-of-architecture" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="example-of-architecture"><span class="header-section-number">11.2</span> Example of architecture</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<figcaption>Credit: <a href="https://en.wikipedia.org/wiki/CPU_cache">Wikipedia</a> (AMD Bulldozer server)</figcaption>
+<p><img src="figs/amd_bulldozer.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</section>
+<section id="cache-memory-size" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="cache-memory-size"><span class="header-section-number">11.3</span> Cache memory size</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Very small</strong></p>
+<ul>
+<li>L1 Cache = <span class="math inline">10\times</span> KB (per core) </li>
+<li>L2 Cache = <span class="math inline">100\times</span> KB (per core) </li>
+<li>L3 Cache = <span class="math inline">1000\times</span> KB (shared per CPU)</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p>Example:</p>
+<p><img src="figs/cpu_cache_hierarchy.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="attribution">
+<p><a href="https://en.wikipedia.org/wiki/CPU_cache">Wikipedia</a> (K8 core in the AMD Athlon 64 CPU)</p>
+</div>
+</section>
+<section id="cache-access-time-latency" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="cache-access-time-latency"><span class="header-section-number">11.4</span> Cache access time (latency)</h2>
+<p><img src="figs/cpu_cache_access.png" class="img-fluid"></p>
+<div class="attribution">
+<p><a href="https://stackoverflow.com/questions/42435180/what-is-the-difference-between-cpu-cache-and-memory-cache/42435902#42435902">Stackoverflow</a></p>
+</div>
+</section>
+<section id="cpu-cache-miss" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="cpu-cache-miss"><span class="header-section-number">11.5</span> CPU cache miss</h2>
+<ul>
+<li><p>data transferred from memory to cache <strong>by blocks of contiguous data</strong></p></li>
+<li><p>to be efficient: necessary to use contiguous data in computations</p></li>
+</ul>
+<p><img src="figs/cpu_cache_miss.png" class="img-fluid"></p>
+<div class="attribution">
+<p><a href="https://aaltoscicomp.github.io/data-analysis-workflows-course/chapter-4-scaling/">Data analysis workflows with R and Python course</a></p>
+</div>
+</section>
+<section id="in-practice-1" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="in-practice-1"><span class="header-section-number">11.6</span> In practice</h2>
+<p>See the dedicated notebook “CPU Cache and its impact on computations” in the <a href="../applications.html">Applications list</a>.</p>
+</section>
+</section>
+<section id="computing-cluster" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Computing cluster</h1>
+<section id="cluster" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="cluster"><span class="header-section-number">12.1</span> Cluster</h2>
+<ul>
+<li><p>a <strong>front-end server</strong>: user interface to submit computations, accessible from the internet (e.g.&nbsp;by <code>ssh</code> connection or through a web interface)</p></li>
+<li><p>many <strong>computing servers</strong> (also called computing <strong>nodes</strong> or <strong>workers</strong>) that run the computations</p></li>
+<li><p>one or more <strong>storage servers</strong>: to store the data and results</p></li>
+</ul>
+<p><img src="figs/cluster.png" class="img-fluid"></p>
+<div class="attribution">
+<p><a href="https://en.wikipedia.org/wiki/Computer_cluster">Wikipedia</a></p>
+</div>
+</section>
+<section id="usage" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="usage"><span class="header-section-number">12.2</span> Usage</h2>
+<ul>
+<li><p>single-node multi-core computations (multi-threading or multi-processing) </p></li>
+<li><p>multi-node computations (distributed computations) </p></li>
+<li><p>GPU computing </p></li>
+<li><p>combinations of two or more</p></li>
+</ul>
+</section>
+<section id="illustration" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="illustration"><span class="header-section-number">12.3</span> Illustration</h2>
+<p>MUSE cluster at MESO@LR computing center in Montpellier</p>
+<p><img src="figs/muse.jpg" class="noinvert img-fluid"></p>
+<div class="attribution">
+<p><a href="https://meso-lr.umontpellier.fr/">meso@LR</a></p>
+</div>
+</section>
+<section id="resource-management" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="resource-management"><span class="header-section-number">12.4</span> Resource management</h2>
+<p>How to <strong>share</strong> the computing resources (cores, memory, full nodes) between user?</p>
+<p><span class="math inline">\rightarrow</span> a resource management system (also called a scheduler) to assign resources to users depending on their request</p>
+<p><strong>Functions</strong>:</p>
+<ul>
+<li><strong>allocating</strong> exclusive and/or non-exclusive <strong>access to resources</strong> (computer nodes) to users for some duration of time so they can perform work </li>
+<li><strong>providing</strong> a framework for <strong>starting, executing, and monitoring work</strong>, typically a parallel job </li>
+<li><strong>arbitrating contention</strong> for resources by managing a queue of pending jobs</li>
+</ul>
+</section>
+<section id="an-example" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="an-example"><span class="header-section-number">12.5</span> An example</h2>
+<p><a href="https://slurm.schedmd.com/">SLURM</a> = a job scheduler for clusters and supercomputers</p>
+<p><strong>Job submission:</strong></p>
+<ul>
+<li>In-session command submission (e.g.&nbsp;requesting 16 cores with 32GB of RAM memory and a RTX 2080 TI GPU, on a single node, during 3 days):</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">srun</span> <span class="at">-N</span> 1 <span class="at">-c</span> 16 <span class="at">--mem</span><span class="op">=</span>32G <span class="at">--gpus</span><span class="op">=</span>rtx2080:1 <span class="at">-t</span> 3-0 my_command</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Script submission to be run off-session (e.g.&nbsp;requesting 3 full nodes during 96hours):</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> <span class="at">-N</span> 3 <span class="at">-t</span> 96:0:0 my_script.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>per core<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>cycles per second (one operation = <span class="math inline">1\times</span> - <span class="math inline">10\times</span> cycles<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>RAM = host memory<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>GPU on-board memory<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>size fixed for decades<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>corresponding to <a href="https://cran.r-project.org/web/views/HighPerformanceComputing.html">CRAN task view on high performance computing</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = true;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../Courses/6_SIMD.html" class="pagination-link" aria-label="Hardware Vectorization with SIMD">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hardware Vectorization with SIMD</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../summary.html" class="pagination-link" aria-label="Summary">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Licensed under a <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-SA 4.0</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

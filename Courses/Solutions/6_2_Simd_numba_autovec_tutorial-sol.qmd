@@ -1,9 +1,6 @@
 ---
-jupyter: python3
+title: SIMD Autovectorization in Numba
 ---
-
-# SIMD Autovectorization in Numba
-
 Most modern CPUs have support for instructions that apply the same operation to multiple data elements simultaneously.  These are called "Single Instruction, Multiple Data" (SIMD) operations, and the LLVM backend used by Numba can generate them in some cases to execute loops more quickly.  (This process is called "autovectorization.")
 
 For example, Intel processors have support for SIMD instruction sets like:

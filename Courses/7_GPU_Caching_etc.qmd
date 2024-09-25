@@ -270,7 +270,7 @@ all(C == gpuC[])
 
 ## In practice
 
-See the dedicated [notebook](gpu.ipynb)^[and its [pdf version](gpu.pdf),[html version](gpu.html)]
+See the dedicated notebook “GPU computing with Numba (introduction)” in the [Applications list](../applications.qmd).
 
 
 # Memory Cache
@@ -333,8 +333,7 @@ Example:
 
 ## In practice
 
-See the dedicated [notebook](cache.ipynb)^[and its [pdf version](cache.pdf)]
-
+See the dedicated notebook “CPU Cache and its impact on computations” in the [Applications list](../applications.qmd).
 
 # Computing cluster
 

@@ -1,0 +1,348 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: Locking with `multiprocessing.Value`\n",
+        "---\n",
+        "\n",
+        "\n",
+        "Take look at [Python Documentation on `multiprocessing.Value`](https://docs.python.org/3/library/multiprocessing.html#multiprocessing.Value)\n",
+        "\n",
+        "Write a simple worker fonction which takes a `multiprocessing.Value` and a `max_count` argument, and increment the value by one `max_count` times:\n",
+        "\n",
+        "```python\n",
+        "import multiprocessing\n",
+        "\n",
+        "def work(value, max_count):\n",
+        "    ...\n",
+        "```\n"
+      ],
+      "id": "9226615c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "import multiprocessing\n",
+        "\n",
+        "def work(value, max_count):\n",
+        "    for n in range(max_count):\n",
+        "        value.value += 1"
+      ],
+      "id": "fe2cc00a",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "1. Write a main function instantiating an integer `multiprocessing.Value` initialized to zero and run `ncores` workers incrementing each `N` times the value one by one.\n",
+        "2. Display the expected final value and the value calculated.\n",
+        "3. Run it on `(8,100000)` (or even bigger). Replace `8` by the actual number of physical cores on the cpu you’re running on.\n",
+        "\n",
+        "```python\n",
+        "def run_workers(ncores,N):\n",
+        "    total_expected_count = ncores * N\n",
+        "    ...\n",
+        "```\n"
+      ],
+      "id": "6e67ee9e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "def run_workers(ncores,N):\n",
+        "    total_expected_count = ncores * N\n",
+        "    processes = []\n",
+        "    value = multiprocessing.Value('i', 0)\n",
+        "    for process_nbr in range(ncores):\n",
+        "        p = multiprocessing.Process(target=work, args=(value, N))\n",
+        "        p.start()\n",
+        "        processes.append(p)\n",
+        "\n",
+        "    # wait for the processes to finish\n",
+        "    for p in processes:\n",
+        "        p.join()\n",
+        "\n",
+        "    # print the final value\n",
+        "    print(\"Expecting to see a count of {}\".format(total_expected_count))\n",
+        "    print(\"We have counted to {}\".format(value.value))"
+      ],
+      "id": "3a00fc4e",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        ":::{.callout-note}\n",
+        "We may use a simplified version with `multiprocessing.Pool` and `map` to avoid the manual process management. However, to do so, we have to use the manager version of `multiprocessing.Value` which is (way) slower.\n",
+        ":::\n"
+      ],
+      "id": "aea463b1"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "run_workers(8,100000)"
+      ],
+      "id": "8fb35cb4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Explanation\n",
+        "\n",
+        "1. Disassemble the worker function and try to look where locks occurs, according the reference documentation on `multiprocessing.Value`. The actual loading (resp. storing) of the value are done by `LOAD_ATTR` (resp. `STORE_ATTR`).         \n",
+        "2. Explain the result\n",
+        "\n",
+        "```python\n",
+        "import dis\n",
+        "\n",
+        "dis.dis(work)\n",
+        "```\n"
+      ],
+      "id": "89e50527"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "import dis\n",
+        "\n",
+        "dis.dis(work)"
+      ],
+      "id": "11198ac6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "```plain\n",
+        "  5          12 LOAD_FAST                0 (value)\n",
+        "             14 DUP_TOP\n",
+        "                                                        #<--- Value lock acquired             \n",
+        "             16 LOAD_ATTR                1 (value)\n",
+        "                                                        #<--- Value lock released\n",
+        "             18 LOAD_CONST               1 (1)\n",
+        "             20 INPLACE_ADD\n",
+        "             22 ROT_TWO\n",
+        "                                                        #<--- Value lock acquired\n",
+        "             24 STORE_ATTR               1 (value)\n",
+        "                                                        #<--- Value lock released\n",
+        "             26 JUMP_ABSOLUTE            8\n",
+        "        >>   28 LOAD_CONST               0 (None)\n",
+        "             30 RETURN_VALUE\n",
+        "```\n",
+        "\n",
+        "At instruction 18 (`18 LOAD_CONST`), nothing prevents another process to load the (old) `value` attribute and be on instruction `18` too. Both processes will proceed incrementing their private copy and writing it back. \n",
+        "\n",
+        "$\\Rightarrow$ The result: the actual value got incremented only once, not twice.\n",
+        "\n",
+        "## Counter measure\n",
+        "\n",
+        "Now, propose a solution. Use the reference documentation to modify the `work` function, and the main function.\n",
+        "Test it.\n"
+      ],
+      "id": "8dbc7c4c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "def work_lock(value, max_count):\n",
+        "    for n in range(max_count):\n",
+        "        with value.get_lock():\n",
+        "            value.value += 1"
+      ],
+      "id": "586875da",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "def run_workers_locked(ncores,N):\n",
+        "    total_expected_count = ncores * N\n",
+        "    processes = []\n",
+        "    value = multiprocessing.Value('i', 0)\n",
+        "    for process_nbr in range(ncores):\n",
+        "        p = multiprocessing.Process(target=work_lock, args=(value, N))\n",
+        "        p.start()\n",
+        "        processes.append(p)\n",
+        "\n",
+        "    # wait for the processes to finish\n",
+        "    for p in processes:\n",
+        "        p.join()\n",
+        "\n",
+        "    # print the final value\n",
+        "    print(\"Expecting to see a count of {}\".format(total_expected_count))\n",
+        "    print(\"We have counted to {}\".format(value.value))"
+      ],
+      "id": "e0571925",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "run_workers_locked(8,100000)"
+      ],
+      "id": "e96003b6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Optimization\n",
+        "\n",
+        "With the manual locking done now, is the native locking of `multiprocessing.Value` still required ? Explain\n",
+        "\n",
+        ":::{.solution}\n",
+        "As we already lock the increment operation with both load and store of the value, the fine grained locks of both operation is uneccessary.\n",
+        ":::\n",
+        "\n",
+        "We now want to use `multiprocessing.RawValue` which is devoid of any lock mechanism, and a manual managed lock from `multiprocessing.manager`.\n",
+        "\n",
+        "Take a look at [Python Documentation on `multiprocessing.RawValue`](https://docs.python.org/3/library/multiprocessing.html#multiprocessing.sharedctypes.RawValue)\n",
+        "\n",
+        "1. Write `work_rawlock` and `run_workers_rawlocked`, with careful consideration for where to instatiate the lock.\n",
+        "2. Test it\n",
+        "3. Benchmark and compare with the previous, print the speedup.\n"
+      ],
+      "id": "c04cd6ac"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "def work_rawlock(value, max_count,lock):\n",
+        "    for n in range(max_count):\n",
+        "        with lock:\n",
+        "            value.value += 1"
+      ],
+      "id": "f9a23b65",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "def run_workers_rawlocked(ncores,N):\n",
+        "    total_expected_count = ncores * N\n",
+        "    processes = []\n",
+        "    value = multiprocessing.RawValue('i', 0)\n",
+        "    lock = multiprocessing.Lock()\n",
+        "    for process_nbr in range(ncores):\n",
+        "        p = multiprocessing.Process(target=work_rawlock, args=(value, N, lock))\n",
+        "        p.start()\n",
+        "        processes.append(p)\n",
+        "\n",
+        "    # wait for the processes to finish\n",
+        "    for p in processes:\n",
+        "        p.join()\n",
+        "\n",
+        "    # print the final value\n",
+        "    print(\"Expecting to see a count of {}\".format(total_expected_count))\n",
+        "    print(\"We have counted to {}\".format(value.value))"
+      ],
+      "id": "5d389daa",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "run_workers_rawlocked(8,100000)"
+      ],
+      "id": "8a69b012",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "tags": [
+          "solution"
+        ]
+      },
+      "source": [
+        "locked_time = %timeit -o -r 1 -n 1 run_workers_locked(4,100000)\n",
+        "rawlocked_time = %timeit -o -r 1 -n 1 run_workers_rawlocked(4,100000)\n",
+        "\n",
+        "print(\"Gain of multiprocessing.RawValue version : {:.0%}\".format(locked_time.average/rawlocked_time.average) )"
+      ],
+      "id": "ee6aa7a9",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\fradav\\.micromamba\\envs\\miashs-hpc\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

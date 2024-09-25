@@ -7,8 +7,8 @@ project:
     - Courses/Solutions/2_Scaling-sol.qmd
     - Courses/Solutions/3_0_Asynchronous-sol.qmd
     - Courses/Solutions/3_1_Decorators_tutorial-sol.qmd
-    - Courses/Solutions/4_0_IPC_and_Locking.qmd
-    - Courses/Solutions/4_1_IPC_and_Locking_cont.qmd
+    - Courses/Solutions/4_0_IPC_and_Locking-sol.qmd
+    - Courses/Solutions/4_1_IPC_and_Locking_cont-sol.qmd
     - Courses/Solutions/4_2_Generators_tutorial-sol.qmd
     - Courses/Solutions/5_0_Distributed_models.qmd
     - Courses/Solutions/5_1_Dask_delayed.qmd

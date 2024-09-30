@@ -97,8 +97,8 @@ with views.sync_imports():
 
 ``` python
 def calculate_primes(N,chunksize):
-    return ...
-```
+    return dview.map_sync(check_prime , range(2,N),chunksize=chunksize)
+
 
 1.  Benchmark it for
 
@@ -108,6 +108,9 @@ chunksize = int(N/64)
 ```
 """
 
+#%%
+def calculate_primes(N,chunksize):
+    return views.map_sync(find_primes ,chunks(range(1,N),chunksize))
 # %%
 N = 5000000
 
@@ -145,7 +148,7 @@ bcast_view = rc.broadcast_view()
 %timeit bcast_view.apply_sync(lambda: None)
 
 # %% [markdown]
-r"""
+"""
 # An embarrasingly parallel example : distributed Monte-Carlo computing of $\pi$
 
 If we sample randomly a bunch of $N$ points in the unity square, and
@@ -175,7 +178,7 @@ $\lim_{N\to\infty} 4\frac{N_I}{N} = \pi$
 """
 
 # %% [markdown]
-r"""
+"""
 ### 2. Write the function which :
 
 -   takes a number of estimates `nbr_estimates` as argument
@@ -200,3 +203,49 @@ def estimate_nbr_points_in_quarter_circle(nbr_estimates):
 
 $\Longrightarrow$ We see a near perfect linear scalability.
 """
+
+#%%
+import random
+with views.sync_imports():
+    import random
+def estimate_nbr_points_in_quarter_circle(nbr_estimates):
+    nbr_trials_in_quarter_unit_circle = 0
+    for _ in range (int(nbr_estimates)):
+        x, y = random.uniform(0,1), random.uniform(0,1)
+        if x**2 + y**2 <= 1 :
+            nbr_trials_in_quarter_unit_circle += 1
+    return nbr_trials_in_quarter_unit_circle
+# %%
+4*estimate_nbr_points_in_quarter_circle(1e4)/1e4
+# %%
+def calculate_pi_distributed(nnodes,nbr_samples_in_total):
+    res = rc[:nnodes].map_sync(estimate_nbr_points_in_quarter_circle,[int(nbr_samples_in_total/nnodes)]*nnodes)
+    n1 = sum(res)
+    estimated_pi = 4*(n1/nbr_samples_in_total)
+    return estimated_pi
+# %%
+calculate_pi_distributed(8,1e7)
+# %%
+import time
+
+N = 1e8
+cluster_times = []
+pis = []
+for nbr_parallel_blocks in range(1,9):
+    print(f"With {nbr_parallel_blocks} node(s): ")
+    t1 = time.time()
+    pi_estimate = calculate_pi_distributed(nbr_parallel_blocks,N)
+    total_time = time.time() - t1
+    print(f"\tPi estimate : {pi_estimate}")
+    print("\tTime : {:.2f}s".format(total_time))
+    cluster_times.append(total_time)
+    pis.append(pi_estimate)
+# %%
+import plotly.express as px
+
+speedups_cores = [cluster_times[0]/cluster_times[i] for i in range(8)]
+px.line(y=speedups_cores,x=range(1,9),
+        labels={"x":"Number of cores",
+                "y":"Speedup over 1 core"},
+       width=600)
+# %%

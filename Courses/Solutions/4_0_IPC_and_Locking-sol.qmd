@@ -316,4 +316,6 @@ def calculate_primes_chunks_rsquared(ncores,N):
 ```{python}
 #| tags: [solution]
 %timeit -r 1 -n 1 calculate_primes_chunks_rsquared(8,N)
+```
 
+This gives a better balance between the workers and the chunks size.

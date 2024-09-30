@@ -10,7 +10,7 @@ project:
     - Courses/Solutions/4_0_IPC_and_Locking-sol.qmd
     - Courses/Solutions/4_1_IPC_and_Locking_cont-sol.qmd
     - Courses/Solutions/4_2_Generators_tutorial-sol.qmd
-    - Courses/Solutions/5_0_Distributed_models.qmd
+    - Courses/Solutions/5_0_Distributed_models-sol.qmd
     - Courses/Solutions/5_1_Dask_delayed.qmd
     - Courses/Solutions/6_0_Numba_tutorial-sol.qmd
     - Courses/Solutions/6_2_Simd_numba_autovec_tutorial-sol.qmd

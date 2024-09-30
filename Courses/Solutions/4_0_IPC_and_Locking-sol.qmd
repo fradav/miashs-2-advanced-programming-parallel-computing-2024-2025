@@ -128,10 +128,15 @@ list(iterables)
 
 ```{python}
 #| tags: [solution]
+import time
+
 def find_prime_worker(input, output):
+    t0 = time.time()
     for chunk in iter(input.get,None):
         primes_found = list(filter(check_prime,chunk))
-        output.put(primes_found)     
+        output.put(primes_found)
+    # print the time taken by the worker in seconds and two decimal places
+    print(f"Worker done in {time.time()-t0:.2f}s")
     return
 ```
 
@@ -174,14 +179,14 @@ list(chain(*list(iter(output.get,None))))
 
 # Putting the workers to... work.
 
-make a function which allocates the queues, and use a `Pool(ncore)` of worker.
+make a function which allocates the queues, and use a `Pool(ncores)` of worker.
 
 ```python
-def calculate_primes(ncore,N,chunksize):
+def calculate_primes(ncores,N,chunksize):
     ...
 ```
 
-- `ncore` is the number of workers (and will be aligned with the number of cores you got, 8 for example)
+- `ncores` is the number of workers (and will be aligned with the number of cores you got, 8 for example)
 - `N` is the upper limit of the primes we want to find 
 - `chunksize` is the size of the chunks we'll send to process to workers.
 
@@ -205,16 +210,16 @@ N = 5000000
 from multiprocessing import Pool,Manager
 from itertools import chain
 
-def calculate_primes(ncore,N,chunksize):
+def calculate_primes(ncores,N):
     with Manager() as manager:
         input = manager.Queue()
         output = manager.Queue()
 
-        with Pool(ncore) as p:
-            it = p.starmap_async(find_prime_worker,[(input,output)]*ncore)
-            for r in chunks(range(1,N),chunksize):
+        with Pool(ncores) as p:
+            it = p.starmap_async(find_prime_worker,[(input,output)]*ncores)
+            for r in chunks(range(1,N),int(N/ncores)):
                 input.put(r)
-            for i in range(ncore): input.put(None)
+            for i in range(ncores): input.put(None)
             it.wait()
             output.put(None)
 
@@ -225,12 +230,12 @@ def calculate_primes(ncore,N,chunksize):
 ### Test of the main function
 
 ```{python}
-N = 5000000
+N = 10000000
 ```
 
 ```{python}
 #| tags: [solution]
-%timeit -r 1 -n 1 calculate_primes(4,N,int(N/64))
+%timeit -r 1 -n 1 calculate_primes(8,N)
 ```
 
 ## Autosizing chunks ! (optional)
@@ -245,38 +250,60 @@ A slight optimization to our multi-processing/queued algorithm is to make the ch
 
 ###  autosizing chunks example function
 
+:::solution
+If the time to check if a number is prime at most proportional to the square root of the number, we can make the hypothesis that the mean real time for the check is a “lower” power law than the square root, something like $O(N^{p)$ where $p < \frac{1}{2}$. So the time of checking all numbers to `N` is proportional to the integral function of this power root which is (up to a constant) $N^{1+p}$. We can infer a method to balance the chunks size with the number of workers.
+
+:::
+
 ```{python}
 #| tags: [solution]
 def chunks_rsquared(lst, n):
     """Yield successive n-sized chunks with n recursively root-squared."""
     i = 0
+    rsq = 1 + 0.3 # empirical value for the power law
     while (i < len(lst)):
         yield lst[i:i + n]
+        im = i
         i = i + n
-        n = max(1,int(n*0.8))
+        ip = (2 * (i ** rsq) - (im ** rsq)) ** (1/rsq)
+        n = max(1,int((ip-i)))
 ```
 
+```{python}
+#! tags: [solution]
+def find_start_chunk(lst,n):
+    for i in range(2,n+1):
+        res = list(chunks_rsquared(lst,int(len(lst)/i)))
+        if len(res) >= n:
+            return res
+```
 ### Test it
 
 ```{python}
 #| tags: [solution]
-list(chunks_rsquared(range(1,N),int(N/4)))
+list(chunks_rsquared(range(1,100),50))
+```
+
+
+```{python}
+#| tags: [solution]
+find_start_chunk(range(1,100),10)
 ```
 
 ### Modify the main worker process function
 
 ```{python}
 #| tags: [solution]
-def calculate_primes_chunks_rsquared(ncore,N,chunksize):
+def calculate_primes_chunks_rsquared(ncores,N):
     with Manager() as manager:
         input = manager.Queue()
         output = manager.Queue()
 
-        with Pool(ncore) as p:
-            it = p.starmap_async(find_prime_worker,[(input,output)]*ncore)
-            for r in chunks_rsquared(range(1,N),chunksize):
+        with Pool(ncores) as p:
+            it = p.starmap_async(find_prime_worker,[(input,output)]*ncores)
+            for r in find_start_chunk(range(1,N),ncores):
                 input.put(r)
-            for i in range(ncore): input.put(None)
+            for i in range(ncores): input.put(None)
             it.wait()
             output.put(None)
 
@@ -288,6 +315,5 @@ def calculate_primes_chunks_rsquared(ncore,N,chunksize):
 
 ```{python}
 #| tags: [solution]
-%timeit -r 1 -n 1 calculate_primes_chunks_rsquared(4,N,int(N/4))
-```
+%timeit -r 1 -n 1 calculate_primes_chunks_rsquared(8,N)
 

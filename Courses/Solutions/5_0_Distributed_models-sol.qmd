@@ -1,5 +1,5 @@
 ---
-title: "Distributed models with dask"
+title: "Distributed models examples"
 ---
 
 # Initialization 

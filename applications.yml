@@ -38,7 +38,7 @@
   ipynb: "docs-resources/Notebooks/Courses/Solutions/0_Numpy_Workout-sol.ipynb"
   py: "docs-resources/Notebooks/Courses/Applications/0_Numpy_Workout.py"
   name: "0_Numpy_Workout-sol.qmd"
-- title: "Distributed models with dask"
+- title: "Distributed models examples"
   html: "docs-resources/Notebooks/Courses/Solutions/5_0_Distributed_models-sol.html"
   ipynb: "docs-resources/Notebooks/Courses/Solutions/5_0_Distributed_models-sol.ipynb"
   py: "docs-resources/Notebooks/Courses/Applications/5_0_Distributed_models.py"
